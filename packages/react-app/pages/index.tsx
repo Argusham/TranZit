@@ -1,116 +1,4 @@
 // import { useState } from 'react';
-// import PrimaryButton from '@/components/Button';
-// import { useWeb3State } from '@/hooks/useWeb3State';
-// import { useGasEstimation } from '@/hooks/useGasEstimation';
-// import { Card, Divider, ToggleButton, ToggleButtonGroup, Stack, Typography } from '@mui/material';
-// import { UserInfo } from '@/components/UserInfo';
-// import { PredefinedAmounts } from '@/components/PredefinedAmounts';
-// import { QRCodeDisplay } from '@/components/QRCodeDisplay';
-// import { TransactionStatus } from '@/components/TransactionStatus';
-// import { GasInfo } from '@/components/GasInfo';
-
-// export default function Home() {
-//   const { address, balance, transactionStatus, tx, errorMessage, signingLoading, sendTransaction } = useWeb3State();
-//   const [amount, setAmount] = useState<string>('');
-//   const predefinedAmounts = [1, 2, 0.5];
-//   const [mode, setMode] = useState<'driver' | 'commuter'>('commuter'); // Driver/Commuter toggle
-
-//   // Get gas estimates
-//   const { gasEstimate, gasPrice } = useGasEstimation(address || '', amount); // Driver's address is used for gas estimation
-
-//   // Handle predefined amount selection
-//   const handleAmountClick = (amount: number) => {
-//     setAmount(amount.toString());
-//   };
-
-//   // Handle toggle change
-//   const handleModeChange = (event: React.MouseEvent<HTMLElement>, newMode: 'driver' | 'commuter') => {
-//     if (newMode) {
-//       setMode(newMode);
-//     }
-//   };
-
-//   return (
-//     <div className='flex flex-col items-center p-2 rounded-xl bg-grey-100'>
-//       {/* Toggle between Driver and Commuter UI */}
-//       <ToggleButtonGroup
-//         color='primary'
-//         value={mode}
-//         exclusive
-//         onChange={handleModeChange}
-//         aria-label='Driver or Commuter mode'
-//         className='mb-4'
-//       >
-//         <ToggleButton value='commuter'>Commuter</ToggleButton>
-//         <ToggleButton value='driver'>Driver</ToggleButton>
-//       </ToggleButtonGroup>
-
-//       <Card className='w-full max-w-md bg-white rounded-3xl p-6 shadow-lg'>
-//         <div className='text-center mb-6'>
-//           <h1 className='text-2xl font-bold mb-2'>Pay-flex</h1>
-
-//           {address && (
-//             <>
-//               {/* User Information */}
-//               <UserInfo address={address} balance={balance} />
-//             </>
-//           )}
-//         </div>
-
-//         {address && (
-//           <>
-//             {/* Conditionally Render UI based on mode */}
-//             {mode === 'commuter' && (
-//               <>
-//                 {/* Commuter UI */}
-//                 <PrimaryButton
-//                   loading={signingLoading}
-//                   onClick={() => {
-//                     // Pay logic after scanning QR code (QR code contains driver’s address and amount)
-//                     sendTransaction(address, amount); // Assume the amount and address will be provided by the QR code scan
-//                   }}
-//                   title='Pay'
-//                   widthFull
-//                 />
-//               </>
-//             )}
-
-//             {mode === 'driver' && (
-//               <>
-//                 {/* Driver UI */}
-//                 {/* Predefined amount selection */}
-//                 <PredefinedAmounts predefinedAmounts={predefinedAmounts} handleAmountClick={handleAmountClick} />
-
-//                 {/* Automatically Generate QR Code when the driver enters/selects amount */}
-//                 {amount && (
-//                   <QRCodeDisplay recipient={address} amount={amount} /> // Driver's own address is in the QR code
-//                 )}
-
-//                 {/* Transaction Status */}
-//                 <TransactionStatus status={transactionStatus} />
-
-//                 {/* Gas Information */}
-//                 <GasInfo gasEstimate={gasEstimate} gasPrice={gasPrice} />
-//               </>
-//             )}
-//           </>
-//         )}
-
-//         {/* Transaction Hash */}
-//         {tx && (
-//           <p className='font-bold mt-4'>
-//             Tx Completed: {(tx.transactionHash as string).substring(0, 6)}...
-//             {(tx.transactionHash as string).substring(tx.transactionHash.length - 6)}
-//           </p>
-//         )}
-//       </Card>
-//     </div>
-//   );
-// }
-
-
-// import { useState } from 'react';
-// import PrimaryButton from '@/components/Button';
 // import { useWeb3State } from '@/hooks/useWeb3State';
 // import { useGasEstimation } from '@/hooks/useGasEstimation';
 // import { Card, ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -125,7 +13,7 @@
 //   const [mode, setMode] = useState<'driver' | 'commuter'>('commuter'); // Driver/Commuter toggle
 
 //   // Get gas estimates
-//   const { gasEstimate, gasPrice } = useGasEstimation(address ?? '', amount); // Driver's address is used for gas estimation
+//   const { gasEstimate, gasPrice } = useGasEstimation(address ?? "", amount); // Driver's address is used for gas estimation
 
 //   // Handle toggle change
 //   const handleModeChange = (event: React.MouseEvent<HTMLElement>, newMode: 'driver' | 'commuter') => {
@@ -162,7 +50,7 @@
 
 //       <Card className='w-full max-w-md bg-white rounded-3xl p-6 shadow-lg'>
 //         <div className='text-center mb-6'>
-//           <h1 className='text-2xl font-bold mb-2'>Pay-flex</h1>
+//           <h1 className='text-2xl font-bold mb-2'>Taxi Zoom</h1>
 
 //           {address && <UserInfo address={address} balance={balance} />}
 //         </div>
@@ -207,99 +95,12 @@
 // }
 
 
-import { useState } from 'react';
-import PrimaryButton from '@/components/Button';
-import { useWeb3State } from '@/hooks/useWeb3State';
-import { useGasEstimation } from '@/hooks/useGasEstimation';
-import { Card, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { UserInfo } from '@/components/UserInfo';
-import { DriverUI } from '@/components/DriverUI';
-import { CommuterUI } from '@/components/CommuterUI';
+// src/pages/index.tsx
+import LandingPage from "./landingpage";
 
 export default function Home() {
-  const { address, balance, transactionStatus, tx, errorMessage, signingLoading, sendTransaction } = useWeb3State();
-  const [amount, setAmount] = useState<string>('');
-  const predefinedAmounts = [1, 2, 0.5];
-  const [mode, setMode] = useState<'driver' | 'commuter'>('commuter'); // Driver/Commuter toggle
-
-  // Get gas estimates
-  const { gasEstimate, gasPrice } = useGasEstimation(address ?? "", amount); // Driver's address is used for gas estimation
-
-  // Handle toggle change
-  const handleModeChange = (event: React.MouseEvent<HTMLElement>, newMode: 'driver' | 'commuter') => {
-    if (newMode) {
-      setMode(newMode);
-    }
-  };
-
-  // Handle successful scan by commuter
-  const handleScanSuccess = (data: string) => {
-    try {
-      const parsedData = JSON.parse(data);
-      const { recipient, amount } = parsedData;
-      sendTransaction(recipient, amount); // Use the scanned recipient and amount
-    } catch (error) {
-      console.error('Error parsing QR code:', error);
-    }
-  };
-
-  return (
-    <div className='flex flex-col items-center p-2 rounded-xl bg-grey-100'>
-      {/* Toggle between Driver and Commuter UI */}
-      <ToggleButtonGroup
-        color='primary'
-        value={mode}
-        exclusive
-        onChange={handleModeChange}
-        aria-label='Driver or Commuter mode'
-        className='mb-4'
-      >
-        <ToggleButton value='commuter'>Commuter</ToggleButton>
-        <ToggleButton value='driver'>Driver</ToggleButton>
-      </ToggleButtonGroup>
-
-      <Card className='w-full max-w-md bg-white rounded-3xl p-6 shadow-lg'>
-        <div className='text-center mb-6'>
-          <h1 className='text-2xl font-bold mb-2'>Taxi Zoom</h1>
-
-          {address && <UserInfo address={address} balance={balance} />}
-        </div>
-
-        {address && (
-          <>
-            {/* Conditionally Render UI based on mode */}
-            {mode === 'commuter' && (
-              <>
-                {/* Commuter UI */}
-                <CommuterUI onScanSuccess={handleScanSuccess} />
-              </>
-            )}
-
-            {mode === 'driver' && (
-              <>
-                {/* Driver UI */}
-                <DriverUI
-                  address={address}
-                  amount={amount}
-                  setAmount={setAmount}
-                  predefinedAmounts={predefinedAmounts}
-                  transactionStatus={transactionStatus}
-                  gasEstimate={gasEstimate}
-                  gasPrice={gasPrice}
-                />
-              </>
-            )}
-          </>
-        )}
-
-        {/* Transaction Hash */}
-        {tx && (
-          <p className='font-bold mt-4'>
-            Tx Completed: {(tx.transactionHash as string).substring(0, 6)}...
-            {(tx.transactionHash as string).substring(tx.transactionHash.length - 6)}
-          </p>
-        )}
-      </Card>
-    </div>
-  );
+  return  (
+         <LandingPage />
+    );
+  
 }

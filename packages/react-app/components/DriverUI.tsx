@@ -1,10 +1,10 @@
 // components/DriverUI.tsx
-import { useState } from 'react';
-import { PredefinedAmounts } from '@/components/PredefinedAmounts';
-import { QRCodeDisplay } from '@/components/QRCodeDisplay';
-import { TransactionStatus } from '@/components/TransactionStatus';
-import { GasInfo } from '@/components/GasInfo';
-import { TextField, Stack } from '@mui/material';
+import { useState } from "react";
+import { PredefinedAmounts } from "@/components/PredefinedAmounts";
+import { QRCodeDisplay } from "@/components/QRCodeDisplay";
+import { TransactionStatus } from "@/components/TransactionStatus";
+import { GasInfo } from "@/components/GasInfo";
+import { TextField, Stack } from "@mui/material";
 
 interface DriverUIProps {
   address: string;
@@ -33,26 +33,29 @@ export const DriverUI = ({
     <>
       {/* Driver UI for entering a custom amount */}
       <TextField
-        id='custom-amount'
-        label='Enter custom amount'
-        variant='outlined'
+        id="custom-amount"
+        label="Enter fair amount"
+        variant="outlined"
         value={amount}
         fullWidth
         onChange={handleCustomAmountChange}
-        className='mb-3'
+        className="mb-3"
       />
 
       {/* Predefined amount selection */}
-      <PredefinedAmounts predefinedAmounts={predefinedAmounts} handleAmountClick={(amt) => setAmount(amt.toString())} />
+      <PredefinedAmounts
+        predefinedAmounts={predefinedAmounts}
+        handleAmountClick={(amt) => setAmount(amt.toString())}
+      />
 
       {/* Automatically Generate QR Code when the driver enters/selects amount */}
       {amount && <QRCodeDisplay recipient={address} amount={amount} />}
 
       {/* Transaction Status */}
-      {/* <TransactionStatus status={transactionStatus} /> */}
+      <TransactionStatus status={transactionStatus} />
 
       {/* Gas Information */}
-      {/* <GasInfo gasEstimate={gasEstimate} gasPrice={gasPrice} /> */}
+      <GasInfo gasEstimate={gasEstimate} gasPrice={gasPrice} />
     </>
   );
 };
