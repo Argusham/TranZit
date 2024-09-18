@@ -1,0 +1,8 @@
+{
+  "celo-alfajores": {
+    "TaxiPaymentcUSD": {
+      "address": "0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4",
+      "startBlock": 26236504
+    }
+  }
+}
