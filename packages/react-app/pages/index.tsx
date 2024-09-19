@@ -1,14 +1,14 @@
-// import LandingPage from "./landingpage";
+import LandingPage from "./landingpage";
 
-// export default function Home() {
-//   return  (
-//          <LandingPage />
-//     );
+export default function Home() {
+  return  (
+         <LandingPage />
+    );
   
-// }
+}
 
 // import React, { useEffect, useState } from 'react';
-// import { useTaxiPayment } from '../hooks/useTaxiPayment';
+// import { useTaxiPaymentcUSD } from '../hooks/useTaxiPaymentcUSD'; // Updated hook import
 
 // const IndexPage = () => {
 //   const {
@@ -24,34 +24,54 @@
 //     getIncentiveTrigger,
 //     incentiveTrigger,
 //     loading,
-//   } = useTaxiPayment();
+//   } = useTaxiPaymentcUSD(); // Updated hook usage
 
 //   const [recipient, setRecipient] = useState(''); // For sending payment
 //   const [amount, setAmount] = useState('0'); // For amount input
 //   const [userAddress, setUserAddress] = useState(''); // For manually fetching user balance
+//   const [balanceLoading, setBalanceLoading] = useState(false); // Loading state for fetching balance
 
 //   // Fetch user's wallet address and contract information on mount
 //   useEffect(() => {
 //     const fetchAddressAndData = async () => {
-//       await getUserAddress();
-//       if (address) {
-//         await getUserBalances(address); // Automatically fetch current user's balance
+//       try {
+//         await getUserAddress();
+//         if (address) {
+//           await getUserBalances(address); // Automatically fetch current user's balance
+//         }
+//         await getTaxPercent();
+//         await getIncentiveAmount();
+//         await getIncentiveTrigger();
+//       } catch (error) {
+//         console.error('Error fetching contract data:', error);
 //       }
-//       await getTaxPercent();
-//       await getIncentiveAmount();
-//       await getIncentiveTrigger();
 //     };
 //     fetchAddressAndData();
 //   }, [address, getUserAddress, getUserBalances, getTaxPercent, getIncentiveAmount, getIncentiveTrigger]);
 
 //   // Handle sending payment
 //   const handlePayment = async () => {
-//     await payUser(recipient, amount);
+//     try {
+//       await payUser(recipient, amount);
+//       // Fetch the user's balances after payment to update the UI
+//       if (address) {
+//         await getUserBalances(address);
+//       }
+//     } catch (error) {
+//       console.error('Error sending payment:', error);
+//     }
 //   };
 
 //   // Handle manually fetching another user's balance
 //   const handleGetBalances = async () => {
-//     await getUserBalances(userAddress);
+//     try {
+//       setBalanceLoading(true);
+//       await getUserBalances(userAddress);
+//     } catch (error) {
+//       console.error('Error fetching user balances:', error);
+//     } finally {
+//       setBalanceLoading(false);
+//     }
 //   };
 
 //   return (
@@ -120,12 +140,13 @@
 //           />
 //           <button
 //             onClick={handleGetBalances}
-//             className="p-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+//             className={`p-2 text-white rounded-md ${balanceLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+//             disabled={balanceLoading}
 //           >
-//             Get Balances
+//             {balanceLoading ? 'Fetching...' : 'Get Balances'}
 //           </button>
 
-//           {userBalances && (
+//           {userBalances && !balanceLoading && (
 //             <div className="text-gray-600">
 //               <p>Balance Spent: {userBalances.balanceSpent} cUSD</p>
 //               <p>Balance Received: {userBalances.balanceReceived} cUSD</p>
@@ -151,165 +172,179 @@
 
 
 
-import React, { useEffect, useState } from 'react';
-import { useTaxiPaymentcUSD } from '../hooks/useTaxiPaymentcUSD'; // Updated hook import
+// "use client";
 
-const IndexPage = () => {
-  const {
-    address,
-    getUserAddress,
-    payUser,
-    getUserBalances,
-    userBalances,
-    getTaxPercent,
-    taxPercent,
-    getIncentiveAmount,
-    incentiveAmount,
-    getIncentiveTrigger,
-    incentiveTrigger,
-    loading,
-  } = useTaxiPaymentcUSD(); // Updated hook usage
+// import React, { useEffect, useState } from 'react';
+// import { useTaxiPaymentcUSD } from '../hooks/useTaxiPaymentcUSD'; 
+// import { gql, useQuery } from '@apollo/client';
 
-  const [recipient, setRecipient] = useState(''); // For sending payment
-  const [amount, setAmount] = useState('0'); // For amount input
-  const [userAddress, setUserAddress] = useState(''); // For manually fetching user balance
-  const [balanceLoading, setBalanceLoading] = useState(false); // Loading state for fetching balance
+// // GraphQL query to fetch data from your subgraph
+// const GET_PAYMENT_DATA = gql`
+//   query {
+//     incentiveAwardeds(first: 5) {
+//       id
+//       user
+//       amount
+//     }
+//     paymentMades(first: 5) {
+//       id
+//       payer
+//       payee
+//       amount
+//     }
+//   }
+// `;
 
-  // Fetch user's wallet address and contract information on mount
-  useEffect(() => {
-    const fetchAddressAndData = async () => {
-      try {
-        await getUserAddress();
-        if (address) {
-          await getUserBalances(address); // Automatically fetch current user's balance
-        }
-        await getTaxPercent();
-        await getIncentiveAmount();
-        await getIncentiveTrigger();
-      } catch (error) {
-        console.error('Error fetching contract data:', error);
-      }
-    };
-    fetchAddressAndData();
-  }, [address, getUserAddress, getUserBalances, getTaxPercent, getIncentiveAmount, getIncentiveTrigger]);
+// const IndexPage = () => {
+//   const {
+//     address,
+//     getUserAddress,
+//     payUser,
+//     getUserBalances,
+//     userBalances,
+//     getTaxPercent,
+//     taxPercent,
+//     getIncentiveAmount,
+//     incentiveAmount,
+//     getIncentiveTrigger,
+//     incentiveTrigger,
+//     loading,
+//   } = useTaxiPaymentcUSD();
 
-  // Handle sending payment
-  const handlePayment = async () => {
-    try {
-      await payUser(recipient, amount);
-      // Fetch the user's balances after payment to update the UI
-      if (address) {
-        await getUserBalances(address);
-      }
-    } catch (error) {
-      console.error('Error sending payment:', error);
-    }
-  };
+//   const [recipient, setRecipient] = useState(''); 
+//   const [amount, setAmount] = useState('0'); 
+//   const [userAddress, setUserAddress] = useState(''); 
+//   const [balanceLoading, setBalanceLoading] = useState(false); 
 
-  // Handle manually fetching another user's balance
-  const handleGetBalances = async () => {
-    try {
-      setBalanceLoading(true);
-      await getUserBalances(userAddress);
-    } catch (error) {
-      console.error('Error fetching user balances:', error);
-    } finally {
-      setBalanceLoading(false);
-    }
-  };
+//   // GraphQL data fetching
+//   const { data, loading: graphLoading, error } = useQuery(GET_PAYMENT_DATA);
 
-  return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Taxi Payment DApp</h1>
+//   // Fetch user's wallet address and contract information on mount
+//   useEffect(() => {
+//     const fetchAddressAndData = async () => {
+//       try {
+//         await getUserAddress();
+//         if (address) {
+//           await getUserBalances(address);
+//         }
+//         await getTaxPercent();
+//         await getIncentiveAmount();
+//         await getIncentiveTrigger();
+//       } catch (error) {
+//         console.error('Error fetching contract data:', error);
+//       }
+//     };
+//     fetchAddressAndData();
+//   }, [address, getUserAddress, getUserBalances, getTaxPercent, getIncentiveAmount, getIncentiveTrigger]);
 
-      {/* Display the current user's address */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">Current User Address</h2>
-        <p className="text-gray-600">{address ? address : 'No address connected'}</p>
-      </div>
+//   // Handle sending payment
+//   const handlePayment = async () => {
+//     try {
+//       await payUser(recipient, amount);
+//       if (address) {
+//         await getUserBalances(address);
+//       }
+//     } catch (error) {
+//       console.error('Error sending payment:', error);
+//     }
+//   };
 
-      {/* Display the current user's balance */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">Current User Balance</h2>
-        {userBalances ? (
-          <div className="text-gray-600">
-            <p>Balance Spent: {userBalances.balanceSpent} cUSD</p>
-            <p>Balance Received: {userBalances.balanceReceived} cUSD</p>
-          </div>
-        ) : (
-          <p className="text-gray-600">Loading balance...</p>
-        )}
-      </div>
+//   // Handle manually fetching another user's balance
+//   const handleGetBalances = async () => {
+//     try {
+//       setBalanceLoading(true);
+//       await getUserBalances(userAddress);
+//     } catch (error) {
+//       console.error('Error fetching user balances:', error);
+//     } finally {
+//       setBalanceLoading(false);
+//     }
+//   };
 
-      {/* Form to send payment */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">Send Payment</h2>
-        <div className="flex flex-col space-y-4">
-          <input
-            type="text"
-            placeholder="Recipient Address"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            className="border border-gray-300 p-2 rounded-md"
-          />
-          <input
-            type="text"
-            placeholder="Amount in cUSD"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="border border-gray-300 p-2 rounded-md"
-          />
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className={`p-2 rounded-md text-white ${
-              loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
-          >
-            {loading ? 'Processing...' : 'Send Payment'}
-          </button>
-        </div>
-      </div>
+//   return (
+//     <div className="container mx-auto p-8">
+//       <h1 className="text-3xl font-bold mb-6 text-center">Taxi Payment DApp</h1>
 
-      {/* Form to manually fetch user balances */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">Get User Balances</h2>
-        <div className="flex flex-col space-y-4">
-          <input
-            type="text"
-            placeholder="User Address"
-            value={userAddress}
-            onChange={(e) => setUserAddress(e.target.value)}
-            className="border border-gray-300 p-2 rounded-md"
-          />
-          <button
-            onClick={handleGetBalances}
-            className={`p-2 text-white rounded-md ${balanceLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
-            disabled={balanceLoading}
-          >
-            {balanceLoading ? 'Fetching...' : 'Get Balances'}
-          </button>
+//       {/* Display the current user's address */}
+//       <div className="mb-6">
+//         <h2 className="text-xl font-semibold">Current User Address</h2>
+//         <p className="text-gray-600">{address ? address : 'No address connected'}</p>
+//       </div>
 
-          {userBalances && !balanceLoading && (
-            <div className="text-gray-600">
-              <p>Balance Spent: {userBalances.balanceSpent} cUSD</p>
-              <p>Balance Received: {userBalances.balanceReceived} cUSD</p>
-            </div>
-          )}
-        </div>
-      </div>
+//       {/* Display the current user's balance */}
+//       <div className="mb-6">
+//         <h2 className="text-xl font-semibold">Current User Balance</h2>
+//         {userBalances ? (
+//           <div className="text-gray-600">
+//             <p>Balance Spent: {userBalances.balanceSpent} cUSD</p>
+//             <p>Balance Received: {userBalances.balanceReceived} cUSD</p>
+//           </div>
+//         ) : (
+//           <p className="text-gray-600">Loading balance...</p>
+//         )}
+//       </div>
 
-      {/* Display contract information */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">Contract Information</h2>
-        <div className="text-gray-600">
-          <p>Tax Percent: {taxPercent}%</p>
-          <p>Incentive Amount: {incentiveAmount} cUSD</p>
-          <p>Incentive Trigger: {incentiveTrigger} unique interactions</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+//       {/* Form to send payment */}
+//       <div className="mb-6">
+//         <h2 className="text-xl font-semibold">Send Payment</h2>
+//         <div className="flex flex-col space-y-4">
+//           <input
+//             type="text"
+//             placeholder="Recipient Address"
+//             value={recipient}
+//             onChange={(e) => setRecipient(e.target.value)}
+//             className="border border-gray-300 p-2 rounded-md"
+//           />
+//           <input
+//             type="text"
+//             placeholder="Amount in cUSD"
+//             value={amount}
+//             onChange={(e) => setAmount(e.target.value)}
+//             className="border border-gray-300 p-2 rounded-md"
+//           />
+//           <button
+//             onClick={handlePayment}
+//             disabled={loading}
+//             className={`p-2 rounded-md text-white ${
+//               loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+//             }`}
+//           >
+//             {loading ? 'Processing...' : 'Send Payment'}
+//           </button>
+//         </div>
+//       </div>
 
-export default IndexPage;
+//       {/* Display data from The Graph */}
+//       <div className="mt-6">
+//         <h2 className="text-xl font-semibold">Recent Payments and Incentives</h2>
+//         {graphLoading ? (
+//           <p>Loading transactions...</p>
+//         ) : error ? (
+//           <p>Error fetching data: {error.message}</p>
+//         ) : (
+//           <>
+//             <h3 className="text-lg font-semibold">Incentive Awards</h3>
+//             <ul className="text-gray-600">
+//               {data.incentiveAwardeds.map((award: any) => (
+//                 <li key={award.id}>
+//                   User: {award.user}, Amount: {award.amount}
+//                 </li>
+//               ))}
+//             </ul>
+
+//             <h3 className="text-lg font-semibold">Payments Made</h3>
+//             <ul className="text-gray-600">
+//               {data.paymentMades.map((payment: any) => (
+//                 <li key={payment.id}>
+//                   Payer: {payment.payer}, Payee: {payment.payee}, Amount: {payment.amount}
+//                 </li>
+//               ))}
+//             </ul>
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default IndexPage;

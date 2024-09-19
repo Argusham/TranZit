@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router"; // Import useRouter for navigation
 import QrScanner from "react-qr-scanner"; // Import the QR scanner package
-import { Button, Stack, CircularProgress } from "@mui/material"; // Use Material-UI for styling
+import { Button, Stack, CircularProgress, Switch } from "@mui/material"; // Use Material-UI for styling
 import { useGasEstimation } from "@/hooks/useGasEstimation";
 import { useWeb3State } from "@/hooks/useWeb3State";
+import blockies from "ethereum-blockies"; // Import blockies to generate profile icons
 
 export default function CommuterUI() {
   const router = useRouter(); // Initialize router
@@ -14,6 +15,8 @@ export default function CommuterUI() {
   ); // Add state to manage camera mode
   const [recipient, setRecipient] = useState<string>(""); // For storing scanned recipient address
   const [amount, setAmount] = useState<string>(""); // For storing scanned amount
+  const [showZar, setShowZar] = useState(false); // State for toggling between cUSD and ZAR
+  const [conversionRate, setConversionRate] = useState<number | null>(null); // Store the conversion rate
 
   // Web3 state and gas estimation
   const {
@@ -26,6 +29,26 @@ export default function CommuterUI() {
     sendTransaction,
   } = useWeb3State();
   const { gasEstimate, gasPrice } = useGasEstimation(recipient, amount); // Use recipient and amount to get gas estimate
+
+  // Fetch conversion rate from API
+  useEffect(() => {
+    const fetchConversionRate = async () => {
+      try {
+        const response = await fetch("https://open.er-api.com/v6/latest/USD");
+        const data = await response.json();
+        const rate = data.rates.ZAR; // Get ZAR conversion rate
+        setConversionRate(rate);
+      } catch (error) {
+        console.error("Error fetching conversion rate:", error);
+      }
+    };
+
+    fetchConversionRate();
+  }, []); // Fetch once when the component mounts
+
+  const zarBalance = conversionRate
+    ? (Number(balance) * conversionRate).toFixed(2)
+    : "Loading..."; // Convert balance to ZAR
 
   const goBack = () => {
     router.back(); // Navigate to the previous page
@@ -70,6 +93,18 @@ export default function CommuterUI() {
     }
   };
 
+  // Format the address to show only first and last 5 characters
+  const formatAddress = (address: string) => {
+    return `${address.substring(0, 5)}...${address.substring(
+      address.length - 5
+    )}`;
+  };
+
+  // Generate the blockie for the user address
+  const blockieDataUrl = address
+    ? blockies.create({ seed: address }).toDataURL()
+    : "";
+
   return (
     <div className="flex flex-col items-center bg-black text-white min-h-screen px-4 py-6">
       {/* Back Button */}
@@ -86,20 +121,38 @@ export default function CommuterUI() {
 
       {/* Profile Section */}
       <div className="w-full bg-green-600 p-4 rounded-2xl mb-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-lg">Hello Commuter👋</p>
-            <img
-              src="/path-to-avatar.jpg"
-              alt="Commuter Avatar"
-              className="w-12 h-12 rounded-full"
-            />
-            <h2 className="text-sm font-bold">{address}</h2>
+        <div className="flex items-center">
+          {/* Display blockie - image on the left */}
+          <img
+            src={blockieDataUrl}
+            alt="Commuter Avatar"
+            className="w-10 h-10 rounded-full mr-4" // Adjusted size and spacing
+          />
+
+          {/* Text section - Hello Passenger and Address on the right */}
+          <div className="flex flex-col justify-center">
+            <p className="text-l">Hello Passenger👋</p>
+            <h2 className="text-sm font-bold">
+              {address ? formatAddress(address) : "Address not available"}
+            </h2>
           </div>
         </div>
+
         <div className="mt-4">
-          <p className="text-sm">Your Current Balance</p>
-          <h3 className="text-4xl font-bold">cU$D {balance}</h3>
+          <p className="text-sm">Wallet Balance:</p>
+          {/* Toggle switch between cUSD and ZAR */}
+          <div className="flex items-center">
+            <h3 className="text-4xl font-bold">
+              {showZar ? `ZAR ${zarBalance}` : `cU$D ${balance}`}
+            </h3>
+            <Switch
+              checked={showZar}
+              onChange={() => setShowZar(!showZar)}
+              color="default"
+              inputProps={{ "aria-label": "Toggle currency display" }}
+            />
+          </div>
+          <p className="text-sm">Switch to {showZar ? "cU$D" : "ZAR"}</p>
         </div>
 
         {/* Pay Button or QR Scanner */}
