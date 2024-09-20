@@ -1,22 +1,29 @@
 // components/UserInfo.tsx
 import { Stack, Typography, Divider, Chip } from '@mui/material';
 
-interface UserInfoProps {
-  address: string;
-  balance: string;
+interface WalletInfoProps {
+  address: string | null;
+  currentWalletAmount: string | null;
 }
 
-export const UserInfo = ({ address, balance }: UserInfoProps) => (
-  <>
-    <Typography>Connected Address:</Typography>
-    <div className='font-bold text-sm break-all'>{address}</div>
-    <Stack direction='row' justifyContent='space-between' alignItems='center'>
-      <Typography>Balance:</Typography>
-      <Typography>{balance} cUSD</Typography>
-    </Stack>
-    <div className='font-bold text-lg m-2'></div>
-    <Divider>
-      <Chip label='Enter Recipient Details Below' size='small' />
-    </Divider>
-  </>
-);
+const WalletInfo = ({ address, currentWalletAmount }: WalletInfoProps) => {
+  return (
+    <>
+      {/* Display the current user's address */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold">Current User Address</h2>
+        <p className="text-gray-600">{address ? address : 'No address connected'}</p>
+      </div>
+
+      {/* Display the current wallet cUSD balance */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold">Current Wallet Balance</h2>
+        <p className="text-gray-600">
+          {currentWalletAmount ? `${currentWalletAmount} cUSD` : 'Fetching balance...'}
+        </p>
+      </div>
+    </>
+  );
+};
+
+export default WalletInfo;

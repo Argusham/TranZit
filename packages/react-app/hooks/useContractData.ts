@@ -1,6 +1,7 @@
 // context/useContractData.ts
 import { useState } from "react";
 import { publicClient } from "../utils/publicClient"; // Import the publicClient utility
+import {  formatEther} from "viem";
 import cusdAbi from '../utils/cusdAbi.json'; // TaxiPaymentcUSD ABI
 
 export const useContractData = () => {
@@ -15,16 +16,16 @@ export const useContractData = () => {
   const getUserBalances = async (userAddress: string) => {
     try {
       const balances = await publicClient.readContract({
-        address: taxiPaymentContractAddress,
-        abi: cusdAbi,
+        address: taxiPaymentContractAddress, // TaxiPaymentcUSD contract address
+        abi: cusdAbi, // TaxiPaymentcUSD ABI
         functionName: "getUserBalances",
         args: [userAddress],
       });
 
-      const [balanceSpent, balanceReceived] = balances as [bigint, bigint]; // Assert type
+      const [balanceSpent, balanceReceived] = balances as [bigint, bigint];
       setUserBalances({
-        balanceSpent: balanceSpent.toString(),
-        balanceReceived: balanceReceived.toString(),
+        balanceSpent: formatEther(balanceSpent),
+        balanceReceived: formatEther(balanceReceived),
       });
     } catch (error) {
       console.error("Failed to fetch user balances:", error);

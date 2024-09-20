@@ -1,6 +1,4 @@
 // context/useWallet.ts
-
-
 import { useState } from "react";
 import { createWalletClient, custom, getContract, formatEther } from "viem";
 import { celoAlfajores } from "viem/chains";
