@@ -137,7 +137,7 @@ export default function DriverPage() {
   const { payUser, loading } = usePayments(address);
   const { getUserBalances, userBalances } = useContractData();
   const [amount, setAmount] = useState('');
-  const predefinedAmounts = [5, 10, 20];
+  const predefinedAmounts = [0.5, 1, 1.5, 2];
 
   useEffect(() => {
     const fetchUserData = async () => {
