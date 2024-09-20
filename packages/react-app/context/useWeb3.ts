@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { stableTokenABI } from "@celo/abis";
-import {createPublicClient,createWalletClient,custom,http,parseEther,getContract,formatEther} from "viem";
+import {createWalletClient,custom,parseEther,getContract,formatEther} from "viem";
 import { celoAlfajores } from "viem/chains";
+import { publicClient } from "../utils/publicClient";
 
-const publicClient = createPublicClient({
-    chain: celoAlfajores,
-    transport: http(),
-});
+
 
 const cUSDTokenAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1"; // Testnet
 
@@ -81,13 +79,6 @@ export const useWeb3 = () => {
         return await publicClient.estimateGas(params);
     };
 
-    // const estimateGasPrice = async (feeCurrency = "") => {
-    //     const params = feeCurrency ? [`0x${feeCurrency.replace(/^0x/, '')}`] : undefined;
-    //     return await publicClient.request({
-    //         method: "eth_gasPrice",
-    //         client: params,
-    //     });
-    // };
 
     const estimateGasPrice = async (feeCurrency = ""): Promise<string> => {
         const params = feeCurrency ? [`0x${feeCurrency.replace(/^0x/, '')}`] : [];
