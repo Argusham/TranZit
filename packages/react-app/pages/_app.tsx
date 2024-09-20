@@ -67,7 +67,7 @@ import { celo, celoAlfajores } from "wagmi/chains";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from '@apollo/client'; // Apollo import
-import client from '../pages/apolloClient'; // Apollo client you created
+import client from '../utils/apolloClient'; // Apollo client you created
 
 const connectors = connectorsForWallets(
     [
