@@ -43,7 +43,7 @@ export const PredefinedAmounts = ({
           {/* Flying text effect */}
           {flyAmount === amount && (
             <motion.div
-              className="absolute text-white text-2xl font-bold top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute text-white p-10 text-2xl font-bold top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               initial={{ opacity: 1, scale: 1 }}
               animate={{
                 opacity: 0,

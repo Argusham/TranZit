@@ -41,10 +41,14 @@ export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const predefinedAmounts = [1, 2, 0.5];
-  const walletClient = useWalletClient();
-  const address = walletClient.data?.account.address;
+  const { getUserBalances, userBalances } = useContractData();
+  const [isMounted, setIsMounted] = useState(false);
+  // const walletClient = useWalletClient();
+  // const address = walletClient.data?.account.address;
   // const balance = walletClient.data?.account.address;
-  console.log(walletClient.data)
+  // console.log(walletClient.data)
+  const { address, getUserAddress, currentWalletAmount, getCurrentWalletAmount } = useWallet();
+  // const address = "0xb11";
 
   const goBack = () => {
     router.back();
@@ -60,7 +64,19 @@ export default function DriverUIPage() {
     skip: !address,
   });
 
-  console.log(result);
+  useEffect(() => {
+    setIsMounted(true);
+
+    const fetchUserData = async () => {
+      await getUserAddress();
+      if (address) {
+        await getUserBalances(address);
+        await getCurrentWalletAmount(address);
+      }
+    };
+    
+    fetchUserData();
+  }, [address, getUserAddress, getUserBalances, getCurrentWalletAmount])
 
   return (
     <div className="flex flex-col items-center bg-white text-black min-h-screen px-6 py-8">
@@ -90,12 +106,12 @@ export default function DriverUIPage() {
         </div>
         <div className="mt-6">
           <p className="text-sm text-gray-200">Wallet Balance</p>
-          <h3 className="text-5xl font-extrabold text-white mt-2">cU$D {'[will figure this out]'}</h3>
+          <h3 className="text-5xl font-extrabold text-white mt-2">cU$D {userBalances?.balanceReceived}</h3>
         </div>
-        <div className="flex justify-between mt-6">
+        {/* <div className="flex justify-between mt-6">
           <button className="bg-white text-green-600 px-6 py-2 rounded-full shadow-md hover:scale-105 transition">Send</button>
           <button className="bg-green-700 text-white px-6 py-2 rounded-full shadow-md hover:scale-105 transition">Request</button>
-        </div>
+        </div> */}
       </div>
 
       {/* Driver-specific UI */}
@@ -139,7 +155,7 @@ export default function DriverUIPage() {
                 }`}
               >
                 {transaction?.type === "positive" ? "+" : "-"}$
-                {transaction?.amount}
+                {Number.parseInt(transaction?.amount) * Math.pow(10, -18)}
               </p>
             </div>
           ))}
