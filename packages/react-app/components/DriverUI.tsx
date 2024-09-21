@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { PredefinedAmounts } from "@/components/PredefinedAmounts";
 import { QRCodeDisplay } from "@/components/QRCodeDisplay";
-import { TransactionStatus } from "@/components/TransactionStatus";
-import { GasInfo } from "@/components/GasInfo";
 import { TextField, Stack } from "@mui/material";
 
 interface DriverUIProps {
@@ -10,9 +8,6 @@ interface DriverUIProps {
   amount: string;
   setAmount: (amount: string) => void;
   predefinedAmounts: number[];
-  transactionStatus: string | null;
-  gasEstimate: string | null;
-  gasPrice: string | null;
 }
 
 export const DriverUI = ({
@@ -20,9 +15,6 @@ export const DriverUI = ({
   amount,
   setAmount,
   predefinedAmounts,
-  transactionStatus,
-  gasEstimate,
-  gasPrice,
 }: DriverUIProps) => {
   const [isSettingAmount, setIsSettingAmount] = useState(false);
 
@@ -40,10 +32,9 @@ export const DriverUI = ({
 
   return (
     <>
-      {/* Driver UI for entering a custom amount */}
       <TextField
         id="custom-amount"
-        label="Enter fair amount"
+        label="Enter fare amount"
         variant="outlined"
         value={amount}
         fullWidth
@@ -61,11 +52,6 @@ export const DriverUI = ({
       {/* Automatically Generate QR Code when the driver enters/selects amount */}
       {amount && !isSettingAmount && <QRCodeDisplay recipient={address} amount={amount} />}
 
-      {/* Transaction Status */}
-      <TransactionStatus status={transactionStatus} />
-
-      {/* Gas Information */}
-      <GasInfo gasEstimate={gasEstimate} gasPrice={gasPrice} />
     </>
   );
 };

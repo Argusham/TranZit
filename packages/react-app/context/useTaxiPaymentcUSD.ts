@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { createPublicClient, createWalletClient, custom, http, formatEther, parseEther, encodeFunctionData } from "viem";
+import {  createWalletClient, custom,  formatEther, parseEther, encodeFunctionData, getContract } from "viem";
 import { celoAlfajores } from "viem/chains";
 import cusdAbi from '../utils/cusdAbi.json'; // TaxiPaymentcUSD ABI
 import erc20Abi from '../utils/erc20Abi.json'; // ERC20 ABI
+import { publicClient } from "../utils/publicClient";
 
-const publicClient = createPublicClient({
-  chain: celoAlfajores,
-  transport: http(),
-});
 
 export const useTaxiPaymentcUSD = () => {
   const [address, setAddress] = useState<any | null>(null);
@@ -18,7 +15,7 @@ export const useTaxiPaymentcUSD = () => {
   const [loading, setLoading] = useState(false);
 
   const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4'; // TaxiPaymentcUSD contract address
-  const cusdTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1'; // cUSD token address on Celo Alfajores testnet
+  const cUSDTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1'; // cUSD token address on Celo Alfajores testnet
 
   // Get user's wallet address
   const getUserAddress = async () => {
@@ -44,7 +41,7 @@ export const useTaxiPaymentcUSD = () => {
 
     try {
       const tx = await walletClient.writeContract({
-        address: cusdTokenAddress, // cUSD token contract address
+        address: cUSDTokenAddress, // cUSD token contract address
         abi: erc20Abi, // ERC20 ABI
         functionName: "approve",
         account: address,
@@ -108,11 +105,12 @@ export const useTaxiPaymentcUSD = () => {
     }
   };
 
+
   // Get cUSD balance for a specific account
-  const getCUSDTokenBalance = async (userAddress: string) => {
+  const getCUSDTokenBalance = async (userAddress: any) => {
     try {
       const balance = await publicClient.readContract({
-        address: cusdTokenAddress, // cUSD token contract address
+        address: cUSDTokenAddress, // cUSD token contract address
         abi: erc20Abi, // ERC20 ABI
         functionName: "balanceOf",
         args: [userAddress], // User address
@@ -123,6 +121,24 @@ export const useTaxiPaymentcUSD = () => {
       console.error("Failed to fetch cUSD balance:", error);
     }
   };
+
+//   const getBalance = async (address: any) => {
+//     const StableTokenContract = getContract({
+//         address: cUSDTokenAddress,
+//         abi: erc20Abi,
+//         client: publicClient,
+//     });
+
+//     const balanceInBigNumber: any = await StableTokenContract.read.balanceOf([address]);
+    
+
+//     const balanceInWei = balanceInBigNumber;
+//     const balanceInCUSD = formatEther(balanceInWei);
+
+//     return balanceInCUSD;
+// };
+
+
 
   // Get user balances from TaxiPaymentcUSD contract
   const getUserBalances = async (userAddress: string) => {

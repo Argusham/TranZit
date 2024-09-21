@@ -2,11 +2,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { DriverUI } from "@/components/DriverUI";
-import { useWeb3State } from "@/hooks/useWeb3State";
-import { TransactionStatus } from "@/components/TransactionStatus";
+// import { useWeb3State } from "@/hooks/useWeb3State";
+// import { TransactionStatus } from "@/components/TransactionStatus";
 import { gql, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { useWallet } from "@/hooks/useWallet";
+import { useTaxiPaymentcUSD } from "@/context/useTaxiPaymentcUSD";
+import { useContractData } from "@/hooks/useContractData";
+import { useWalletClient } from "wagmi";
 
 const GET_PAYMENT_DATA = gql`
   query GetPaymentData($address: String!) {
@@ -24,19 +28,23 @@ const GET_PAYMENT_DATA = gql`
   }
 `;
 
+const GET_USER_BALANCE = gql`
+  query GetUserBalances($address: Bytes!) {
+    userBalance(id: $address) {
+      balanceSpent
+      balanceReceived
+    }
+  }
+`;
+
 export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const predefinedAmounts = [1, 2, 0.5];
-  const {
-    address,
-    balance,
-    transactionStatus,
-    tx,
-    errorMessage,
-    signingLoading,
-    sendTransaction,
-  } = useWeb3State();
+  const walletClient = useWalletClient();
+  const address = walletClient.data?.account.address;
+  // const balance = walletClient.data?.account.address;
+  console.log(walletClient.data)
 
   const goBack = () => {
     router.back();
@@ -46,6 +54,13 @@ export default function DriverUIPage() {
     variables: { address },
     skip: !address,
   });
+
+  const result = useQuery(GET_USER_BALANCE, {
+    variables: { address },
+    skip: !address,
+  });
+
+  console.log(result);
 
   return (
     <div className="flex flex-col items-center bg-white text-black min-h-screen px-6 py-8">
@@ -75,7 +90,7 @@ export default function DriverUIPage() {
         </div>
         <div className="mt-6">
           <p className="text-sm text-gray-200">Wallet Balance</p>
-          <h3 className="text-5xl font-extrabold text-white mt-2">cU$D {balance}</h3>
+          <h3 className="text-5xl font-extrabold text-white mt-2">cU$D {'[will figure this out]'}</h3>
         </div>
         <div className="flex justify-between mt-6">
           <button className="bg-white text-green-600 px-6 py-2 rounded-full shadow-md hover:scale-105 transition">Send</button>
@@ -89,13 +104,10 @@ export default function DriverUIPage() {
           amount={amount}
           setAmount={setAmount}
           predefinedAmounts={predefinedAmounts}
-          transactionStatus={transactionStatus}
-          gasEstimate={null}
-          gasPrice={null}
           address={address || ""}
         />
         {/* Transaction Status */}
-        <TransactionStatus status={transactionStatus} />
+        {/* <TransactionStatus status={transactionStatus} /> */}
       </div>
 
       {/* Transactions Section */}
