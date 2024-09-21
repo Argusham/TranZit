@@ -1,36 +1,46 @@
-# React Framework + NextJS | Celo Composer
+# Taxi Payment DApp
 
-Celo Composer support React boilerplate template with TailwindCSS. This is a starter kit with no additional boilerplate code. It's a perfect starter kit to get your project started on Celo blockchain.
+A decentralized application built on the Celo Alfajores Testnet. This DApp facilitates contactless payments between taxi drivers and commuters using cUSD, a Celo stable coin.
 
-## Setup & Installation
+## Tech Stack
+- Frontend: React, Tailwind CSS
+- Blockchain: Celo Alfajores Testnet
+- Smart Contract Interaction: Viem, Solidity
 
-```bash
-yarn
-```
+## Key Features
+1. **Send Payments**: Enables users to send cUSD payments to other addresses.
+2. **View User Balances**: Displays the amount spent and received by users.
+3. **Contract Info**: Fetches tax percentage, incentive amounts, and incentive triggers.
 
-Run `yarn` or `npm install` to install all the required dependencies to run the dApp.
+## Requirements
+- **Node.js** and **npm**
+- **MetaMask** with Celo Alfajores Testnet
+- **Hardhat** for contract deployment
 
-> React + Tailwind CSS Template does not have any dependency on hardhat and truffle.
-> This starterkit does not include connection of Hardhat/Truffle with ReactJS. It's up to the user to integrate smart contract with ReactJS. This gives user more flexibily over the dApp.
+## Setup
+1. Clone the repo:  
+   `git clone https://github.com/yourusername/taxi-payment-dapp.git`
+   
+2. Install dependencies:  
+   `npm install`
 
--   To start the dApp, run the following command.
+3. Configure Tailwind CSS:  
+   `npx tailwindcss init`
 
-```bash
-yarn react-dev
-```
+4. Add the Alfajores network to MetaMask:  
+   RPC URL: `https://alfajores-forno.celo-testnet.org`  
+   Chain ID: `44787`
 
-## Dependencies
+5. Run the DApp:  
+   `npm start`
 
-### Default
+6. Deploy the contract using Hardhat:  
+   `npx hardhat run scripts/deploy.ts --network alfajores`
 
--   [Next.js](https://nextjs.org/) app framework
--   [TailwindCSS](https://tailwindcss.com/) for UI
--   [rainbowkit-celo](https://www.npmjs.com/package/@celo/rainbowkit-celo), a plugin to help rainbowkit developers support the CELO protocol faster.
+## Project Structure
+- `src/components/`: Reusable UI components.
+- `src/hooks/`: Contains custom hooks like `useTaxiPayment.ts` for blockchain interactions.
+- `src/pages/`: Main page (index.tsx) where the DApp UI is rendered.
 
-## Architecture
-
--   `/pages` includes the main application components (specifically `index.tsx` and `_app.tsx`)
-    -   `_app.tsx` includes configuration
-    -   `index.tsx` is the main page of the application
--   `/components` includes components that are rendered in `index.tsx`
--   `/public` includes static files
+## License
+MIT

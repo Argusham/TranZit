@@ -5,12 +5,9 @@ import { useRouter } from 'next/router';
 export default function LandingPage() {
   const router = useRouter();
 
+
   const handleNavigation = (role: 'driver' | 'commuter') => {
-    if (role === 'driver') {
-      router.push('/driver');
-    } else {
-      router.push('/commuter');
-    }
+    router.push(`/${role}`);
   };
 
   return (

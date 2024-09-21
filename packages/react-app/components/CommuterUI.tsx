@@ -1,93 +1,311 @@
-// // components/CommuterUI.tsx
-// import { useState } from 'react';
+// import { useState, useEffect, useRef } from 'react';
 // import PrimaryButton from '@/components/Button';
-// import QrReader from 'react-qr-reader'; // You will need to install this package
+// import { Button, Stack } from '@mui/material';
+// import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 // interface CommuterUIProps {
 //   onScanSuccess: (data: string) => void;
 // }
 
+// type ScannerState = 'stopped' | 'starting' | 'scanning' | 'stopping';
+
 // export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
 //   const [scanning, setScanning] = useState(false);
+//   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+//   const qrCodeScannerRef = useRef<Html5Qrcode | null>(null);
+//   const [scannerState, setScannerState] = useState<ScannerState>('stopped');
 
-//   const handleScan = (data: any) => {
-//     if (data) {
-//       onScanSuccess(data); // Pass the scanned data to the parent component
-//       setScanning(false);
+//   // Reference to the reader element
+//   const readerRef = useRef<HTMLDivElement | null>(null);
+
+//   // Start scanning
+//   const startScanning = async () => {
+//     if (scannerState !== 'stopped') {
+//       console.warn('Scanner is not in a state to start scanning');
+//       return;
+//     }
+
+//     if (readerRef.current) {
+//       const qrCodeScanner = new Html5Qrcode(readerRef.current.id);
+//       qrCodeScannerRef.current = qrCodeScanner;
+//       setScannerState('starting');
+
+//       const config = {
+//         fps: 10,
+//         qrbox: { width: 250, height: 250 },
+//         formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+//       };
+
+//       try {
+//         await qrCodeScanner.start(
+//           { facingMode },
+//           config,
+//           (decodedText) => {
+//             onScanSuccess(decodedText);
+//             setScanning(false); // This will trigger stopScanning via useEffect
+//           },
+//           (errorMessage) => {
+//             console.warn('QR Scan Error:', errorMessage);
+//           }
+//         );
+//         setScannerState('scanning');
+//       } catch (err) {
+//         console.error('Failed to start scanning:', err);
+//         setScannerState('stopped');
+//       }
+//     } else {
+//       console.error('Reader element not found');
 //     }
 //   };
 
-//   const handleError = (err: any) => {
-//     console.error(err);
+//   // Stop scanning
+//   const stopScanning = async () => {
+//     if (scannerState !== 'scanning') {
+//       console.warn('Scanner is not in a state to stop scanning');
+//       return;
+//     }
+
+//     const qrCodeScanner = qrCodeScannerRef.current;
+//     if (qrCodeScanner) {
+//       setScannerState('stopping');
+//       try {
+//         await qrCodeScanner.stop();
+//         await qrCodeScanner.clear();
+//         qrCodeScannerRef.current = null;
+//         setScannerState('stopped');
+//       } catch (err) {
+//         console.error('Failed to stop scanning:', err);
+//         qrCodeScannerRef.current = null;
+//         setScannerState('stopped');
+//       }
+//     }
 //   };
+
+//   // Handle Pay button click
+//   const handlePayClick = () => {
+//     setScanning(true);
+//   };
+
+//   // Handle Cancel button click
+//   const handleCancelClick = () => {
+//     setScanning(false);
+//   };
+
+//   // Toggle camera
+//   const toggleCamera = () => {
+//     if (scannerState !== 'scanning') {
+//       console.warn('Cannot switch camera, scanner is not active');
+//       return;
+//     }
+
+//     stopScanning().then(() => {
+//       setFacingMode((prevMode) => (prevMode === 'environment' ? 'user' : 'environment'));
+//       setTimeout(() => {
+//         if (scanning) {
+//           startScanning();
+//         }
+//       }, 500);
+//     });
+//   };
+
+//   // Effect to start/stop scanning when scanning state changes
+//   useEffect(() => {
+//     if (scanning) {
+//       startScanning();
+//     } else {
+//       stopScanning();
+//     }
+
+//     // Cleanup function
+//     return () => {
+//       stopScanning();
+//     };
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [scanning, facingMode]);
 
 //   return (
 //     <>
 //       {!scanning ? (
-//         <PrimaryButton title='Pay' onClick={() => setScanning(true)} widthFull />
+//         <PrimaryButton title="Pay" onClick={handlePayClick} widthFull />
 //       ) : (
-//         <QrReader delay={300} onError={handleError} onScan={handleScan} style={{ width: '100%' }} />
+//         <>
+//           <div id="reader" ref={readerRef} style={{ width: '100%', height: '300px' }}></div>
+//           <Stack direction="row" justifyContent="center" spacing={2} className="mt-2">
+//             <Button variant="contained" color="primary" onClick={toggleCamera}>
+//               Switch Camera
+//             </Button>
+//             <Button variant="contained" color="secondary" onClick={handleCancelClick}>
+//               Cancel
+//             </Button>
+//           </Stack>
+//         </>
 //       )}
 //     </>
 //   );
 // };
 
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PrimaryButton from '@/components/Button';
-import QrScanner from 'react-qr-scanner'; // Import the QR scanner package
-import { Button, Stack } from '@mui/material'; // Use Material-UI for styling
+import { Button, Stack } from '@mui/material';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 interface CommuterUIProps {
   onScanSuccess: (data: string) => void;
 }
 
+type ScannerState = 'stopped' | 'starting' | 'scanning' | 'stopping';
+
 export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
   const [scanning, setScanning] = useState(false);
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment'); // Add state to manage camera mode
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const qrCodeScannerRef = useRef<Html5Qrcode | null>(null);
+  const [scannerState, setScannerState] = useState<ScannerState>('stopped');
 
-  // Handle scanning success
-  const handleScan = (data: any) => {
-    if (data) {
-      onScanSuccess(data.text); // Extract the scanned QR code data and pass it to the parent
-      setScanning(false);
+  // Reference to the reader element
+  const readerRef = useRef<HTMLDivElement | null>(null);
+
+  // Start scanning
+  const startScanning = async () => {
+    if (scannerState !== 'stopped') {
+      console.warn('Scanner is not in a state to start scanning');
+      return;
+    }
+
+    if (readerRef.current) {
+      const qrCodeScanner = new Html5Qrcode(readerRef.current.id);
+      qrCodeScannerRef.current = qrCodeScanner;
+      setScannerState('starting');
+
+      const config = {
+        fps: 10,
+        // Dynamically calculate qrbox size based on viewport dimensions
+        qrbox: function (viewfinderWidth: number, viewfinderHeight: number) {
+          const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+          const qrboxSize = Math.floor(minEdgeSize * 0.7); // Adjust the percentage as needed
+          return {
+            width: qrboxSize,
+            height: qrboxSize,
+          };
+        },
+        formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+      };
+
+      try {
+        await qrCodeScanner.start(
+          { facingMode },
+          config,
+          (decodedText) => {
+            onScanSuccess(decodedText);
+            setScanning(false); // This will trigger stopScanning via useEffect
+          },
+          (errorMessage) => {
+            console.warn('QR Scan Error:', errorMessage);
+          }
+        );
+        setScannerState('scanning');
+      } catch (err) {
+        console.error('Failed to start scanning:', err);
+        setScannerState('stopped');
+      }
+    } else {
+      console.error('Reader element not found');
     }
   };
 
-  // Handle scanning error
-  const handleError = (err: any) => {
-    console.error('QR Scan Error: ', err);
+  // Stop scanning
+  const stopScanning = async () => {
+    if (scannerState !== 'scanning') {
+      console.warn('Scanner is not in a state to stop scanning');
+      return;
+    }
+
+    const qrCodeScanner = qrCodeScannerRef.current;
+    if (qrCodeScanner) {
+      setScannerState('stopping');
+      try {
+        await qrCodeScanner.stop();
+        await qrCodeScanner.clear();
+        qrCodeScannerRef.current = null;
+        setScannerState('stopped');
+      } catch (err) {
+        console.error('Failed to stop scanning:', err);
+        qrCodeScannerRef.current = null;
+        setScannerState('stopped');
+      }
+    }
   };
 
-  // Toggle camera between front and back
+  // Handle Pay button click
+  const handlePayClick = () => {
+    setScanning(true);
+  };
+
+  // Handle Cancel button click
+  const handleCancelClick = () => {
+    setScanning(false);
+  };
+
+  // Toggle camera
   const toggleCamera = () => {
-    setFacingMode((prevMode) => (prevMode === 'environment' ? 'user' : 'environment'));
+    if (scannerState !== 'scanning') {
+      console.warn('Cannot switch camera, scanner is not active');
+      return;
+    }
+
+    stopScanning().then(() => {
+      setFacingMode((prevMode) => (prevMode === 'environment' ? 'user' : 'environment'));
+      setTimeout(() => {
+        if (scanning) {
+          startScanning();
+        }
+      }, 500);
+    });
   };
 
-  // QR scanner settings
-  const previewStyle = {
-    height: 240,
-    width: '100%',
-  };
+  // Effect to start/stop scanning when scanning state changes
+  useEffect(() => {
+    if (scanning) {
+      startScanning();
+    } else {
+      stopScanning();
+    }
+
+    // Cleanup function
+    return () => {
+      stopScanning();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scanning, facingMode]);
 
   return (
     <>
       {!scanning ? (
-        <PrimaryButton title='Pay' onClick={() => setScanning(true)} widthFull />
+        <PrimaryButton title="Pay" onClick={handlePayClick} widthFull />
       ) : (
         <>
-          <QrScanner
-            delay={300}
-            onError={handleError}
-            onScan={handleScan}
-            style={previewStyle}
-            facingMode={facingMode} // Set the camera based on facingMode state
-          />
+          <div
+            id="reader"
+            ref={readerRef}
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '300px',
+              margin: '0 auto',
+            }}
+          >
+            {/* The reader element will maintain a square aspect ratio */}
+            <div
+              style={{
+                paddingTop: '50%', // 1:1 Aspect Ratio
+              }}
+            ></div>
+          </div>
           <Stack direction="row" justifyContent="center" spacing={2} className="mt-2">
             <Button variant="contained" color="primary" onClick={toggleCamera}>
               Switch Camera
             </Button>
-            <Button variant="contained" color="secondary" onClick={() => setScanning(false)}>
+            <Button variant="contained" color="secondary" onClick={handleCancelClick}>
               Cancel
             </Button>
           </Stack>

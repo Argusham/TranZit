@@ -13,7 +13,7 @@ export default function Header() {
             setHideConnectBtn(true);
             connect({ connector: injected({ target: "metaMask" }) });
         }
-    }, []);
+    }, [connect]);
 
     return (
         <Disclosure as="nav" className="bg-green-200 border-b border-black">
