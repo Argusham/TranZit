@@ -1,4 +1,3 @@
-// components/DriverUI.tsx
 import { useState } from "react";
 import { PredefinedAmounts } from "@/components/PredefinedAmounts";
 import { QRCodeDisplay } from "@/components/QRCodeDisplay";
@@ -25,8 +24,18 @@ export const DriverUI = ({
   gasEstimate,
   gasPrice,
 }: DriverUIProps) => {
+  const [isSettingAmount, setIsSettingAmount] = useState(false);
+
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
+    setAmount(e.target.value); // Update immediately when it's a custom input
+  };
+
+  const handlePredefinedAmountClick = (amt: number) => {
+    setIsSettingAmount(true); // To manage the delay state
+    setTimeout(() => {
+      setAmount(amt.toString());
+      setIsSettingAmount(false); // Reset the delay state after 1 second
+    }, 300); // Delay of 1 second
   };
 
   return (
@@ -40,16 +49,17 @@ export const DriverUI = ({
         fullWidth
         onChange={handleCustomAmountChange}
         className="mb-3"
+        disabled={isSettingAmount} // Disable input when setting predefined amount
       />
 
       {/* Predefined amount selection */}
       <PredefinedAmounts
         predefinedAmounts={predefinedAmounts}
-        handleAmountClick={(amt) => setAmount(amt.toString())}
+        handleAmountClick={handlePredefinedAmountClick}
       />
 
       {/* Automatically Generate QR Code when the driver enters/selects amount */}
-      {amount && <QRCodeDisplay recipient={address} amount={amount} />}
+      {amount && !isSettingAmount && <QRCodeDisplay recipient={address} amount={amount} />}
 
       {/* Transaction Status */}
       <TransactionStatus status={transactionStatus} />
