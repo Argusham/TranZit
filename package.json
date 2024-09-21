@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "yarn workspace @MiniTest/react-app dev",
-        "react-app:build": "yarn workspace @MiniTest/react-app build",
+        "build": "yarn workspace @MiniTest/react-app build",
         "react-app:start": "yarn workspace @MiniTest/react-app start",
         "react-app:lint": "yarn workspace @MiniTest/react-app lint",
         "hardhat:compile": "yarn workspace @MiniTest/hardhat compile",
@@ -36,6 +36,7 @@
         "@emotion/styled": "^11.11.5",
         "@mui/material": "^5.15.20",
         "ethereum-blockies": "^0.1.1",
+        "html5-qrcode": "^2.3.8",
         "qrcode.react": "^4.0.1",
         "react-qr-code": "^2.0.15",
         "react-qr-reader": "^3.0.0-beta-1",

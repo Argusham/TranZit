@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { PredefinedAmounts } from "@/components/PredefinedAmounts";
 import { QRCodeDisplay } from "@/components/QRCodeDisplay";
 import { TextField, Stack } from "@mui/material";
+
 
 interface DriverUIProps {
   address: string;
@@ -9,6 +11,7 @@ interface DriverUIProps {
   setAmount: (amount: string) => void;
   predefinedAmounts: number[];
 }
+
 
 export const DriverUI = ({
   address,
@@ -29,6 +32,7 @@ export const DriverUI = ({
       setIsSettingAmount(false); // Reset the delay state after 1 second
     }, 300); // Delay of 1 second
   };
+
 
   return (
     <>
