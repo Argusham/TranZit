@@ -28,23 +28,15 @@ interface QRCodeDisplayProps {
   amount: string;
 }
 
-export const QRCodeDisplay = ({ recipient, amount }: QRCodeDisplayProps) => {
-  const isDataValid = recipient && amount;
 
-  return (
-    <div className='text-center mt-4'>
-      {isDataValid ? (
-        <>
-          <Typography variant="h6">Payment QR Code</Typography>
-          <div className='p-4 bg-white inline-block rounded'>
-            <QRCode value={JSON.stringify({ recipient, amount })} />
-          </div>
-        </>
-      ) : (
-        <Typography variant="body1" color="error">
-          Recipient or amount missing. Unable to generate QR code.
-        </Typography>
-      )}
-    </div>
-  );
-};
+export const QRCodeDisplay = ({ recipient, amount }: QRCodeDisplayProps) => (
+  <>
+    {recipient && amount && (
+      <div className='text-center mt-4 w-[fit-content] bg-red ml-[auto] mr-[auto]'>
+        <Typography>QR Code</Typography>
+        <QRCode className='' value={JSON.stringify({ recipient, amount })} />
+      </div>
+    )}
+  </>
+);
+
