@@ -13,15 +13,15 @@ const TransactionItem = ({ payee, amount }: TransactionItemProps) => {
   const formattedAmount = (Number(amount) / 1e18).toFixed(2); // Convert Wei to cUSD
 
   return (
-    <div className="flex justify-between items-center bg-gray-900 p-3 rounded-md">
+    <div className="flex justify-between items-center bg-gray-600 p-3 rounded-md">
       <div className="flex items-center space-x-3">
         {/* Display blockie */}
         <img src={blockieDataUrl} alt="Payee Avatar" className="w-6 h-6 rounded-full" />
         {/* Display formatted payee address */}
-        <p className="text-white">{formattedAddress}</p>
+        <p>{formattedAddress}</p>
       </div>
       {/* Display formatted amount */}
-      <p className="text-green-500 font-semibold">{formattedAmount} cUSD</p>
+      <p className="font-semibold">{formattedAmount} cUSD</p>
     </div>
   );
 };

@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { DriverUI } from "@/components/DriverUI";
-// import { useWeb3State } from "@/hooks/useWeb3State";
-// import { TransactionStatus } from "@/components/TransactionStatus";
 import { gql, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
