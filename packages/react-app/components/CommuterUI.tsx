@@ -32,10 +32,9 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
 
       const config = {
         fps: 10,
-        // Dynamically calculate qrbox size based on viewport dimensions
         qrbox: function (viewfinderWidth: number, viewfinderHeight: number) {
           const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
-          const qrboxSize = Math.floor(minEdgeSize * 0.7); // Adjust the percentage as needed
+          const qrboxSize = Math.floor(minEdgeSize * 0.75); // Adjust the percentage as needed
           return {
             width: qrboxSize,
             height: qrboxSize,
@@ -140,21 +139,15 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
           <div
             id="reader"
             ref={readerRef}
+            className="relative w-full max-w-xs mx-auto rounded-3xl overflow-hidden shadow-lg border-4 border-yellow-400"
             style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '300px',
-              margin: '0 auto',
+              aspectRatio: '1 / 1', // Ensures a square aspect ratio
             }}
           >
-            {/* The reader element will maintain a square aspect ratio */}
-            <div
-              style={{
-                paddingTop: '50%', // 1:1 Aspect Ratio
-              }}
-            ></div>
+            {/* Empty div for the QR reader */}
+            <div className="absolute inset-0"></div>
           </div>
-          <Stack direction="row" justifyContent="center" spacing={2} className="mt-2">
+          <Stack direction="row" justifyContent="center" spacing={2} className="mt-4">
             <Button variant="contained" color="primary" onClick={toggleCamera}>
               Switch Camera
             </Button>

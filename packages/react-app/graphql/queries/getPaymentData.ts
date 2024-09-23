@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_PAYMENT_DATA = gql`
   query {
@@ -12,6 +12,7 @@ export const GET_PAYMENT_DATA = gql`
       payer
       payee
       amount
+      blockTimestamp
     }
   }
 `;
