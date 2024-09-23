@@ -8,31 +8,7 @@ import { faArrowLeft, faBell, faUserCircle } from "@fortawesome/free-solid-svg-i
 import { useWallet } from "@/hooks/useWallet";
 import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
-
-const GET_PAYMENT_DATA = gql`
-  query GetPaymentData($address: String!) {
-    incentiveAwardeds(first: 5) {
-      id
-      user
-      amount
-    }
-    paymentMades(where: { payer: $address }) {
-      id
-      payer
-      payee
-      amount
-    }
-  }
-`;
-
-const GET_USER_BALANCE = gql`
-  query GetUserBalances($address: Bytes!) {
-    userBalance(id: $address) {
-      balanceSpent
-      balanceReceived
-    }
-  }
-`;
+import { GET_PAYMENTS_RECEIVED } from "@/graphql/queries/getPaymentData";
 
 export default function DriverUIPage() {
   const router = useRouter();
@@ -48,12 +24,7 @@ export default function DriverUIPage() {
     router.back();
   };
 
-  const { data, loading: graphLoading, error } = useQuery(GET_PAYMENT_DATA, {
-    variables: { address },
-    skip: !address,
-  });
-
-  const result = useQuery(GET_USER_BALANCE, {
+  const { data, loading: graphLoading, error } = useQuery(GET_PAYMENTS_RECEIVED, {
     variables: { address },
     skip: !address,
   });
