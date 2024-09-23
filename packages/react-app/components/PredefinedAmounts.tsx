@@ -32,12 +32,12 @@ export const PredefinedAmounts = ({
           key={amount}
           onClick={() => handleClick(amount)}
           className={`relative px-8 py-3 border-2 text-lg font-semibold rounded-lg transform transition-transform duration-300 ease-out
-            ${activeAmount === amount ? "bg-gradient-to-r from-neon-green to-green-600 text-white shadow-neon" : "bg-transparent border-neon-green text-neon-green hover:shadow-neon"}
-            hover:scale-90 hover:border-neon-blue hover:text-white`}
+            ${activeAmount === amount ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-yellow-400" : "bg-transparent border-yellow-400 text-yellow-400 hover:shadow-yellow-400"}
+            hover:scale-90 hover:border-yellow-500 hover:text-white`}
         >
           {amount} cUSD
           {activeAmount === amount && (
-            <span className="absolute inset-0 rounded-lg animate-ping bg-gradient-to-r from-neon-blue to-neon-green opacity-30"></span>
+            <span className="absolute inset-0 rounded-lg animate-ping bg-gradient-to-r from-yellow-400 to-yellow-600 opacity-30"></span>
           )}
 
           {/* Flying text effect */}
@@ -59,5 +59,6 @@ export const PredefinedAmounts = ({
         </Button>
       ))}
     </div>
+
   );
 };
