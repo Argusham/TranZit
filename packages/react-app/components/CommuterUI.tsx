@@ -133,7 +133,7 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
   return (
     <>
       {!scanning ? (
-        <PrimaryButton title="Pay" onClick={handlePayClick} widthFull />
+        <PrimaryButton title="Scan to pay"  onClick={handlePayClick} widthFull />
       ) : (
         <>
           <div
@@ -151,7 +151,7 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
             <Button variant="contained" color="primary" onClick={toggleCamera}>
               Switch Camera
             </Button>
-            <Button variant="contained" color="secondary" onClick={handleCancelClick}>
+            <Button variant="contained" color="error" onClick={handleCancelClick}>
               Cancel
             </Button>
           </Stack>

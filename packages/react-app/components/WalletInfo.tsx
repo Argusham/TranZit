@@ -15,7 +15,7 @@ const WalletInfo = ({ address, currentWalletAmount, showZar, zarBalance, setShow
   const blockieDataUrl = address ? blockies.create({ seed: address }).toDataURL() : '';
 
   return (
-    <div className="w-full bg-gray-700 bg-opacity-70 p-4 rounded-3xl mb-6 shadow-lg text-white">
+    <div className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-gray-400 bg-opacity-100 p-4 rounded-3xl mb-6 shadow-lg text-white">
       <div className="flex items-center">
         {/* Display blockie */}
         <img
@@ -25,7 +25,7 @@ const WalletInfo = ({ address, currentWalletAmount, showZar, zarBalance, setShow
         />
         <div className="flex flex-col justify-center">
           <p className="text-lg text-yellow-400">
-            {role === 'commuter' ? 'Hello Passenger 👋' : 'Hello Driver 👋'}
+            {role === 'commuter' ? 'Hello Passenger 😎' : 'Hello Driver 🚖'}
           </p>
           <h2 className="text-sm font-semibold">
             {address ? `${address.substring(0, 5)}...${address.substring(address.length - 5)}` : 'Address not available'}

@@ -2,12 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_PAYMENT_DATA = gql`
   query {
-    incentiveAwardeds(first: 5) {
-      id
-      user
-      amount
-    }
-    paymentMades(first: 10) {
+    paymentMades(first: 5, orderBy: blockTimestamp, orderDirection: desc) {
       id
       payer
       payee
