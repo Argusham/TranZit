@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useQuery } from "@apollo/client";
 import { CommuterUI } from "@/components/CommuterUI";
 import { usePayments } from "@/hooks/usePayment";
