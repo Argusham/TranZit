@@ -16,3 +16,14 @@ export const GET_PAYMENT_DATA = gql`
     }
   }
 `;
+
+export const GET_PAYMENTS_RECEIVED = gql`
+  query GetPaymentData($address: String!) {
+    paymentMades(where: { payee: $address }) {
+      id
+      payer
+      payee
+      amount
+    }
+  }
+`

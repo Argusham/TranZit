@@ -8,31 +8,7 @@ import { faArrowLeft, faBell, faUserCircle } from "@fortawesome/free-solid-svg-i
 import { useWallet } from "@/hooks/useWallet";
 import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
-
-const GET_PAYMENT_DATA = gql`
-  query GetPaymentData($address: String!) {
-    incentiveAwardeds(first: 5) {
-      id
-      user
-      amount
-    }
-    paymentMades(where: { payer: $address }) {
-      id
-      payer
-      payee
-      amount
-    }
-  }
-`;
-
-const GET_USER_BALANCE = gql`
-  query GetUserBalances($address: Bytes!) {
-    userBalance(id: $address) {
-      balanceSpent
-      balanceReceived
-    }
-  }
-`;
+import { GET_PAYMENTS_RECEIVED } from "@/graphql/queries/getPaymentData";
 
 export default function DriverUIPage() {
   const router = useRouter();
@@ -48,12 +24,7 @@ export default function DriverUIPage() {
     router.back();
   };
 
-  const { data, loading: graphLoading, error } = useQuery(GET_PAYMENT_DATA, {
-    variables: { address },
-    skip: !address,
-  });
-
-  const result = useQuery(GET_USER_BALANCE, {
+  const { data, loading: graphLoading, error } = useQuery(GET_PAYMENTS_RECEIVED, {
     variables: { address },
     skip: !address,
   });
@@ -138,19 +109,19 @@ export default function DriverUIPage() {
                   className="w-12 h-12 text-yellow-900"
                 />
                 <div>
-                  <p className="font-semibold text-black">{`${transaction?.payee.substring(0, 5)}...${transaction?.payee.substring(transaction?.payee.length - 5)}`}</p>
+                  <p className="font-semibold text-black">{`${transaction?.payer.substring(0, 5)}...${transaction?.payer.substring(transaction?.payee.length - 5)}`}</p>
                   <p className="text-sm text-gray-500">{transaction?.date}</p>
                 </div>
               </div>
               <p
                 className={`font-bold text-xl ${
-                  transaction?.type === "positive"
-                    ? "text-green-400"
+                  transaction?.type !== "positive"
+                    ? "text-green-600"
                     : "text-red-500"
                 }`}
               >
-                {transaction?.type === "positive" ? "+" : "-"}$
-                {Number.parseInt(transaction?.amount) * Math.pow(10, -18)}
+                {transaction?.type !== "positive" ? "+" : "-"}$
+                {(Number.parseInt(transaction?.amount) * Math.pow(10, -18)).toFixed(2)}
               </p>
             </div>
           ))}
