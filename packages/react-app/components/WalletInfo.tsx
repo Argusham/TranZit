@@ -62,7 +62,7 @@ const WalletInfo = ({ address, currentWalletAmount, showZar, zarBalance, setShow
   const blockieDataUrl = address ? blockies.create({ seed: address }).toDataURL() : '';
 
   return (
-    <div className="w-full bg-green-600 p-4 rounded-2xl mb-6">
+    <div className="w-full bg-yellow-400 text-black p-4 rounded-2xl mb-6">
       <div className="flex items-center">
         {/* Display blockie */}
         <img src={blockieDataUrl} alt="User Avatar" className="w-10 h-10 rounded-full mr-4" />

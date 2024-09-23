@@ -32,10 +32,12 @@ interface QRCodeDisplayProps {
 export const QRCodeDisplay = ({ recipient, amount }: QRCodeDisplayProps) => (
   <>
     {recipient && amount && (
-      <div className='text-center mt-4 w-[fit-content] bg-red ml-[auto] mr-[auto]'>
-        <Typography>QR Code</Typography>
-        <QRCode className='' value={JSON.stringify({ recipient, amount })} />
-      </div>
+      <div className="text-center mt-6 bg-yellow-400 p-4 rounded-xl shadow-md mx-auto">
+        <Typography className="text-lg font-semibold text-pink-600 mb-2">QR Code</Typography>
+        <div className="inline-block p-4 bg-white rounded-lg shadow-sm">
+          <QRCode className="rounded-lg" size={200} value={JSON.stringify({ recipient, amount })} />
+        </div>
+      </div>    
     )}
   </>
 );
