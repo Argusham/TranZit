@@ -109,19 +109,19 @@ export default function DriverUIPage() {
                   className="w-12 h-12 text-yellow-900"
                 />
                 <div>
-                  <p className="font-semibold text-black">{`${transaction?.payee.substring(0, 5)}...${transaction?.payee.substring(transaction?.payee.length - 5)}`}</p>
+                  <p className="font-semibold text-black">{`${transaction?.payer.substring(0, 5)}...${transaction?.payer.substring(transaction?.payee.length - 5)}`}</p>
                   <p className="text-sm text-gray-500">{transaction?.date}</p>
                 </div>
               </div>
               <p
                 className={`font-bold text-xl ${
-                  transaction?.type === "positive"
-                    ? "text-green-400"
+                  transaction?.type !== "positive"
+                    ? "text-green-600"
                     : "text-red-500"
                 }`}
               >
-                {transaction?.type === "positive" ? "+" : "-"}$
-                {Number.parseInt(transaction?.amount) * Math.pow(10, -18)}
+                {transaction?.type !== "positive" ? "+" : "-"}$
+                {(Number.parseInt(transaction?.amount) * Math.pow(10, -18)).toFixed(2)}
               </p>
             </div>
           ))}
