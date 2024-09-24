@@ -170,7 +170,7 @@
 
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@apollo/client";
 import { CommuterUI } from "@/components/CommuterUI";
 import { usePayments } from "@/hooks/usePayment";
@@ -264,6 +264,10 @@ export default function CommuterPage() {
     ?.filter((transaction: any) => transaction.payer.toLowerCase() === address?.toLowerCase())
     .slice(-5); // Limit to last 5 transactions
 
+const handleRefresh = async () => {
+await refetch();
+}
+
   return (
     <div className="flex flex-col items-center text-white min-h-screen px-4 py-6 bg-black">
       {/* Back Button */}
@@ -317,30 +321,41 @@ export default function CommuterPage() {
         </div>
       )}
 
-      {/* Last 5 Transactions */}
-      <div className="w-full max-w-md space-y-4 mt-6">
-        <h3 className="text-xl text-gray-200 font-semibold">Last 4 Transactions</h3>
-        {transactionsLoading ? (
-          <p>Loading transactions...</p>
-        ) : error ? (
-          <p>Error loading transactions: {error.message}</p>
-        ) : (
-          <div className="bg-gray-500 p-4 rounded-2xl space-y-4">
-            {userTransactions.length > 0 ? (
-              userTransactions.map((transaction: any) => (
-                <TransactionItem
-                  key={transaction.id}
-                  payee={transaction.payee}
-                  amount={transaction.amount}
-                  blockTimestamp={transaction.blockTimestamp}
-                />
-              ))
-            ) : (
-              <p>No recent transactions found.</p>
-            )}
-          </div>
-        )}
-      </div>
+      {/* Previous Transactions Section */}
+<div className="w-full max-w-md mt-6">
+  <div className="flex justify-between items-center mb-4">
+    {/* Header for the Transactions */}
+    <h3 className="text-lg text-yellow-400 font-semibold">Previous Transactions</h3>
+    {/* Refresh Button */}
+    <button onClick={handleRefresh} className="text-gray-400 hover:text-gray-300 transition ease-in-out duration-150">
+      <FontAwesomeIcon icon={faSyncAlt} className="w-6 h-6" />
+    </button>
+  </div>
+
+  {/* Transactions List or Loading/Error States */}
+  {transactionsLoading ? (
+    <p className="text-gray-200 text-center">Loading transactions...</p>
+  ) : error ? (
+    <p className="text-red-400 text-center">Error loading transactions: {error.message}</p>
+  ) : (
+    <div className="bg-gray-500 p-4 rounded-3xl shadow-lg space-y-4">
+      {userTransactions.length > 0 ? (
+        userTransactions.map((transaction: any) => (
+          <TransactionItem
+            key={transaction.id}
+            payee={transaction.payee}
+            amount={transaction.amount}
+            blockTimestamp={transaction.blockTimestamp}
+          />
+        ))
+      ) : (
+        <p className="text-gray-200 text-center">No recent transactions found.</p>
+      )}
+    </div>
+  )}
+</div>
+
+
     </div>
   );
 }

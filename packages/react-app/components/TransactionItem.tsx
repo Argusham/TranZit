@@ -70,16 +70,16 @@ const TransactionItem = ({ payee, amount, blockTimestamp }: TransactionItemProps
   const isIncome = role === 'driver';
 
   return (
-    <div className="flex justify-between items-center bg-gray-600 p-3 rounded-md">
+    <div className="flex justify-between items-center bg-gray-300 p-3 rounded-md">
       {/* Left side: Blockie and Payee Info */}
       <div className="flex items-center space-x-3">
         {/* Display blockie */}
-        <img src={blockieDataUrl} alt="Payee Avatar" className="w-6 h-6 rounded-full" />
+        <img src={blockieDataUrl} alt="Payee Avatar" className="w-7 h-7 rounded-full" />
         <div className="flex flex-col">
           {/* Display formatted payee address */}
-          <p className="text-white">{formattedAddress}</p>
+          <p className="text-gray-600">{formattedAddress}</p>
           {/* Display the transaction date */}
-          <p className="text-xs text-gray-400">{formattedDate}</p>
+          <p className="text-xs text-gray-600">{formattedDate}</p>
         </div>
       </div>
 
@@ -87,10 +87,10 @@ const TransactionItem = ({ payee, amount, blockTimestamp }: TransactionItemProps
       <div className="text-right">
         {/* Display formatted amount with color based on role */}
         <p className={`font-semibold text-sm ${isIncome ? 'text-green-400' : 'text-red-400'}`}>
-          {isIncome ? `+${formattedAmount}` : `-${formattedAmount}`} cUSD
+          {isIncome ? `+${formattedAmount}` : `-${formattedAmount}`} cU$D
         </p>
         {/* Transaction type based on role */}
-        <p className="text-xs text-gray-400">{isIncome ? 'Income' : 'Transfer'}</p>
+        <p className="text-xs text-gray-600">{isIncome ? 'Income' : 'Transfer'}</p>
       </div>
     </div>
   );
