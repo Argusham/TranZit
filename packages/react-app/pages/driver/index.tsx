@@ -86,6 +86,8 @@ export default function DriverUIPage() {
           setAmount={setAmount}
           predefinedAmounts={predefinedAmounts}
           address={address || ""}
+          conversionRate={conversionRate || 1}
+          showZar={showZar}
         />
       </div>
 

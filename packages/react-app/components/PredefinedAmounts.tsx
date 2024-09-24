@@ -1,20 +1,26 @@
 "use client";
 // components/PredefinedAmounts.tsx
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // For smooth animations
 
 interface PredefinedAmountsProps {
   predefinedAmounts: number[];
   handleAmountClick: (amount: number) => void;
+  conversionRate: number;
+  showZar: boolean;
 }
 
 export const PredefinedAmounts = ({
   predefinedAmounts,
   handleAmountClick,
+  conversionRate,
+  showZar
+  
 }: PredefinedAmountsProps) => {
   const [activeAmount, setActiveAmount] = useState<number | null>(null);
   const [flyAmount, setFlyAmount] = useState<number | null>(null);
+  const [updatedPredefinedAmounts, setUpdatedPredefinedAmounts] = useState<number[]>(predefinedAmounts);
 
   const handleClick = (amount: number) => {
     setActiveAmount(amount);
@@ -25,9 +31,18 @@ export const PredefinedAmounts = ({
     setTimeout(() => setFlyAmount(null), 1000);
   };
 
+  useEffect(() => {
+    if (!showZar) {
+      conversionRate = 1;
+    }
+    const transformedAmounts = predefinedAmounts.map((amount) => Number.parseFloat((amount * conversionRate).toFixed(2)));
+    setUpdatedPredefinedAmounts(transformedAmounts);
+    console.log(predefinedAmounts);
+  }, [showZar]);
+
   return (
     <div className="flex mt-[20px] flex-row justify-center space-x-4 mb-8 relative">
-      {predefinedAmounts.map((amount) => (
+      {updatedPredefinedAmounts.map((amount) => (
         <Button
           key={amount}
           onClick={() => handleClick(amount)}
