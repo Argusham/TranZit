@@ -10,6 +10,8 @@ interface DriverUIProps {
   amount: string;
   setAmount: (amount: string) => void;
   predefinedAmounts: number[];
+  conversionRate: number;
+  showZar: boolean;
 }
 
 
@@ -18,6 +20,8 @@ export const DriverUI = ({
   amount,
   setAmount,
   predefinedAmounts,
+  conversionRate,
+  showZar
 }: DriverUIProps) => {
   const [isSettingAmount, setIsSettingAmount] = useState(false);
 
@@ -85,6 +89,8 @@ export const DriverUI = ({
       <PredefinedAmounts
         predefinedAmounts={predefinedAmounts}
         handleAmountClick={handlePredefinedAmountClick}
+        conversionRate={conversionRate || 1}
+        showZar={showZar}
       />
 
       {/* Automatically Generate QR Code when the driver enters/selects amount */}
