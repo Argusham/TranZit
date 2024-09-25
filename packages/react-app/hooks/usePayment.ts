@@ -1,4 +1,4 @@
-// context/usePayments.ts
+// hooks/usePayments.ts
 import { useState } from "react";
 import { createWalletClient, custom, parseEther, encodeFunctionData } from "viem";
 import { celoAlfajores } from "viem/chains";

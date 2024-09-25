@@ -1,4 +1,4 @@
-// context/useWallet.ts
+// hooks/useWallet.ts
 import { useState } from "react";
 import { createWalletClient, custom, getContract, formatEther } from "viem";
 import { celoAlfajores } from "viem/chains";
@@ -24,6 +24,11 @@ export const useWallet = () => {
     }
   };
 
+  const formatCUSD = (balance: bigint) => {
+    return (Number(balance) / 1e18).toFixed(2); // Ensure it formats to two decimal places
+  };
+  
+
   // Get cUSD balance using ERC20 ABI
   const getCurrentWalletAmount = async (userAddress: string) => {
     try {
@@ -35,7 +40,7 @@ export const useWallet = () => {
 
       // Get the balance as a bigint
       const balance = await contract.read.balanceOf([userAddress]) as bigint; // Ensure type is bigint
-      const formattedBalance = formatEther(balance); // Convert to human-readable format (cUSD)
+      const formattedBalance = formatCUSD(balance); // Convert to human-readable format (cUSD)
       setCurrentWalletAmount(formattedBalance); // Update state with the balance
     } catch (error) {
       console.error("Failed to fetch balance:", error);

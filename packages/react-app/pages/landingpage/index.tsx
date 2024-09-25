@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 // src/components/LandingPage.tsx
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCar, faCircleDollarToSlot } from '@fortawesome/free-solid-svg-icons';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -10,11 +9,6 @@ import { useUserRole } from '@/context/UserRoleContext';
 export default function LandingPage() {
   const router = useRouter();
   const { setRole } = useUserRole(); // Access setRole from context
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleNavigation = (role: 'driver' | 'commuter') => {
     setRole(role); // Set the role in context
@@ -22,87 +16,60 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-black p-8">
-       {/* Header Section */}
-       <div className="flex flex-col items-center text-center text-yellow-300 mt-10">
-        <h1 className="text-4xl font-bold">
-          Making Your <br /> Ride Enjoyable
-        </h1>
-      </div>
+    <div className="relative flex flex-col items-center justify-between min-h-screen">
+    {/* Background image with gradient overlay */}
+    <div className="absolute inset-0 z-0">
+      <img
+        src="https://cdn.24.co.za/files/Cms/General/d/8872/84ce083d7f474f26ad80e3431643aed2.jpg"
+        alt="Background"
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-80"></div>
+    </div>
 
-      {/* Illustration */}
-      <div className="flex-grow flex justify-center items-center animate-float">
-        {isMounted && (
-          <img
-            src="https://images.unsplash.com/photo-1605098293544-25f4c32344c8?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="QR Illustration"
-            className="w-64 h-64 rounded-lg shadow-xl hover:scale-110 transition-all duration-500 ease-in-out"
-          />
-        )}
-      </div>
+    {/* Content */}
+    <div className="relative z-10 flex flex-col items-center text-center text-yellow-300 mt-10">
+    <h1 className="text-3xl text-white font-bold">
+      Siyaya
+      </h1>
+      <h1 className="text-3xl font-bold">
+        Making Your <br /> Ride Enjoyable
+      </h1>
+    </div>
 
+    {/* Info and Buttons Section */}
+    <div className="relative z-10 w-full max-w-md p-6 space-y-6 mt-auto mb-8 text-center">
       {/* Info Section */}
-      <div className="text-center p-6 space-y-4">
-        <h1 className="text-4xl font-bold text-yellow-400 tracking-wider hover:text-neon-green transition-colors duration-300">
-          Fast & Secure Payments 
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold text-yellow-400 tracking-wide">
+          Fast & Secure Payments
           <span>
-            <FontAwesomeIcon icon={faCircleDollarToSlot} className="ml-2 w-6 h-9" />
+            <FontAwesomeIcon icon={faCircleDollarToSlot} className="ml-2 w-6 h-6" />
           </span>
         </h1>
-        <p className="text-lg text-white">
+        <p className="text-sm text-white leading-relaxed">
           Experience the fastest way to pay using QR code scanning technology.
         </p>
       </div>
 
       {/* Buttons for Navigation */}
-      <div className="w-full max-w-md flex justify-around mb-6">
+      <div className="flex justify-around">
         <button
-          className="w-36 py-3 rounded-full bg-gradient-to-l from-yellow-400 via-yellow-500 to-yellow-600 text-black text-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
+          className="w-32 py-3 rounded-full bg-gradient-to-l from-yellow-400 via-yellow-500 to-yellow-600 text-black text-base font-medium shadow-lg hover:scale-105 transition-transform duration-300"
           onClick={() => handleNavigation('driver')}
         >
           <FontAwesomeIcon icon={faCar} className="mr-2 w-4 h-4" />
           Driver
         </button>
         <button
-          className="w-36 py-3 rounded-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black text-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
+          className="w-32 py-3 rounded-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black text-base font-medium shadow-lg hover:scale-105 transition-transform duration-300"
           onClick={() => handleNavigation('commuter')}
         >
           <FontAwesomeIcon icon={faUser} className="mr-2 w-4 h-4" />
           Commuter
         </button>
       </div>
-
-      {/* Global Styles */}
-      <style jsx global>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
-
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-
-        .bg-neon-green {
-          background-color: #28a745; /* Darker green */
-        }
-
-        .text-neon-green {
-          color: #28a745; /* Darker green */
-        }
-
-        /* Neon button hover */
-        button:hover {
-          box-shadow: 0 0 10px rgba(40, 167, 69, 0.6), 0 0 20px rgba(40, 167, 69, 0.4);
-        }
-      `}</style>
     </div>
+  </div>
   );
 }

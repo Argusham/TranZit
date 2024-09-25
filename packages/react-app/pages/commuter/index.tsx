@@ -179,6 +179,7 @@ import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
 import { GET_PAYMENT_DATA } from "@/graphql/queries/getPaymentData";
 import TransactionItem from "@/components/TransactionItem";
+import IncentiveHistory from "@/components/IncentiveHistory"; 
 
 export default function CommuterPage() {
   const { address, getUserAddress, currentWalletAmount, getCurrentWalletAmount } = useWallet();
@@ -289,6 +290,9 @@ await refetch();
         zarBalance={zarBalance}
         setShowZar={setShowZar}
       />
+
+{address && <IncentiveHistory address={address} />}
+       
 
       {/* QR Scanner */}
       <CommuterUI onScanSuccess={handleScanSuccess} />
