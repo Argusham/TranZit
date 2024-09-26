@@ -1,34 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { useQuery } from "@apollo/client";
 import { GET_USER_INCENTIVES } from "@/graphql/queries/getPaymentData"; // Import the new query
-import blockies from "ethereum-blockies";
-
-interface IncentiveItemProps {
-  user: string;
-  amount: string;
-}
-
-const IncentiveItem = ({ user, amount }: IncentiveItemProps) => {
-  const blockieDataUrl = blockies.create({ seed: user }).toDataURL(); // Generate blockie for the user
-  const formattedAddress = `${user.substring(0, 5)}...${user.substring(user.length - 5)}`;
-  const formattedAmount = (Number(amount) / 1e18).toFixed(2); // Convert Wei to cUSD
-
-  return (
-    <div className="flex justify-between items-center bg-gray-300 p-3 rounded-md mb-2">
-      <div className="flex items-center space-x-3">
-        <img src={blockieDataUrl} alt="User Avatar" className="w-7 h-7 rounded-full" />
-        <p className="text-gray-600">{formattedAddress}</p>
-      </div>
-      <p className="text-green-400 font-semibold">{formattedAmount} cU$D</p>
-    </div>
-  );
-};
 
 interface IncentiveHistoryProps {
   address: string | null;
+  showZar: boolean;
+  conversionRate: number | null;
 }
 
-const IncentiveHistory = ({ address }: IncentiveHistoryProps) => {
+const IncentiveHistory = ({ address, showZar, conversionRate  }: IncentiveHistoryProps) => {
   const { data, loading, error } = useQuery(GET_USER_INCENTIVES, {
     variables: { userAddress: address },
   });
@@ -45,27 +25,17 @@ const IncentiveHistory = ({ address }: IncentiveHistoryProps) => {
 
   // Convert total incentives from Wei to cUSD
   const formattedTotalIncentives = (totalIncentives / 1e18).toFixed(2);
+  const totalIncentivesZar = conversionRate ? (Number(formattedTotalIncentives) * conversionRate).toFixed(2) : "Loading...";
 
   return (
     <div className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-gray-400 bg-opacity-100 p-4 rounded-3xl mb-6 shadow-lg text-white">
-      <h3 className="text-lg text-yellow-400 font-semibold mb-4">Incentive History</h3>
+      <h3 className="text-lg text-yellow-400 font-semibold mb-4">Commute Coins</h3>
       
       {/* Display total incentives */}
       <div className="flex justify-between mb-4">
-        <p className="text-sm">Total Incentives Received:</p>
-        <span className="font-bold text-yellow-400">{formattedTotalIncentives} cU$D</span>
+        <p className="text-sm">Total Coins earned:</p>
+        <p>{showZar ? `${totalIncentivesZar} ZAR` : `${formattedTotalIncentives} cUSD`}</p>
       </div>
-
-      {/* List each individual incentive */}
-      {/* {incentives.length > 0 ? (
-        <div>
-          {incentives.map((incentive: any) => (
-            <IncentiveItem key={incentive.id} user={incentive.user} amount={incentive.amount} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-sm text-center">No incentives received yet.</p>
-      )} */}
     </div>
   );
 };
