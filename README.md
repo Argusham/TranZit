@@ -29,6 +29,8 @@ The Taxi dApp facilitates contactless payments and incentivizes user interaction
 - **Incentive Pool**: Funded by a 1% transaction fee to reward users.
 - **Celo Blockchain & cUSD**: Provides the decentralized platform and stable currency.
 
+---
+
 ## 🔄 Process Flow
 Understanding the step-by-step process from initiating a payment to receiving incentives.
 
@@ -43,6 +45,8 @@ Understanding the step-by-step process from initiating a payment to receiving in
    - Allocates 1% tax to the incentive pool.
 4. Smart Contract updates user interactions and checks for incentive eligibility.
 5. Incentives are awarded if eligibility criteria are met.
+
+---
 
 ## 📊 Data Flow
 A detailed look at how data moves through the system during a transaction.
@@ -104,8 +108,8 @@ A detailed look at how data moves through the system during a transaction.
 
 ## **Pitch Deck & Demo Videos**
 
-- [PowerPoint Presentation Placeholder] 📊
-- [Video Demo Placeholder] 🎥
+- [Pitch Deck Presentation] 📊
+- [Video Demo] 🎥
 
 ---
 
