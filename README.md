@@ -53,6 +53,13 @@ A detailed look at how data moves through the system during a transaction.
 
 ![Process Flow](images/Dataflow.png)
 
+### Data Movement:
+1. Commuter obtains payment info by scanning the QR code.
+2. Payment Information is sent to the Smart Contract.
+3. Smart Contract verifies balances, processes payment, and updates user data.
+4. Incentive Pool collects taxes and funds incentives.
+5. Users receive incentives after qualifying interactions.
+
 ---
 
 ## **🚀 Getting Started**
