@@ -3,7 +3,7 @@
 
 ## **Project Overview**
 
-Welcome to the **Taxi dApp**, a decentralized application for seamless contactless payments in the taxi industry. This project leverages the **Celo blockchain** and is built using **Next.js** and **Yarn**. The app allows commuters to easily pay taxi drivers using QR codes, making the payment process fast and efficient.
+Welcome to the **Taxi dApp**, a decentralized application designed to revolutionize contactless payments in the taxi industry. Leveraging the power of the **Celo blockchain** and is built using **Next.js** and **Yarn**. This app ensures secure, fast, and efficient transactions between commuters and drivers through QR code technology.
 
 ---
 
@@ -17,7 +17,55 @@ Welcome to the **Taxi dApp**, a decentralized application for seamless contactle
 
 ---
 
-## **How to Run the Project**
+## 📈 Business Model Overview
+The Taxi dApp facilitates contactless payments and incentivizes user interactions within the ecosystem.
+
+![Business Model](images/BusinnessModel.png)
+
+
+### Key Components:
+- **Drivers and Commuters**: Engage in transactions via QR codes.
+- **Smart Contract**: Handles payments, tracks interactions, and awards incentives.
+- **Incentive Pool**: Funded by a 1% transaction fee to reward users.
+- **Celo Blockchain & cUSD**: Provides the decentralized platform and stable currency.
+
+---
+
+## 🔄 Process Flow
+Understanding the step-by-step process from initiating a payment to receiving incentives.
+
+![Process Flow](images/Processflow.png)
+
+
+### Process Steps:
+1. Driver sets the fare and generates a QR code.
+2. Commuter scans the QR code to initiate payment.
+3. Smart Contract processes the payment:
+   - Transfers cUSD (minus 1% tax) to the driver's wallet.
+   - Allocates 1% tax to the incentive pool.
+4. Smart Contract updates user interactions and checks for incentive eligibility.
+5. Incentives are awarded if eligibility criteria are met.
+
+---
+
+## 📊 Data Flow
+A detailed look at how data moves through the system during a transaction.
+
+![Process Flow](images/Dataflow.png)
+
+### Data Movement:
+1. Commuter obtains payment info by scanning the QR code.
+2. Payment Information is sent to the Smart Contract.
+3. Smart Contract verifies balances, processes payment, and updates user data.
+4. Incentive Pool collects taxes and funds incentives.
+5. Users receive incentives after qualifying interactions.
+
+---
+
+## **🚀 Getting Started**
+
+### Prerequisites
+- Node.js and Yarn installed on your machine.
 
 1. **Clone the Repository**:
     ```bash
@@ -67,8 +115,8 @@ Welcome to the **Taxi dApp**, a decentralized application for seamless contactle
 
 ## **Pitch Deck & Demo Videos**
 
-- [PowerPoint Presentation Placeholder] 📊
-- [Video Demo Placeholder] 🎥
+- [Pitch Deck Presentation] 📊
+- [Video Demo] 🎥
 
 ---
 
