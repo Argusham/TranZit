@@ -19,6 +19,7 @@ export default function DriverUIPage() {
   const { address, getUserAddress, currentWalletAmount, getCurrentWalletAmount } = useWallet();
   const [showZar, setShowZar] = useState(false); 
   const [conversionRate, setConversionRate] = useState<number | null>(null);
+  const [isToggled, setIsToggled] = useState<boolean>(false);
 
   const goBack = () => {
     router.back();
@@ -71,13 +72,13 @@ export default function DriverUIPage() {
       </div>
 
       {/* Wallet Info Section */}
-      <WalletInfo
-        address={address}
-        currentWalletAmount={currentWalletAmount}
-        showZar={showZar}
-        zarBalance={zarBalance}
-        setShowZar={setShowZar}
-      />
+        <WalletInfo
+          address={address}
+          currentWalletAmount={currentWalletAmount}
+          showZar={showZar}
+          zarBalance={zarBalance}
+          setShowZar={setShowZar}
+        />
 
       {/* Driver-specific UI */}
       <div className="w-full bg-gray-800 p-6 rounded-3xl mb-6 shadow-lg">
