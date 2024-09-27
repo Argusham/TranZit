@@ -44,7 +44,7 @@ export const DriverUI = ({
         id="custom-amount"
         label={`Enter fare amount (${showZar ? 'ZAR' : 'cUSD'})`}
         variant="outlined"
-        value={showZar ? (parseFloat(amount) / conversionRate) : amount}
+        value={amount}
         fullWidth
         onChange={handleCustomAmountChange}
         disabled={isSettingAmount} // Disable input when setting predefined amount
