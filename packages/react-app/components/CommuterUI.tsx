@@ -139,7 +139,7 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
           <div
             id="reader"
             ref={readerRef}
-            className="relative w-full max-w-xs mx-auto rounded-3xl overflow-hidden shadow-lg border-4 border-yellow-400"
+            className="relative w-full max-w-xs mx-auto rounded-lg overflow-hidden shadow-md border-2 border-gray-200"
             style={{
               aspectRatio: '1 / 1', // Ensures a square aspect ratio
             }}
@@ -160,3 +160,5 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
     </>
   );
 };
+
+
