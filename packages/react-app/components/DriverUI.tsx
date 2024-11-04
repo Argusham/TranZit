@@ -42,7 +42,7 @@ export const DriverUI = ({
     <>
       <TextField
         id="custom-amount"
-        label="Enter fare amount"
+        label={`Enter fare amount (${showZar ? 'ZAR' : 'cUSD'})`}
         variant="outlined"
         value={amount}
         fullWidth

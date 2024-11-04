@@ -50,7 +50,7 @@ export const PredefinedAmounts = ({
             ${activeAmount === amount ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-yellow-400" : "bg-transparent border-yellow-400 text-yellow-400 hover:shadow-yellow-400"}
             hover:scale-90 hover:border-yellow-500 hover:text-white`}
         >
-          {amount} cUSD
+          {amount} {showZar ? "ZAR" : "cUSD"}
           {activeAmount === amount && (
             <span className="absolute inset-0 rounded-lg animate-ping bg-gradient-to-r from-yellow-400 to-yellow-600 opacity-30"></span>
           )}
