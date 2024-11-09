@@ -51,8 +51,8 @@ export const DriverUI = ({
         className="mb-3"
         InputProps={{
           style: {
-            color: '#facc15', // text-yellow-400 equivalent for value text
-            borderColor: '#facc15', // text-yellow-400 equivalent for border color
+            color: '#000000', // text-yellow-400 equivalent for value text
+            borderColor: '#000000', // text-yellow-400 equivalent for border color
           },
           classes: {
             notchedOutline: 'border-yellow-400', // Apply yellow border to the outline
@@ -67,20 +67,20 @@ export const DriverUI = ({
         sx={{
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderColor: '#facc15', // yellow border
+              borderColor: '#000000', // yellow border
             },
             '&:hover fieldset': {
-              borderColor: '#facc15', // yellow border on hover
+              borderColor: '#000000', // yellow border on hover
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#facc15', // yellow border when focused
+              borderColor: '#000000', // yellow border when focused
             },
           },
           '& .MuiInputBase-input': {
-            color: '#facc15', // yellow text color for input
+            color: '#000000', // yellow text color for input
           },
           '& .MuiInputLabel-root': {
-            color: '#facc15', // yellow color for label
+            color: '#000000', // yellow color for label
           },
         }}
       />
