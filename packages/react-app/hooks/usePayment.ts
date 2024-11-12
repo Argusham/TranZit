@@ -1,21 +1,24 @@
 // hooks/usePayments.ts
 import { useState } from "react";
 import { createWalletClient, custom, parseEther, encodeFunctionData } from "viem";
-import { celoAlfajores } from "viem/chains";
+import { celo } from "viem/chains";
 import erc20Abi from '../utils/erc20Abi.json'; // ERC20 ABI
 import cusdAbi from '../utils/cusdAbi.json'; // TaxiPaymentcUSD ABI
 import { publicClient } from "../utils/publicClient"; // Import the publicClient utility
 
 export const usePayments = (address: any) => {
   const [loading, setLoading] = useState(false);
-  const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4';
-  const cusdTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1';
+  // const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4';
+  const taxiPaymentContractAddress = '0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96';
+
+  // const cusdTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1';
+  const cusdTokenAddress = '0x765de816845861e75a25fca122bb6898b8b1282a';
 
   // Function to approve cUSD spending
   const approveCUSDSpending = async (spender: string, amount: string) => {
     const walletClient = createWalletClient({
       transport: custom(window.ethereum),
-      chain: celoAlfajores,
+      chain: celo,
     });
 
     const [userAddress] = await walletClient.getAddresses(); // Get wallet address from wallet client
@@ -41,7 +44,7 @@ export const usePayments = (address: any) => {
   const payUser = async (recipient: string, amount: string) => {
     const walletClient = createWalletClient({
       transport: custom(window.ethereum),
-      chain: celoAlfajores,
+      chain: celo,
     });
 
     const [userAddress] = await walletClient.getAddresses(); // Get wallet address

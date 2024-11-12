@@ -1,7 +1,7 @@
 // hooks/useWallet.ts
 import { useState } from "react";
 import { createWalletClient, custom, getContract, formatEther } from "viem";
-import { celoAlfajores } from "viem/chains";
+import { celo } from "viem/chains";
 import { publicClient } from "../utils/publicClient";
 import erc20Abi from '../utils/erc20Abi.json'; // ERC20 ABI for cUSD functions like balanceOf
 
@@ -15,7 +15,7 @@ export const useWallet = () => {
     if (typeof window !== "undefined" && window.ethereum) {
       const walletClient = createWalletClient({
         transport: custom(window.ethereum),
-        chain: celoAlfajores,
+        chain: celo,
       });
 
       const [userAddress] = await walletClient.getAddresses();
@@ -33,7 +33,8 @@ export const useWallet = () => {
   const getCurrentWalletAmount = async (userAddress: string) => {
     try {
       const contract = getContract({
-        address: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1', // cUSD token address
+        // address: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1', // cUSD token address
+        address: '0x765de816845861e75a25fca122bb6898b8b1282a',
         abi: erc20Abi, // Use ERC20 ABI for balanceOf function
         client: publicClient,
       });
