@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {  createWalletClient, custom,  formatEther, parseEther, encodeFunctionData, getContract } from "viem";
-import { celoAlfajores } from "viem/chains";
+import { celo } from "viem/chains";
 import cusdAbi from '../utils/cusdAbi.json'; // TaxiPaymentcUSD ABI
 import erc20Abi from '../utils/erc20Abi.json'; // ERC20 ABI
 import { publicClient } from "../utils/publicClient";
@@ -14,15 +14,18 @@ export const useTaxiPaymentcUSD = () => {
   const [incentiveTrigger, setIncentiveTrigger] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4'; // TaxiPaymentcUSD contract address
-  const cUSDTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1'; // cUSD token address on Celo Alfajores testnet
+  // const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4'; // TaxiPaymentcUSD contract address
+  const taxiPaymentContractAddress = '0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96';
+
+  // const cUSDTokenAddress = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1'; // cUSD token address on Celo Alfajores testnet
+  const cUSDTokenAddress = '0x765de816845861e75a25fca122bb6898b8b1282a';
 
   // Get user's wallet address
   const getUserAddress = async () => {
     if (typeof window !== "undefined" && window.ethereum) {
       const walletClient = createWalletClient({
         transport: custom(window.ethereum),
-        chain: celoAlfajores,
+        chain: celo,
       });
 
       const [userAddress] = await walletClient.getAddresses();
@@ -34,7 +37,7 @@ export const useTaxiPaymentcUSD = () => {
   const approveCUSDSpending = async (spender: string, amount: string) => {
     const walletClient = createWalletClient({
       transport: custom(window.ethereum),
-      chain: celoAlfajores,
+      chain: celo,
     });
 
     const amountInWei = parseEther(amount);
@@ -60,7 +63,7 @@ export const useTaxiPaymentcUSD = () => {
   const payUser = async (recipient: string, amount: string) => {
     const walletClient = createWalletClient({
       transport: custom(window.ethereum),
-      chain: celoAlfajores,
+      chain: celo,
     });
 
     const [userAddress] = await walletClient.getAddresses();
