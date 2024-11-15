@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCar } from "@fortawesome/free-solid-svg-icons";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useState, useEffect } from "react";
+import InfoHub from "@/components/InfoHub";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -89,6 +90,8 @@ export default function LandingPage() {
           Commuter
         </button>
       </div>
+
+      <InfoHub />
     </div>
   );
 }
