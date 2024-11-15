@@ -115,8 +115,8 @@ A detailed look at how data moves through the system during a transaction.
 
 ## **Pitch Deck & Demo Videos**
 
-- [Pitch Deck Presentation] 📊
-- [Video Demo] 🎥
+- [https://docs.google.com/presentation/d/1Rjn4HUlv2up2dEMyi_RhBr-4FaJ1QxutRoUr3W_yifw/edit?usp=sharing] 📊
+- [https://docs.google.com/presentation/d/1Rjn4HUlv2up2dEMyi_RhBr-4FaJ1QxutRoUr3W_yifw/edit?usp=sharing] 🎥
 
 ---
 
