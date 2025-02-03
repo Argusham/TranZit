@@ -198,7 +198,7 @@ export default function CommuterPage() {
         ) : error ? (
           <p className="text-center text-red-500 mt-4">Error loading transactions: {error.message}</p>
         ) : (
-          <div className="bg-white p-6 rounded-lg shadow-md space-y-4 mt-4">
+          <div className="bg-white p-6 rounded-lg space-y-4 mt-4">
             {userTransactions.length > 0 ? (
               userTransactions.map((transaction: any) => (
                 <TransactionItem

@@ -103,7 +103,7 @@ export default function DriverUIPage() {
           />
 
           {/* Driver-specific UI */}
-          <div className="w-full bg-white p-4 rounded-lg shadow-md mt-4">
+          <div className="w-full bg-white p-4 rounded-lg mt-4">
             <DriverUI
               amount={amount}
               setAmount={setAmount}
@@ -118,7 +118,7 @@ export default function DriverUIPage() {
 
       {/* Activity Section */}
       {activeTab === "activity" && (
-        <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md mt-4">
+        <div className="w-full max-w-md bg-white p-4 rounded-lg mt-4">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h3>
           {graphLoading ? (
             <p className="text-center text-gray-500">Loading transactions...</p>
@@ -129,7 +129,7 @@ export default function DriverUIPage() {
               {data?.paymentMades.map((transaction: any) => (
                 <div
                   key={transaction?.id}
-                  className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm"
+                  className="flex justify-between items-center bg-gray-100 p-4 rounded-lg"
                 >
                   <div className="flex items-center space-x-4">
                     <FontAwesomeIcon
