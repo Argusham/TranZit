@@ -28,7 +28,7 @@ const IncentiveHistory = ({ address, showZar, conversionRate }: IncentiveHistory
   const totalIncentivesZar = conversionRate ? (Number(formattedTotalIncentives) * conversionRate).toFixed(2) : "Loading...";
 
   return (
-    <div className="w-full bg-white p-4 rounded-lg shadow-md text-gray-800">
+    <div className="w-full bg-white p-4 rounded-lg text-gray-800">
       <h3 className="text-lg font-semibold mb-1">Commute Coins</h3>
 
       {/* Display total incentives */}

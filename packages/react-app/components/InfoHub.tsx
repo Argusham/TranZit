@@ -96,14 +96,14 @@ export default function InfoHub() {
             {/* Chatbot Icon */}
             <button
                 onClick={toggleChatbot}
-                className={`fixed bottom-4 right-4 bg-neon ${isOpen ? 'hidden' : ''} bg-blue-500 p-3 rounded-full shadow-lg transition-transform transform translate-y-12 hover:scale-110 animate-float`}
+                className={`fixed bottom-4 right-4 bg-neon ${isOpen ? 'hidden' : ''} bg-blue-500 p-3 rounded-full transition-transform transform translate-y-12 hover:scale-110 animate-float`}
             >
                 <FontAwesomeIcon icon={faInfo} className="w-8 h-8 text-white" />
             </button>
 
             {/* Chatbot Popup */}
             <div
-                className={`fixed bottom-4 right-2 left-2 w-[calc(100% - 8px)] bg-gray-800 ${isOpen ? '' : 'hidden'} text-white rounded-lg shadow-lg transition-transform transform translate-y-0 opacity-100 animate-float`}
+                className={`fixed bottom-4 right-2 left-2 w-[calc(100% - 8px)] bg-gray-800 ${isOpen ? '' : 'hidden'} text-white rounded-lg transition-transform transform translate-y-0 opacity-100 animate-float`}
             >
                 <div className="flex items-center justify-between p-4 border-b border-gray-700">
                     <h2 className="text-xl font-semibold">Taxify Siyaya InfoHub</h2>
