@@ -1,0 +1,29 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TaxiPaymentcUSD
+    network: celo
+    source:
+      address: "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96"
+      abi: TaxiPaymentcUSD
+      startBlock: 28730416
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - IncentiveAwarded
+        - PaymentMade
+      abis:
+        - name: TaxiPaymentcUSD
+          file: ./abis/TaxiPaymentcUSD.json
+      eventHandlers:
+        - event: IncentiveAwarded(indexed address,uint256)
+          handler: handleIncentiveAwarded
+        - event: PaymentMade(indexed address,indexed address,uint256)
+          handler: handlePaymentMade
+      file: ./src/taxi-paymentc-usd.ts

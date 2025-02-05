@@ -10,7 +10,11 @@ export const useContractData = () => {
   const [incentiveAmount, setIncentiveAmount] = useState<string | null>(null); // Use string to store formatted incentive amounts
   const [incentiveTrigger, setIncentiveTrigger] = useState<string | null>(null); // Use string for the trigger
 
-  const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4';
+  //testnet deployment
+  // const taxiPaymentContractAddress = '0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4';
+
+  //mainnet deployment
+  const taxiPaymentContractAddress = '0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96'
 
   // Fetch user balances
   const getUserBalances = async (userAddress: string) => {

@@ -1,0 +1,8 @@
+{
+  "celo": {
+    "TaxiPaymentcUSD": {
+      "address": "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96",
+      "startBlock": 28730416
+    }
+  }
+}

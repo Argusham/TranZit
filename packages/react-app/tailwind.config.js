@@ -26,8 +26,13 @@ module.exports = {
         "sky": "#7CC0FF",
         "citrus": "#FF9A51",
         "lotus": "#FFA3EB",
-        "lavender": "#B490FF"
-      }
+        "lavender": "#B490FF",
+        'neon-green': '#39FF14',
+        'neon-blue': '#00F0FF',
+      },
+      boxShadow: {
+        neon: '0px 0px 20px 4px rgba(0, 240, 255, 0.6), 0px 0px 10px 2px rgba(57, 255, 20, 0.6)',
+      },
     },
   },
   plugins: [],

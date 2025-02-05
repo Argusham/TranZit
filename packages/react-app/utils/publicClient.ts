@@ -1,9 +1,9 @@
 // utils/publicClient.ts
 import { createPublicClient, http } from "viem";
-import { celoAlfajores } from "viem/chains";
+import { celo } from "viem/chains";
 
 // Create a public client to interact with the Celo Alfajores testnet
 export const publicClient = createPublicClient({
-  chain: celoAlfajores,
+  chain: celo,
   transport: http(),
 });

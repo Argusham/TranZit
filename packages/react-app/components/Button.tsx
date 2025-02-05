@@ -21,9 +21,9 @@ function PrimaryButton({
       disabled={disabled ?? loading}
       className={`${
         widthFull ? "w-60" : "px-4"
-      } ${className} font-bold bg-yellow-500 rounded-2xl text-white py-3 flex justify-center items-center`}
+        } ${className} font-semibold bg-blue-600 text-white py-3 rounded-lg flex justify-center items-center shadow-md hover:shadow-lg hover:bg-blue-700 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed`}
     >
-      {loading ? <>Loading...😶‍🌫️</> : title}
+      {loading ? <>Loading...</> : title}
     </button>
   );
 }
