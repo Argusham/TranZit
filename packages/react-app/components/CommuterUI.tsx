@@ -310,7 +310,7 @@ export const CommuterUI = ({ onScanSuccess }: CommuterUIProps) => {
           title="Scan to pay"
           onClick={handlePayClick}
           widthFull
-          style={{ maxWidth: '300px' }}
+          // style={{ maxWidth: '300px' }}
         />
       ) : (
         <>
