@@ -2,7 +2,7 @@ import {
   RainbowKitProvider,
   connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
-import { injectedWallet } from "@rainbow-me/rainbowkit/wallets";
+import { injectedWallet, walletConnectWallet } from "@rainbow-me/rainbowkit/wallets";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { http, WagmiProvider, createConfig } from "wagmi";
@@ -14,12 +14,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from "@apollo/client"; // Apollo import
 import client from "../utils/apolloClient"; // Apollo client you created
 import Head from "next/head";
+import { WalletProvider } from "@/context/WalletProvider";
 
 const connectors = connectorsForWallets(
   [
     {
       groupName: "Recommended",
-      wallets: [injectedWallet],
+      wallets: [injectedWallet, walletConnectWallet],
     },
   ],
   {
@@ -50,8 +51,9 @@ function App({ Component, pageProps }: AppProps) {
       </Head>
 
     <WagmiProvider config={config}>
+    <WalletProvider>
       <ApolloProvider client={client}>
-        {" "}
+        
         {/* ApolloProvider wraps everything */}
         <QueryClientProvider client={queryClient}>
           <UserRoleProvider>
@@ -63,6 +65,7 @@ function App({ Component, pageProps }: AppProps) {
           </UserRoleProvider>
         </QueryClientProvider>
       </ApolloProvider>
+      </WalletProvider>
     </WagmiProvider>
    </>
   );

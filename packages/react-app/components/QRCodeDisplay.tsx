@@ -13,7 +13,7 @@ export const QRCodeDisplay = ({ recipient, amount }: QRCodeDisplayProps) => {
             Scan to Pay
           </h2>
 
-          <div className="p-3 bg-blue-500 rounded-lg">
+          <div className="p-3 bg-gray-200 rounded-lg">
             <QRCode
               className="rounded-lg"
               size={180}
