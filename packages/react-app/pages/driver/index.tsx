@@ -4,18 +4,19 @@ import { useRouter } from "next/router";
 import { DriverUI } from "@/components/DriverUI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { useWallet } from "@/hooks/useWallet";
 import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
 import { GET_PAYMENTS_RECEIVED } from "@/graphql/queries/getPaymentData";
 import { useQuery } from "@apollo/client";
+import { useWallets } from "@/context/WalletProvider";
 
 export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const predefinedAmounts = [1, 2, 0.5];
-  const { getUserBalances, userBalances } = useContractData();
-  const { address, getUserAddress, currentWalletAmount, getCurrentWalletAmount } = useWallet();
+
+  const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
+  const { getUserBalances } = useContractData();
   const [showZar, setShowZar] = useState(false);
   const [conversionRate, setConversionRate] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("wallet"); // Toggle state for the tabs
@@ -25,35 +26,27 @@ export default function DriverUIPage() {
   };
 
   const { data, loading: graphLoading, error } = useQuery(GET_PAYMENTS_RECEIVED, {
-    variables: { address },
-    skip: !address,
+    variables: { address: walletAddress },
+    skip: !walletAddress,
   });
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      await getUserAddress();
-      if (address) {
-        await getUserBalances(address);
-        await getCurrentWalletAmount(address);
-        fetchConversionRate();
-      }
-    };
-    fetchUserData();
-  }, [address, getUserAddress, getUserBalances, getCurrentWalletAmount]);
+    fetchWalletBalance();
+    fetchConversionRate();
+  }, [fetchWalletBalance]);
 
   const fetchConversionRate = async () => {
     try {
       const response = await fetch("https://open.er-api.com/v6/latest/USD");
       const data = await response.json();
-      const rate = data.rates.ZAR;
-      setConversionRate(rate);
+      setConversionRate(data.rates.ZAR);
     } catch (error) {
       console.error("Error fetching conversion rate:", error);
     }
   };
 
   const zarBalance = conversionRate
-    ? (Number(currentWalletAmount) * conversionRate).toFixed(2)
+    ? (Number(walletBalance) * conversionRate).toFixed(2)
     : "Loading...";
 
   return (
@@ -95,8 +88,6 @@ export default function DriverUIPage() {
       {activeTab === "wallet" && (
         <>
           <WalletInfo
-            address={address}
-            currentWalletAmount={currentWalletAmount}
             showZar={showZar}
             zarBalance={zarBalance}
             setShowZar={setShowZar}
@@ -108,7 +99,7 @@ export default function DriverUIPage() {
               amount={amount}
               setAmount={setAmount}
               predefinedAmounts={predefinedAmounts}
-              address={address || ""}
+              address={walletAddress || ""}
               conversionRate={conversionRate || 1}
               showZar={showZar}
             />

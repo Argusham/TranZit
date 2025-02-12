@@ -873,6 +873,14 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
+"@blackbox-vision/react-qr-reader@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@blackbox-vision/react-qr-reader/-/react-qr-reader-5.0.0.tgz#cec9f83b54a5c70f79f46cbc5906177591335d4c"
+  integrity sha512-VLNKwwJTv4UX1inUNgt2aGC2yIhKBYptW9EOhn7Nq//WzjD5KvHG7WR48HTzGUZ2s/EA0XlxZSfKOarHV1Vb/A==
+  dependencies:
+    "@zxing/browser" "0.0.7"
+    "@zxing/library" "^0.18.3"
+
 "@celo/abis@11.0.0", "@celo/abis@^11.0.0":
   version "11.0.0"
   resolved "https://registry.npmjs.org/@celo/abis/-/abis-11.0.0.tgz"
@@ -3678,6 +3686,15 @@
   version "0.19.3"
   resolved "https://registry.npmjs.org/@zxing/library/-/library-0.19.3.tgz"
   integrity sha512-RUv5svewpDoD0ymXleOP8yVTO5BLkR0zn5coGC/Vs1671u0OBJ4xdtR8WVWf08OcvrieEMHdSfQY3ZKtqII/hg==
+  dependencies:
+    ts-custom-error "^3.2.1"
+  optionalDependencies:
+    "@zxing/text-encoding" "~0.9.0"
+
+"@zxing/library@^0.21.3":
+  version "0.21.3"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.21.3.tgz#0a4cb777701884131832b05922d7e88ef1b87ab4"
+  integrity sha512-hZHqFe2JyH/ZxviJZosZjV+2s6EDSY0O24R+FQmlWZBZXP9IqMo7S3nb3+2LBWxodJQkSurdQGnqE7KXqrYgow==
   dependencies:
     ts-custom-error "^3.2.1"
   optionalDependencies:
