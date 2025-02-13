@@ -2,7 +2,10 @@ import {
   RainbowKitProvider,
   connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
-import { injectedWallet, walletConnectWallet } from "@rainbow-me/rainbowkit/wallets";
+import {
+  injectedWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { http, WagmiProvider, createConfig } from "wagmi";
@@ -15,6 +18,7 @@ import { ApolloProvider } from "@apollo/client"; // Apollo import
 import client from "../utils/apolloClient"; // Apollo client you created
 import Head from "next/head";
 import { WalletProvider } from "@/context/WalletProvider";
+import { useEffect } from "react";
 
 const connectors = connectorsForWallets(
   [
@@ -41,33 +45,49 @@ const config = createConfig({
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-  return (
-   <>
 
-    {/* ✅ PWA Metadata */}
-    <Head>
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => { console.log("service worker registration successful");
+        })
+        .catch((err) => {
+          console.warn("service worker registration failed", err.message);
+        });
+    }
+
+  }, []);
+
+  return (
+    <>
+      {/* ✅ PWA Metadata */}
+      <Head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
       </Head>
 
-    <WagmiProvider config={config}>
-    <WalletProvider>
-      <ApolloProvider client={client}>
-        
-        {/* ApolloProvider wraps everything */}
-        <QueryClientProvider client={queryClient}>
-          <UserRoleProvider>
-            <RainbowKitProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </RainbowKitProvider>
-          </UserRoleProvider>
-        </QueryClientProvider>
-      </ApolloProvider>
-      </WalletProvider>
-    </WagmiProvider>
-   </>
+      <WagmiProvider config={config}>
+        <WalletProvider>
+          <ApolloProvider client={client}>
+            {/* ApolloProvider wraps everything */}
+            <QueryClientProvider client={queryClient}>
+              <UserRoleProvider>
+                <RainbowKitProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </RainbowKitProvider>
+              </UserRoleProvider>
+            </QueryClientProvider>
+          </ApolloProvider>
+        </WalletProvider>
+      </WagmiProvider>
+    </>
   );
 }
 

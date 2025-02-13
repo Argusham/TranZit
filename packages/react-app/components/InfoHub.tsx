@@ -96,7 +96,7 @@ export default function InfoHub() {
             {/* Chatbot Icon */}
             <button
                 onClick={toggleChatbot}
-                className={`fixed bottom-4 right-4 bg-neon ${isOpen ? 'hidden' : ''} bg-blue-500 p-3 rounded-full transition-transform transform translate-y-12 hover:scale-110 animate-float`}
+                className={`fixed bottom-2 right-4 bg-neon ${isOpen ? 'hidden' : ''} bg-blue-500 p-3 rounded-full transition-transform transform translate-y-12 hover:scale-110 animate-float`}
             >
                 <FontAwesomeIcon icon={faInfo} className="w-8 h-8 text-white" />
             </button>

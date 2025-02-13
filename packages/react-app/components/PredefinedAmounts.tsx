@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 // components/PredefinedAmounts.tsx
 import { Button } from "@mui/material";
