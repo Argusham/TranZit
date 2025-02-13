@@ -62,92 +62,78 @@
 //   }
 // });
 
+// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
+const CACHE = "taxify-offline-cache";
 
-const CACHE_NAME = "taxify-pwa-cache-v3";
-const OFFLINE_URL = "/";
-const HOSTNAME_WHITELIST = [
-  self.location.hostname,
-  "fonts.gstatic.com",
-  "fonts.googleapis.com",
-  "cdn.jsdelivr.net",
-];
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js");
 
-// Assets to cache
-const FILES_TO_CACHE = [
-  "/",
-  "/manifest.json",
-  "/styles/globals.css",
-  "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
-];
+// Set the correct offline fallback page
+const offlineFallbackPage = "/";
 
-// Install Service Worker & Cache Essential Files
-self.addEventListener("install", (event) => {
+// Skip waiting to update the service worker immediately
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
+// Cache the offline fallback page on install
+self.addEventListener("install", async (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(FILES_TO_CACHE);
+    caches.open(CACHE).then((cache) => {
+      return cache.addAll([
+        offlineFallbackPage,
+        "/manifest.json",
+        "/favicon.ico",
+        "/styles/globals.css",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
+      ]);
     })
   );
 });
 
-// Activate Service Worker & Cleanup Old Caches
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      );
-    })
-  );
-  return self.clients.claim();
-});
+// Enable navigation preload
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
 
-// Fetch Interceptor: Serve Cached UI Assets + Handle Next.js Static Files
+// Cache and serve Next.js static assets (`/_next/static/`)
+workbox.routing.registerRoute(
+  new RegExp("/_next/static/.*"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "next-static-assets",
+  })
+);
+
+// Cache all requests for better offline experience
+workbox.routing.registerRoute(
+  new RegExp("/*"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE,
+  })
+);
+
+// Handle fetch requests and return cached UI when offline
 self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      (async () => {
+        try {
+          const preloadResp = await event.preloadResponse;
 
-  // Handle Next.js Static Assets
-  if (url.pathname.startsWith("/_next/static/")) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.match(event.request).then((cachedResponse) => {
-          return (
-            cachedResponse ||
-            fetch(event.request).then((fetchedResponse) => {
-              cache.put(event.request, fetchedResponse.clone());
-              return fetchedResponse;
-            })
-          );
-        });
-      })
-    );
-  } 
-  // Handle Whitelisted CDN & Font Files
-  else if (HOSTNAME_WHITELIST.includes(url.hostname)) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        return (
-          cached ||
-          fetch(event.request)
-            .then((response) => {
-              const responseClone = response.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-              return response;
-            })
-            .catch(() => cached)
-        );
-      })
-    );
-  } 
-  // Default: Try Fetching, Otherwise Serve Cached Version
-  else {
-    event.respondWith(
-      fetch(event.request)
-        .catch(() => caches.match(event.request))
-        .then((response) => response || caches.match(OFFLINE_URL))
+          if (preloadResp) {
+            return preloadResp;
+          }
+
+          const networkResp = await fetch(event.request);
+          return networkResp;
+        } catch (error) {
+          console.warn("⚠️ Offline, serving cached page:", event.request.url);
+          const cache = await caches.open(CACHE);
+          const cachedResp = await cache.match(offlineFallbackPage);
+          return cachedResp;
+        }
+      })()
     );
   }
 });
