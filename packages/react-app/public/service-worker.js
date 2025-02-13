@@ -62,78 +62,58 @@
 //   }
 // });
 
+
 // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
-const CACHE = "taxify-offline-cache";
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js");
+const CACHE = "pwabuilder-offline-page";
 
-// Set the correct offline fallback page
-const offlineFallbackPage = "/";
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-// Skip waiting to update the service worker immediately
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
+const offlineFallbackPage = "ToDo-replace-this-name.html";
+
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
 });
 
-// Cache the offline fallback page on install
-self.addEventListener("install", async (event) => {
+self.addEventListener('install', async (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => {
-      return cache.addAll([
-        offlineFallbackPage,
-        "/manifest.json",
-        "/favicon.ico",
-        "/styles/globals.css",
-        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
-      ]);
-    })
+    caches.open(CACHE)
+      .then((cache) => cache.add(offlineFallbackPage))
   );
 });
 
-// Enable navigation preload
 if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
-// Cache and serve Next.js static assets (`/_next/static/`)
 workbox.routing.registerRoute(
-  new RegExp("/_next/static/.*"),
+  new RegExp('/*'),
   new workbox.strategies.StaleWhileRevalidate({
-    cacheName: "next-static-assets",
+    cacheName: CACHE
   })
 );
 
-// Cache all requests for better offline experience
-workbox.routing.registerRoute(
-  new RegExp("/*"),
-  new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE,
-  })
-);
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preloadResp = await event.preloadResponse;
 
-// Handle fetch requests and return cached UI when offline
-self.addEventListener("fetch", (event) => {
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      (async () => {
-        try {
-          const preloadResp = await event.preloadResponse;
-
-          if (preloadResp) {
-            return preloadResp;
-          }
-
-          const networkResp = await fetch(event.request);
-          return networkResp;
-        } catch (error) {
-          console.warn("⚠️ Offline, serving cached page:", event.request.url);
-          const cache = await caches.open(CACHE);
-          const cachedResp = await cache.match(offlineFallbackPage);
-          return cachedResp;
+        if (preloadResp) {
+          return preloadResp;
         }
-      })()
-    );
+
+        const networkResp = await fetch(event.request);
+        return networkResp;
+      } catch (error) {
+
+        const cache = await caches.open(CACHE);
+        const cachedResp = await cache.match(offlineFallbackPage);
+        return cachedResp;
+      }
+    })());
   }
 });
