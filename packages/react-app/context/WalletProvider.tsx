@@ -95,10 +95,11 @@ interface WalletContextType {
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
+const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { address, isConnected } = useAccount();
   const [walletBalance, setWalletBalance] = useState<string | null>("0");
-  const [isOffline, setIsOffline] = useState<boolean>(false); // Always render UI
+  const [isOffline, setIsOffline] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState(false); // Prevents hydration error
 
   // For READ-ONLY calls:
   const client = createPublicClient({
@@ -106,13 +107,13 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     transport: http(),
   });
 
-  // Detect if user is offline (runs only on client)
+  // Fix SSR hydration issues: Only run on client
   useEffect(() => {
+    setHasMounted(true);
+    setIsOffline(!navigator.onLine);
+
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
-
-    // Set initial offline state to prevent SSR hydration issues
-    setIsOffline(!navigator.onLine);
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
@@ -148,6 +149,9 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isConnected, address, isOffline]);
 
+  // 🚀 Fix: Prevent hydration mismatch by waiting for client to initialize
+  if (!hasMounted) return null;
+
   return (
     <WalletContext.Provider
       value={{
@@ -176,3 +180,6 @@ export const useWallets = () => {
   }
   return context;
 };
+
+// ✅ Fix: Ensure default export for `dynamic()`
+export default WalletProvider;
