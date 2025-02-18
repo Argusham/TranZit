@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { DriverUI } from "@/components/DriverUI";
+import { ReceivePayment } from "@/components/ReceivePayment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useContractData } from "@/hooks/useContractData";
@@ -95,7 +95,7 @@ export default function DriverUIPage() {
 
           {/* Driver-specific UI */}
           <div className="w-full bg-white p-4 rounded-lg mt-4">
-            <DriverUI
+            <ReceivePayment
               amount={amount}
               setAmount={setAmount}
               predefinedAmounts={predefinedAmounts}

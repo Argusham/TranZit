@@ -2,7 +2,7 @@
   "name": "Taxify",
   "short_name": "Taxify",
   "start_url": "/",
-  "display": "fullscreen",
+  "display": "standalone",
   "display_override": ["standalone", "fullscreen", "window-controls-overlay"],
   "description": " Web3-powered ride-sharing PWA.",
   "lang": "en",
