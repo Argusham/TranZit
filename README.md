@@ -10,7 +10,7 @@ Welcome to the **Taxi dApp**, a decentralized application designed to revolution
 ### **Project Highlights**
 
 - **Blockchain**: Built on **Celo** to ensure secure, decentralized payments.
-- **Smart Contracts**: Contracts deployed on Celo's Alfajores testnet, handling transactions and incentives.
+- **Smart Contracts**: Contracts deployed on Celo's Main, handling transactions and incentives.
 - **Incentives**: Users are rewarded with **0.2 cUSD** after interacting with 2 unique users.
 - **QR Code Payments**: Fast and convenient payments using QR code technology.
 - **Data Visualization**: Payment and incentive data are fetched and displayed using **The Graph**.
@@ -92,8 +92,8 @@ A detailed look at how data moves through the system during a transaction.
 ---
 
 ### **Smart Contract Addresses**:
-- **Contract Address**: `0xAF556F1aecd2b5f2Ce7C83Da9f6B18491ce8eEA4`
-- **cUSD Token Address**: `0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1` (Celo Alfajores Testnet)
+- **Contract Address**: `0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96`
+- **cUSD Token Address**: `0x765de816845861e75a25fca122bb6898b8b1282a` (Celo Mainnet)
 
 ---
 
