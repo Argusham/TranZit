@@ -42,7 +42,7 @@ export const DriverUI = ({
     : amount;
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white p-6 rounded-lg">
+    <div className="w-full max-w-md mx-auto bg-white p-2 rounded-lg">
       {/* Input Field */}
       <div className="mb-4">
         <label className="block text-gray-700 font-medium text-sm mb-2">

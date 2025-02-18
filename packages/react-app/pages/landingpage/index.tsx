@@ -3,6 +3,7 @@
 import { useRouter } from "next/router";
 import { useUserRole } from "@/context/UserRoleContext";
 import InfoHub from "@/components/InfoHub";
+import Header from "@/components/ConnectButton";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -16,10 +17,10 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-white">
       {/* Hero Section with Logo and Image */}
-      <div className="relative w-full h-[70vh] bg-blue-600 rounded-b-[40px] overflow-hidden flex flex-col items-center justify-center">
+      <div className="relative w-full h-[60vh] bg-blue-600 rounded-b-[40px] overflow-hidden flex flex-col items-center justify-center">
         {/* Logo + App Name */}
         <h1 className="absolute top-12 text-3xl font-bold text-white z-10">
-          Taxify Siyaya
+          Tranzit
         </h1>
 
         {/* Background Image */}
@@ -33,7 +34,7 @@ export default function LandingPage() {
       {/* Title & Description */}
       <div className="text-center mt-8 px-6">
         <h2 className="text-xl font-semibold text-gray-900">
-          Seamless Rides, Fast & Secure
+          Seamless Travel, Fast & Secure
         </h2>
         <p className="text-gray-600 text-base mt-2">
           Get around effortlessly with instant & secure payments.
@@ -57,10 +58,8 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <div className="mt-6 text-gray-500 text-sm">
-        <a href="#" className="underline">
-          Privacy and Terms
-        </a>
+      <div className="m-6 text-gray-500 text-sm">
+        <Header />
       </div>
       <InfoHub />
     </div>

@@ -13,7 +13,7 @@ import { useWallets } from "@/context/WalletProvider";
 export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
-  const predefinedAmounts = [1, 2, 0.5];
+  const predefinedAmounts = [0.5, 1, 2];
 
   const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
   const { getUserBalances } = useContractData();
