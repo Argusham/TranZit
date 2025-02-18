@@ -17,53 +17,66 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
     : "";
 
   return (
-    <div className="w-full bg-white p-4 rounded-lg text-gray-800">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <img
-            src={blockieDataUrl}
-            alt="User Avatar"
-            className="w-8 h-8 rounded-full mr-2 border border-gray-300"
-          />
-          <div>
-            <p className="text-sm font-semibold text-gray-600">
-              {role === "commuter" ? "Passenger Balance" : "Driver Balance"}
-            </p>
-            <p className="text-xs text-gray-500">
-              {walletAddress
-                ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(
-                    walletAddress.length - 4
-                  )}`
-                : "Not Connected"}
-            </p>
+    <div className="w-full max-w-md mx-auto p-1 rounded-2xl bg-gradient-to-br from-blue-200 to-blue-500">
+      {/* Inner Container with White Background */}
+      <div className="bg-white rounded-2xl p-4">
+        {/* Card Info Section */}
+        <div className="bg-gray-100 rounded-lg p-3 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <img
+              src={blockieDataUrl}
+              alt="User Avatar"
+              className="w-12 h-12 rounded-md"
+            />
+            <div>
+              <p className="text-s font-semibold text-gray-900">
+                {role === "commuter" ? "Passenger" : "Driver"}
+              </p>
+              <p className="text-xs text-gray-500">
+                {walletAddress
+                  ? `${walletAddress.substring(
+                      0,
+                      6
+                    )}...${walletAddress.substring(walletAddress.length - 4)}`
+                  : "Not Connected"}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-4 text-center">
-        <h3 className="text-4xl font-bold text-gray-900">
-          {showZar ? `ZAR ${zarBalance}` : `cU$D ${walletBalance || "0.00"}`}
-        </h3>
-      </div>
-
-      {/* <button
-        onClick={fetchWalletBalance}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
-      >
-        Refresh Balance
-      </button> */}
-
-      <div className="flex items-center justify-center mt-4 space-x-2">
-        <span className={`text-sm ${!showZar ? "text-blue-600" : "text-gray-400"}`}>cU$D</span>
-        <div
-          onClick={() => setShowZar(!showZar)}
-          className={`w-10 h-5 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer ${
-            showZar ? "justify-end" : "justify-start"
-          }`}
-        >
-          <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
+        {/* Balance Section */}
+        <div className="mt-4">
+          <p className="text-s font-medium text-gray-600">Balance:</p>
+          <h3 className="text-4xl font-extrabold tracking-tight text-gray-900">
+            {showZar ? `R ${zarBalance}` : `$ ${walletBalance || "0.00"}`}
+          </h3>
         </div>
-        <span className={`text-sm ${showZar ? "text-blue-600" : "text-gray-400"}`}>ZAR</span>
+
+        {/* Currency Toggle */}
+        <div className="flex items-center justify-center mt-4 space-x-2">
+          <span
+            className={`text-sm font-medium ${
+              !showZar ? "text-gray-900" : "text-gray-400"
+            }`}
+          >
+            cU$D
+          </span>
+          <div
+            onClick={() => setShowZar(!showZar)}
+            className={`w-12 h-6 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer transition-all ${
+              showZar ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div className="w-5 h-5 bg-blue-500 rounded-full"></div>
+          </div>
+          <span
+            className={`text-sm font-medium ${
+              showZar ? "text-gray-900" : "text-gray-400"
+            }`}
+          >
+            ZAR
+          </span>
+        </div>
       </div>
     </div>
   );
