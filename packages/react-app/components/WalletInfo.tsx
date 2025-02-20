@@ -17,16 +17,16 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
     : "";
 
   return (
-    <div className="w-full max-w-md mx-auto p-1 rounded-2xl bg-gradient-to-br from-blue-200 to-blue-500">
+    <div className="w-full max-w-md mx-auto p-1 rounded-3xl bg-gradient-to-br from-blue-200 to-blue-500">
       {/* Inner Container with White Background */}
-      <div className="bg-white rounded-2xl p-4">
+      <div className="bg-white rounded-3xl p-4">
         {/* Card Info Section */}
-        <div className="bg-gray-100 rounded-lg p-3 flex items-center justify-between">
+        <div className="bg-gray-100 rounded-3xl p-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <img
               src={blockieDataUrl}
               alt="User Avatar"
-              className="w-12 h-12 rounded-md"
+              className="w-12 h-12 rounded-3xl"
             />
             <div>
               <p className="text-s font-semibold text-gray-900">
@@ -53,7 +53,7 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
         </div>
 
         {/* Currency Toggle */}
-        <div className="flex items-center justify-center mt-4 space-x-2">
+        <div className="flex items-center justify-center space-x-2">
           <span
             className={`text-sm font-medium ${
               !showZar ? "text-gray-900" : "text-gray-400"

@@ -32,7 +32,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "Celo Composer",
+    appName: "Tranzit",
     projectId: "044601f65212332475a09bc14ceb3c34",
   }
 );
