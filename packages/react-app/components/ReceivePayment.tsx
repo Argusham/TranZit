@@ -46,7 +46,7 @@ export const ReceivePayment = ({
       {/* Input Field */}
       <div className="mb-4">
         <label className="block text-gray-700 font-medium text-sm mb-2">
-          Enter fare amount ({showZar ? "ZAR" : "cUSD"})
+          Fare amount ({showZar ? "ZAR" : "cU$D"})
         </label>
         <input
           type="number"
@@ -54,7 +54,7 @@ export const ReceivePayment = ({
           onChange={handleCustomAmountChange}
           disabled={isSettingAmount}
           placeholder={`Enter fare in ${showZar ? "ZAR" : "cUSD"}`}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
       </div>
 

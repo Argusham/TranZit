@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_PAYMENT_DATA = gql`
+export const GET_PAYMENT_SENT = gql`
   query {
       incentiveAwardeds(where: { user: $userAddress }) {
       amount
@@ -26,11 +26,12 @@ export const GET_USER_INCENTIVES = gql`
 
 export const GET_PAYMENTS_RECEIVED = gql`
   query GetPaymentData($address: String!) {
-    paymentMades(where: { payee: $address }) {
+    paymentMades(where: { payer: $address }, orderBy: blockTimestamp, orderDirection: desc) {
       id
       payer
       payee
       amount
+      blockTimestamp
     }
   }
 `
