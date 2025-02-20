@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@apollo/client";
-import { CommuterUI } from "@/components/CommuterUI";
+import { ProcessPayment } from "@/components/ProcessPayment";
 import { usePayments } from "@/hooks/usePayment";
 import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
@@ -10,6 +10,7 @@ import { GET_PAYMENT_DATA } from "@/graphql/queries/getPaymentData";
 import TransactionItem from "@/components/TransactionItem";
 import IncentiveHistory from "@/components/IncentiveHistory";
 import { useWallets } from "@/context/WalletProvider";
+import FonbnkWidget from "@/components/FonbnkWidget";
 
 export default function CommuterPage() {
   const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
@@ -26,7 +27,12 @@ export default function CommuterPage() {
   // Toggle state to switch between Wallet, Rewards, and Activity views
   const [activeTab, setActiveTab] = useState("wallet");
 
-  const { data, loading: transactionsLoading, error, refetch } = useQuery(GET_PAYMENT_DATA, {
+  const {
+    data,
+    loading: transactionsLoading,
+    error,
+    refetch,
+  } = useQuery(GET_PAYMENT_DATA, {
     fetchPolicy: "network-only",
     notifyOnNetworkStatusChange: true,
   });
@@ -86,7 +92,10 @@ export default function CommuterPage() {
     : "Loading...";
 
   const userTransactions = data?.paymentMades
-    ?.filter((transaction: any) => transaction.payer.toLowerCase() === walletAddress?.toLowerCase())
+    ?.filter(
+      (transaction: any) =>
+        transaction.payer.toLowerCase() === walletAddress?.toLowerCase()
+    )
     .slice(-5);
 
   const handleRefresh = async () => {
@@ -110,12 +119,14 @@ export default function CommuterPage() {
       {/* Tab Navigation */}
       <div className="w-full max-w-md mb-8">
         <div className="flex bg-gray-200 rounded-full p-1 space-x-1">
-          {["wallet", "rewards", "activity"].map((tab) => (
+          {["wallet", "activity", "transact"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 text-center rounded-full ${
-                activeTab === tab ? "bg-white text-blue-600 font-semibold" : "text-gray-500"
+                activeTab === tab
+                  ? "bg-white text-blue-600 font-semibold"
+                  : "text-gray-500"
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -124,79 +135,90 @@ export default function CommuterPage() {
         </div>
       </div>
 
-      {/* Wallet and QR Scanner Section */}
+      {/* Wallet Section */}
       {activeTab === "wallet" && (
         <>
-          <WalletInfo showZar={showZar} zarBalance={zarBalance} setShowZar={setShowZar} />
+          <WalletInfo
+            showZar={showZar}
+            zarBalance={zarBalance}
+            setShowZar={setShowZar}
+          />
           <div className="w-full max-w-md mt-6 mb-6">
-            <CommuterUI onScanSuccess={handleScanSuccess} />
+            <ProcessPayment onScanSuccess={handleScanSuccess} />
           </div>
-          {recipient && amount && !isProcessingComplete && (
-            <div className="mt-6 w-full max-w-md">
-              <div className="flex space-x-4">
-                <button
-                  onClick={handlePay}
-                  disabled={loading}
-                  className={`w-1/2 py-3 rounded-lg font-semibold text-white ${
-                    loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600 transition duration-200"
-                  }`}
-                >
-                  {loading ? "Processing..." : `Pay ${amount} cUSD`}
-                </button>
-                {!isProcessing && (
-                  <button
-                    onClick={handleCancelTransaction}
-                    className="w-1/2 py-3 rounded-lg font-semibold text-white bg-red-500 hover:bg-red-600 transition duration-200"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
         </>
       )}
 
-      {/* Rewards Section */}
-      {activeTab === "rewards" && walletAddress && (
-        <IncentiveHistory address={walletAddress} showZar={showZar} conversionRate={conversionRate} />
-      )}
-
-      {/* Activity Section */}
+      {/* Activity Section (Merged Rewards and Transactions) */}
       {activeTab === "activity" && (
-        <div className="w-full max-w-md mt-8">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-700">Previous Transactions</h3>
+        <div className="w-full max-w-md mx-auto mt-6">
+          {/* Incentive Section */}
+          {walletAddress && (
+            <IncentiveHistory
+              address={walletAddress}
+              showZar={showZar}
+              conversionRate={conversionRate}
+            />
+          )}
+
+          {/* Transactions Section */}
+          <div className="bg-white p-4 rounded-2xl shadow-sm mt-6">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Transactions
+              </h3>
+            </div>
+
+            {transactionsLoading ? (
+              <p className="text-center text-gray-500 py-4">
+                Loading transactions...
+              </p>
+            ) : error ? (
+              <p className="text-center text-red-500 py-4">
+                Error loading transactions: {error.message}
+              </p>
+            ) : (
+              <div>
+                {userTransactions.length > 0 ? (
+                  userTransactions
+                    .slice(0, 5)
+                    .map((transaction: any) => (
+                      <TransactionItem
+                        key={transaction.id}
+                        payee={transaction.payee}
+                        amount={transaction.amount}
+                        blockTimestamp={transaction.blockTimestamp}
+                        showZar={showZar}
+                        conversionRate={conversionRate}
+                      />
+                    ))
+                ) : (
+                  <p className="text-center text-gray-500 py-4">
+                    No recent transactions found.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Refresh Button */}
             <button
               onClick={handleRefresh}
-              className="text-gray-500 hover:text-gray-700 transition duration-200"
+              className="w-full flex items-center justify-center text-gray-600 text-sm mt-4"
             >
-              <FontAwesomeIcon icon={faSyncAlt} className="w-5 h-5" />
+              <FontAwesomeIcon icon={faSyncAlt} className="w-4 h-4 mr-2" />
+              Refresh Transactions
             </button>
           </div>
+        </div>
+      )}
 
-          {transactionsLoading ? (
-            <p className="text-center text-gray-500 mt-4">Loading transactions...</p>
-          ) : error ? (
-            <p className="text-center text-red-500 mt-4">Error loading transactions: {error.message}</p>
-          ) : (
-            <div className="bg-white p-6 rounded-lg space-y-4 mt-4">
-              {userTransactions.length > 0 ? (
-                userTransactions.map((transaction: any) => (
-                  <TransactionItem
-                    key={transaction.id}
-                    payee={transaction.payee}
-                    amount={transaction.amount}
-                    blockTimestamp={transaction.blockTimestamp}
-                    showZar={showZar}
-                    conversionRate={conversionRate}
-                  />
-                ))
-              ) : (
-                <p className="text-center text-gray-500">No recent transactions found.</p>
-              )}
-            </div>
-          )}
+        {/* Transact Section (Fonbnk Integration) */}
+        {activeTab === "transact" && (
+        <div className="w-full max-w-md">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Top up your balance
+          </h3>
+          <FonbnkWidget />
         </div>
       )}
     </div>

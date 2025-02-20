@@ -11,7 +11,7 @@ interface DriverUIProps {
   showZar: boolean;
 }
 
-export const DriverUI = ({
+export const ReceivePayment = ({
   address,
   amount,
   setAmount,

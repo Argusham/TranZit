@@ -1,5 +1,4 @@
 import { FC, ReactNode } from "react";
-import Header from "./ConnectButton";
 
 interface Props {
   children: ReactNode;

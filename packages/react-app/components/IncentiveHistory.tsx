@@ -33,7 +33,7 @@ const IncentiveHistory = ({ address, showZar, conversionRate }: IncentiveHistory
 
       {/* Display total incentives */}
       <div className="flex justify-between mb-4">
-        <p className="text-sm">Total Coins earned:</p>
+        <p className="text-sm">Total earned:</p>
         <p>{showZar ? `${totalIncentivesZar} ZAR` : `${formattedTotalIncentives} cUSD`}</p>
       </div>
     </div>
