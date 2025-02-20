@@ -12,14 +12,17 @@ interface WalletContextType {
   walletAddress: string | null;
   walletBalance: string | null;
   isConnected: boolean;
+  isOffline: boolean;
   fetchWalletBalance: () => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
+const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { address, isConnected } = useAccount();
   const [walletBalance, setWalletBalance] = useState<string | null>("0");
+  const [isOffline, setIsOffline] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState(false); // Prevents hydration error
 
   // For READ-ONLY calls:
   const client = createPublicClient({
@@ -27,9 +30,26 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     transport: http(),
   });
 
+  // Fix SSR hydration issues: Only run on client
+  useEffect(() => {
+    setHasMounted(true);
+    setIsOffline(!navigator.onLine);
+
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   // Function to fetch cUSD balance
   const fetchWalletBalance = async () => {
-    if (!address) return;
+    if (!address || isOffline) return;
     try {
       const balance = await client.readContract({
         address: CELO_CUSD_CONTRACT,
@@ -47,20 +67,30 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (isConnected && address) {
+    if (isConnected && address && !isOffline) {
       fetchWalletBalance();
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, isOffline]);
+
+  // 🚀 Fix: Prevent hydration mismatch by waiting for client to initialize
+  if (!hasMounted) return null;
 
   return (
     <WalletContext.Provider
       value={{
         walletAddress: address ?? null,
         walletBalance,
-        isConnected,
+        isConnected: isConnected && !isOffline, // Prevent interactions when offline
+        isOffline,
         fetchWalletBalance,
       }}
     >
+      {/* ✅ UI always remains visible, just show a banner when offline */}
+      {isOffline && (
+        <div className="w-full bg-red-600 text-white text-center py-2 fixed top-0 z-50">
+          You are offline. Some features may be unavailable.
+        </div>
+      )}
       {children}
     </WalletContext.Provider>
   );
@@ -73,3 +103,6 @@ export const useWallets = () => {
   }
   return context;
 };
+
+// ✅ Fix: Ensure default export for `dynamic()`
+export default WalletProvider;

@@ -36,8 +36,8 @@ const TransactionItem = ({ payee, amount, blockTimestamp, showZar, conversionRat
       <div className="text-right">
         <p className={`text-sm font-semibold ${isIncome ? 'text-green-500' : 'text-red-500'}`}>
           {isIncome
-            ? `+${showZar ? amountZar : formattedAmount} ${showZar ? 'ZAR' : 'cUSD'}`
-            : `-${showZar ? amountZar : formattedAmount} ${showZar ? 'ZAR' : 'cUSD'}`}
+            ? `+${showZar ? amountZar : formattedAmount} ${showZar ? 'ZAR' : 'cU$D'}`
+            : `-${showZar ? amountZar : formattedAmount} ${showZar ? 'ZAR' : 'cU$D'}`}
         </p>
       </div>
     </div>

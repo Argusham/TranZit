@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { DriverUI } from "@/components/DriverUI";
+import { ReceivePayment } from "@/components/ReceivePayment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useContractData } from "@/hooks/useContractData";
@@ -13,7 +13,7 @@ import { useWallets } from "@/context/WalletProvider";
 export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
-  const predefinedAmounts = [1, 2, 0.5];
+  const predefinedAmounts = [0.5, 1, 2];
 
   const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
   const { getUserBalances } = useContractData();
@@ -95,7 +95,7 @@ export default function DriverUIPage() {
 
           {/* Driver-specific UI */}
           <div className="w-full bg-white p-4 rounded-lg mt-4">
-            <DriverUI
+            <ReceivePayment
               amount={amount}
               setAmount={setAmount}
               predefinedAmounts={predefinedAmounts}
