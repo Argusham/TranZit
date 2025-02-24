@@ -1,6 +1,6 @@
 {
-  "name": "Taxify",
-  "short_name": "Taxify",
+  "name": "Tranzit",
+  "short_name": "Tranzit",
   "start_url": "/",
   "display": "standalone",
   "display_override": ["fullscreen", "window-controls-overlay"],
@@ -52,5 +52,5 @@
       "description": "A description of the functionality of this shortcut"
     }
   ],
-  "id": "Taxify"
+  "id": "Tranzit"
 }

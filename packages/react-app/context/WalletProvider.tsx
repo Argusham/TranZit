@@ -72,7 +72,7 @@ const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isConnected, address, isOffline]);
 
-  // 🚀 Fix: Prevent hydration mismatch by waiting for client to initialize
+  // Fix: Prevent hydration mismatch by waiting for client to initialize
   if (!hasMounted) return null;
 
   return (
@@ -85,11 +85,12 @@ const WalletProvider = ({ children }: { children: React.ReactNode }) => {
         fetchWalletBalance,
       }}
     >
-      {/* ✅ UI always remains visible, just show a banner when offline */}
+      {/* UI always remains visible, just show a banner when offline */}
       {isOffline && (
-        <div className="w-full bg-red-600 text-white text-center py-2 fixed top-0 z-50">
-          You are offline. Some features may be unavailable.
-        </div>
+         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex items-center bg-gray-800 text-sm font-semibold px-4 py-2 mt-4 rounded-full shadow-lg z-50">
+         <span className="w-4 h-4 bg-red-500 rounded-full mr-2"></span>
+         You are offline
+       </div>
       )}
       {children}
     </WalletContext.Provider>
