@@ -22,7 +22,7 @@ Welcome to **Tranzit**, a decentralized application that revolutionises contactl
 ---
 
 ## 📈 **Business Model Overview**
-[Business Model](images/BusinnessModel.png)
+![Business Model](images/BusinnessModel.png)
 
 Tranzit facilitates contactless payments while incentivizing user interactions within the ecosystem.
 
