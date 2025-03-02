@@ -1,18 +1,8 @@
 import { useEffect } from "react";
 import dynamic from "next/dynamic"; // ✅ Import `dynamic()`
-import {
-  RainbowKitProvider,
-  connectorsForWallets,
-} from "@rainbow-me/rainbowkit";
-import {
-  injectedWallet
-} from "@rainbow-me/rainbowkit/wallets";
-import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
-import { http, WagmiProvider, createConfig } from "wagmi";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
-import { celo } from "wagmi/chains";
 import { UserRoleProvider } from "@/context/UserRoleContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from "@apollo/client";
@@ -24,26 +14,7 @@ const WalletProvider = dynamic(() => import("@/context/WalletProvider"), {
   ssr: false, // ✅ Disable SSR for WalletProvider
 });
 
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Recommended",
-      wallets: [injectedWallet],
-    },
-  ],
-  {
-    appName: "Tranzit",
-    projectId: "044601f65212332475a09bc14ceb3c34",
-  }
-);
 
-const config = createConfig({
-  connectors,
-  chains: [celo],
-  transports: {
-    [celo.id]: http(),
-  },
-});
 
 const queryClient = new QueryClient();
 
@@ -76,25 +47,25 @@ function App({ Component, pageProps }: AppProps) {
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-          <link rel="apple-touch-icon" href="/ios.png" />
+          <link rel="apple-touch-icon" href="/blobby-192.png" />
       </Head>
 
       <PrivyProviderWrapper>
-      <WagmiProvider config={config}>
+    
         <WalletProvider>
           <ApolloProvider client={client}>
             <QueryClientProvider client={queryClient}>
               <UserRoleProvider>
-                <RainbowKitProvider>
+             
                   <Layout>
                     <Component {...pageProps} />
                   </Layout>
-                </RainbowKitProvider>
+               
               </UserRoleProvider>
             </QueryClientProvider>
           </ApolloProvider>
         </WalletProvider>
-      </WagmiProvider>
+     
       </PrivyProviderWrapper>
     </>
   );
