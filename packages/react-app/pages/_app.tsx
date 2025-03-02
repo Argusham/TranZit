@@ -5,20 +5,20 @@ import {
   connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import {
-  injectedWallet,
-  walletConnectWallet,
+  injectedWallet
 } from "@rainbow-me/rainbowkit/wallets";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { http, WagmiProvider, createConfig } from "wagmi";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
-import { celo, celoAlfajores } from "wagmi/chains";
+import { celo } from "wagmi/chains";
 import { UserRoleProvider } from "@/context/UserRoleContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from "@apollo/client";
 import client from "../utils/apolloClient";
 import Head from "next/head";
+import { PrivyProviderWrapper } from "@/context/PrivyProviderWrapper";
 
 const WalletProvider = dynamic(() => import("@/context/WalletProvider"), {
   ssr: false, // ✅ Disable SSR for WalletProvider
@@ -28,7 +28,7 @@ const connectors = connectorsForWallets(
   [
     {
       groupName: "Recommended",
-      wallets: [injectedWallet, walletConnectWallet],
+      wallets: [injectedWallet],
     },
   ],
   {
@@ -79,8 +79,9 @@ function App({ Component, pageProps }: AppProps) {
           <link rel="apple-touch-icon" href="/ios.png" />
       </Head>
 
+      <PrivyProviderWrapper>
       <WagmiProvider config={config}>
-        <WalletProvider> {/* ✅ Now only renders on client */}
+        <WalletProvider>
           <ApolloProvider client={client}>
             <QueryClientProvider client={queryClient}>
               <UserRoleProvider>
@@ -94,6 +95,7 @@ function App({ Component, pageProps }: AppProps) {
           </ApolloProvider>
         </WalletProvider>
       </WagmiProvider>
+      </PrivyProviderWrapper>
     </>
   );
 }

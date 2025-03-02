@@ -35,6 +35,8 @@
         "@emotion/react": "^11.11.4",
         "@emotion/styled": "^11.11.5",
         "@mui/material": "^5.15.20",
+        "@privy-io/react-auth": "^2.6.0",
+        "@privy-io/wagmi": "^1.0.3",
         "@walletconnect/modal": "^2.7.0",
         "caniuse-lite": "^1.0.30001690",
         "ethereum-blockies": "^0.1.1",
