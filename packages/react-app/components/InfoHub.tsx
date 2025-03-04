@@ -1,195 +1,358 @@
+// // components/InfoHub.tsx
+// "use client";
+
+// import React, { useState, useRef, useEffect } from "react";
+// import { MessageCircle, Send, X, Info } from "lucide-react";
+// import { usePrivy } from "@privy-io/react-auth";
+
+// export default function InfoHub() {
+//   const { authenticated, user, login } = usePrivy();
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [messages, setMessages] = useState([
+//     { id: "1", role: "assistant", content: "Hi, I'm Kuhle, your AI assistant. How can I help you today?" },
+//   ]);
+//   const [input, setInput] = useState("");
+//   const [isLoading, setIsLoading] = useState(false);
+//   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+//   // Toggle Chat Visibility
+//   const toggleChatbot = () => setIsOpen((prev) => !prev);
+
+//   // Scroll to latest message when new messages arrive
+//   useEffect(() => {
+//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+//   }, [messages]);
+
+//   // Handle AI Requests
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!input.trim()) return;
+
+//     const userMessage = { id: Date.now().toString(), role: "user", content: input };
+//     setMessages((prev) => [...prev, userMessage]);
+//     setInput("");
+//     setIsLoading(true);
+
+//     try {
+//       // Identify if it's a Web3-related query (transaction or wallet keywords)
+//       const isWeb3Query = input.toLowerCase().includes("transaction") || input.toLowerCase().includes("wallet");
+//       const wallet = authenticated ? user?.wallet : null;
+
+//       // Use the Nebula API route (which is now configured for Celo Mainnet) for Web3 queries
+//       const response = await fetch(isWeb3Query ? "/api/nebula" : "/api/openai", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ message: input, walletAddress: wallet?.address || null }),
+//       });
+
+//       const data = await response.json();
+//       setMessages((prev) => [
+//         ...prev,
+//         { id: (Date.now() + 1).toString(), role: "assistant", content: data.response },
+//       ]);
+//     } catch {
+//       setMessages((prev) => [
+//         ...prev,
+//         { id: (Date.now() + 1).toString(), role: "assistant", content: "Oops! Something went wrong." },
+//       ]);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div style={{ position: "relative", zIndex: 50 }}>
+//       {/* Chat Button */}
+//       <button
+//         onClick={toggleChatbot}
+//         className={`fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 ${
+//           isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100"
+//         } animate-float`}
+//         aria-label="Open chat"
+//       >
+//         <Info className="h-6 w-6" />
+//       </button>
+
+//       {/* Chat Popup */}
+//       {isOpen && (
+//         <div
+//           className="fixed inset-x-0 bottom-0 mx-auto max-w-md rounded-t-2xl bg-white shadow-2xl"
+//           style={{ maxHeight: "90vh", zIndex: 51 }}
+//         >
+//           {/* Header */}
+//           <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3">
+//             <div className="flex items-center space-x-3">
+//               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600">
+//                 <MessageCircle className="h-5 w-5 text-white" />
+//               </div>
+//               <div>
+//                 <h3 className="font-semibold text-gray-800">Kuhle</h3>
+//                 <p className="text-xs text-gray-500">AI Assistant</p>
+//               </div>
+//             </div>
+//             <button onClick={toggleChatbot} className="rounded-full p-2 text-gray-500 hover:bg-gray-100" aria-label="Close chat">
+//               <X className="h-5 w-5" />
+//             </button>
+//           </div>
+
+//           {/* Messages */}
+//           <div className="h-[60vh] overflow-y-auto bg-gray-50 p-4">
+//             <div className="space-y-4">
+//               {messages.map((msg) => (
+//                 <div
+//                   key={msg.id}
+//                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+//                 >
+//                   <div
+//                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+//                       msg.role === "user"
+//                         ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+//                         : "bg-white text-gray-800 shadow-sm"
+//                     }`}
+//                   >
+//                     {msg.content}
+//                   </div>
+//                 </div>
+//               ))}
+//               {isLoading && (
+//                 <div className="flex justify-start">
+//                   <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm">
+//                     <div className="flex space-x-2">
+//                       <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
+//                       <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "0.2s" }}></div>
+//                       <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "0.4s" }}></div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               )}
+//               <div ref={messagesEndRef} />
+//             </div>
+//           </div>
+
+//           {/* Input */}
+//           <div className="border-t border-gray-100 bg-white p-4">
+//             {!authenticated ? (
+//               <button
+//                 onClick={login}
+//                 className="w-full rounded-full bg-blue-500 py-2 text-white shadow-md transition hover:bg-blue-600"
+//               >
+//                 Connect Wallet to Chat
+//               </button>
+//             ) : (
+//               <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+//                 <input
+//                   type="text"
+//                   value={input}
+//                   onChange={(e) => setInput(e.target.value)}
+//                   placeholder="Type your message..."
+//                   className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100"
+//                 />
+//                 <button
+//                   type="submit"
+//                   disabled={isLoading || !input.trim()}
+//                   className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white disabled:opacity-50"
+//                 >
+//                   <Send className="h-4 w-4" />
+//                 </button>
+//               </form>
+//             )}
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Floating Animation */}
+//       <style jsx global>{`
+//         @keyframes float {
+//           0%, 100% { transform: translateY(0); }
+//           50% { transform: translateY(-10px); }
+//         }
+//         .animate-float { animation: float 3s ease-in-out infinite; }
+//         ::-webkit-scrollbar { width: 8px; }
+//         ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 20px; }
+//       `}</style>
+//     </div>
+//   );
+// }
+
+
+// components/InfoHub.tsx
 "use client";
-import { faClose, faInfo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState, useRef } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
+import { MessageCircle, Send, X, Info } from "lucide-react";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function InfoHub() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selected, setSelected] = useState<any>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const questionsPerPage = 3;
+  const { authenticated, user, login } = usePrivy();
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { id: "1", role: "assistant", content: "Hi, I'm Kuhle, your AI assistant. How can I help you today?" },
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const options = [
-    {
-      id: 1,
-      question: "How do I make a payment as a commuter?",
-      answer:
-        "Simply scan the QR code generated by the driver. Once you confirm the amount, the payment will be processed instantly using blockchain technology, ensuring transparency and security.",
-    },
-    {
-      id: 2,
-      question: "How do I generate a QR code as a driver?",
-      answer:
-        "As a driver, after entering your desired fare, the app will automatically generate a QR code for you. This QR code contains the payment details, which the commuter can scan to process the payment. You can also toggle between cUSD and Rand for currency selection.",
-    },
-    {
-      id: 3,
-      question: "Can I switch the payment currency?",
-      answer:
-        "Yes, you can toggle between cUSD Rand for payments. Simply select your preferred currency before generating the QR code or processing the payment.",
-    },
-    {
-      id: 4,
-      question: "Is it safe to use blockchain for payments?",
-      answer:
-        "Yes! Blockchain ensures that all transactions are secure and transparent. Each payment is recorded preventing fraud or alterations, and providing a clear audit trail.",
-    },
-    {
-      id: 5,
-      question: "What happens if the payment fails?",
-      answer:
-        "If the payment fails, please double-check your internet connection and ensure that you have enough money in your account.",
-    },
+  // Toggle Chat Visibility
+  const toggleChatbot = () => setIsOpen((prev) => !prev);
 
-    {
-      id: 6,
-      question: "Can I use my local currency (Rand) for payments?",
-      answer:
-        "Absolutely! This flexibility allows for both blockchain and traditional payments to be made effortlessly.",
-    },
-    {
-      id: 7,
-      question: "How long does it take for a payment to be processed?",
-      answer:
-        "Payments are processed instantly via the blockchain, ensuring both the driver and commuter experience minimal wait times.",
-    },
-    {
-      id: 8,
-      question: "Can the driver change the fare after generating the QR code?",
-      answer:
-        "No, If you need to change the fare, you must regenerate a new QR code with the updated amount.",
-    },
-    {
-      id: 9,
-      question: "What happens if I scan the wrong QR code?",
-      answer:
-        "Please ensure that the QR code is coming from the correct driver and corresponds to your intended payment amount.",
-    },
-  ];
-
-  const messagesEndRef = useRef<any>(null);
-
-  const toggleChatbot = () => {
-    setIsOpen((prevState) => !prevState);
-  };
-
-  const handleQuestionChoice = (id: any) => {
-    const question = options.find((op) => op.id === id);
-    setSelected((prevQuestions: any) => [...prevQuestions, question]);
-  };
-
-  const handleShowMoreQuestions = () => {
-    if (startIndex + questionsPerPage >= options.length) {
-      setCurrentPage(0); // Restart when we reach the end
-    } else {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  let startIndex = currentPage * questionsPerPage;
-  const currentQuestions = options.slice(
-    startIndex,
-    startIndex + questionsPerPage
-  );
-
+  // Scroll to latest message when new messages arrive
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Handle AI Requests: Always use OpenAI only.
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = { id: Date.now().toString(), role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      // Always call the OpenAI endpoint.
+      const response = await fetch("/api/openai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await response.json();
+      setMessages((prev) => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "assistant", content: data.response },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "assistant", content: "Oops! Something went wrong." },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
-  }, [selected, currentQuestions]);
+  };
 
   return (
-    <div style={{ position: "absolute", zIndex: 2 }}>
-      {/* Chatbot Icon */}
+    <div style={{ position: "relative", zIndex: 50 }}>
+      {/* Chat Button */}
       <button
         onClick={toggleChatbot}
-        className={`fixed bottom-2 right-4 bg-neon ${
-          isOpen ? "hidden" : ""
-        } bg-blue-600 p-3 rounded-full transition-transform transform translate-y-12 hover:scale-110 animate-float`}
+        className={`fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 ${
+          isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100"
+        } animate-float`}
+        aria-label="Open chat"
       >
-        <FontAwesomeIcon icon={faInfo} className="w-8 h-8 text-white" />
+        <Info className="h-6 w-6" />
       </button>
 
-      {/* Chatbot Popup */}
-      <div
-        className={`fixed bottom-4 right-2 left-2 w-[calc(100% - 8px)] bg-gray-400 ${
-          isOpen ? "" : "hidden"
-        } rounded-3xl transition-transform transform translate-y-0 opacity-100 animate-float`}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-semibold">
-            Hi I&apos;m Kuhle here to help you learn
-          </h2>
-          <button
-            onClick={toggleChatbot}
-            className="p-2 rounded-full hover:bg-gray-700"
-          >
-            <FontAwesomeIcon icon={faClose} className="w-6 h-6" />
-          </button>
-        </div>
-        <div className="p-4 overflow-y-auto h-60">
-          {/* Chat messages go here */}
-          <div className="space-y-4">
-            <div className="bg-gray-500 p-4 rounded-2xl m-2">
-              <p>
-                Thou hast summoned the divine presence. Speak thy will,
-                <br />
-                and I shall bestow upon thee my wisdom and favor.
-              </p>
-            </div>
-
-            {selected.map((chosenQuestion: any, index: any) => (
-              <div key={index}>
-                <div className="bg-gray-500 p-2 rounded-lg ml-14">
-                  <p>{chosenQuestion.question}</p>
-                </div>
-                <div className="bg-gray-300 p-2 rounded-lg mr-14 mt-[18px]">
-                  <p>{chosenQuestion.answer}</p>
-                </div>
+      {/* Chat Popup */}
+      {isOpen && (
+        <div
+          className="fixed inset-x-0 bottom-0 mx-auto max-w-md rounded-t-2xl bg-white shadow-2xl"
+          style={{ maxHeight: "90vh", zIndex: 51 }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3">
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600">
+                <MessageCircle className="h-5 w-5 text-white" />
               </div>
-            ))}
-            <div ref={messagesEndRef}></div>
+              <div>
+                <h3 className="font-semibold text-gray-800">Kuhle</h3>
+                <p className="text-xs text-gray-500">AI Assistant</p>
+              </div>
+            </div>
+            <button
+              onClick={toggleChatbot}
+              className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
+              aria-label="Close chat"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div className="h-[60vh] overflow-y-auto bg-gray-50 p-4">
+            <div className="space-y-4">
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      msg.role === "user"
+                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                        : "bg-white text-gray-800 shadow-sm"
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm">
+                    <div className="flex space-x-2">
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "0.2s" }}></div>
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: "0.4s" }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+
+          {/* Input */}
+          <div className="border-t border-gray-100 bg-white p-4">
+            {!authenticated ? (
+              <button
+                onClick={login}
+                className="w-full rounded-full bg-blue-500 py-2 text-white shadow-md transition hover:bg-blue-600"
+              >
+                Connect Wallet to Chat
+              </button>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !input.trim()}
+                  className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white disabled:opacity-50"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
+              </form>
+            )}
           </div>
         </div>
-        <div
-          className="p-4 pb-12 border-t border-gray-700"
-          style={{ position: "relative" }}
-        >
-          {currentQuestions.map((option) => (
-            <button
-              key={option.id}
-              className="border p-2 m-2 text-xs bg-white border-gray-500 rounded-lg text-neon hover:bg-blue-700 hover:border-white transition-transform transform hover:scale-105"
-              onClick={() => handleQuestionChoice(option.id)}
-            >
-              {option.question}
-            </button>
-          ))}
-          <button
-            style={{ position: "absolute", right: 20, bottom: 20 }}
-            className="text-xs text-neon hover:text-black transition-transform transform hover:scale-110"
-            onClick={handleShowMoreQuestions}
-          >
-            Show other questions
-          </button>
-        </div>
-      </div>
+      )}
 
-      {/* Floating animation CSS */}
+      {/* Floating Animation */}
       <style jsx global>{`
         @keyframes float {
-          0% {
+          0%, 100% {
             transform: translateY(0);
           }
           50% {
             transform: translateY(-10px);
           }
-          100% {
-            transform: translateY(0);
-          }
         }
-
         .animate-float {
           animation: float 3s ease-in-out infinite;
+        }
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.1);
+          border-radius: 20px;
         }
       `}</style>
     </div>

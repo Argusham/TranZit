@@ -14,8 +14,6 @@ const WalletProvider = dynamic(() => import("@/context/WalletProvider"), {
   ssr: false, // ✅ Disable SSR for WalletProvider
 });
 
-
-
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
@@ -25,7 +23,9 @@ function App({ Component, pageProps }: AppProps) {
         navigator.serviceWorker
           .register("/service-worker.js")
           .then(() => console.log("✅ Service Worker Registered"))
-          .catch((err) => console.error("❌ Service Worker Registration Failed", err));
+          .catch((err) =>
+            console.error("❌ Service Worker Registration Failed", err)
+          );
       } else {
         console.log("🛑 Service Worker is disabled in development mode");
       }
@@ -42,30 +42,26 @@ function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-          <link rel="apple-touch-icon" href="/blobby-192.png" />
+        <link rel="apple-touch-icon" href="/blobby-192.png" />
       </Head>
 
       <PrivyProviderWrapper>
-    
         <WalletProvider>
           <ApolloProvider client={client}>
             <QueryClientProvider client={queryClient}>
               <UserRoleProvider>
-             
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-               
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
               </UserRoleProvider>
             </QueryClientProvider>
           </ApolloProvider>
         </WalletProvider>
-     
       </PrivyProviderWrapper>
     </>
   );

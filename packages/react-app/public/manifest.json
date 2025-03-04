@@ -12,12 +12,12 @@
   "orientation": "portrait",
   "icons": [
    {
-			"src": "/assets/blobby-192.png",
+			"src": "/blobby-192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src": "/assets/blobby-512.png",
+			"src": "/blobby-512.png",
 			"type": "image/png",
 			"sizes": "512x512"
 		}
