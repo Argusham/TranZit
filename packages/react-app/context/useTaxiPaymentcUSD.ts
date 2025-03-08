@@ -86,13 +86,14 @@ export const useTaxiPaymentcUSD = () => {
       });
 
       // 4) Pay user
-      const txHash = await walletClient.writeContract({
+      const txHash = await walletClient.sendTransaction({
         address: taxiPaymentContractAddress,
         abi: cusdAbi,
         functionName: "payUser",
         account: address,
         args: [recipient, amountInWei],
         gas: gasEstimate,
+        feeCurrency: cUSDTokenAddress,
       });
       await publicClient.waitForTransactionReceipt({ hash: txHash });
 

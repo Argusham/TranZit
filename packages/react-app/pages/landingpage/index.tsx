@@ -3,7 +3,9 @@
 import { useRouter } from "next/router";
 import { useUserRole } from "@/context/UserRoleContext";
 import InfoHub from "@/components/InfoHub";
-import Header from "@/components/ConnectButton";
+import Connect from "@/components/ConnectButton";
+import Account from "@/components/AccountProvider";
+ import { client } from "hooks/client"
 
 export default function LandingPage() {
   const router = useRouter();
@@ -59,9 +61,12 @@ export default function LandingPage() {
 
       {/* Footer */}
       <div className="m-6 text-gray-500 text-sm">
-        <Header />
+        <Connect />
       </div>
       <InfoHub />
+
+      {/* Account Info */}
+      <Account client={client} />
     </div>
   );
 }
