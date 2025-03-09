@@ -5,6 +5,7 @@ import { useUserRole } from "@/context/UserRoleContext";
 import InfoHub from "@/components/InfoHub";
 import Header from "@/components/ConnectButton";
 
+
 export default function LandingPage() {
   const router = useRouter();
   const { setRole } = useUserRole();
@@ -60,6 +61,7 @@ export default function LandingPage() {
       {/* Footer */}
       <div className="m-6 text-gray-500 text-sm">
         <Header />
+
       </div>
       <InfoHub />
     </div>

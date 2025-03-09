@@ -35,12 +35,19 @@
         "@emotion/react": "^11.11.4",
         "@emotion/styled": "^11.11.5",
         "@mui/material": "^5.15.20",
+        "@privy-io/react-auth": "^2.6.0",
+        "@privy-io/wagmi": "^1.0.3",
         "caniuse-lite": "^1.0.30001690",
+        "dotenv": "^16.4.7",
         "ethereum-blockies": "^0.1.1",
+        "ethers": "^6.13.5",
         "html5-qrcode": "^2.3.8",
+        "lucide-react": "^0.477.0",
+        "openai": "^4.86.1",
         "qrcode.react": "^4.0.1",
         "react-qr-code": "^2.0.15",
         "react-qr-reader": "^3.0.0-beta-1",
-        "react-qr-scanner": "^1.0.0-alpha.11"
+        "react-qr-scanner": "^1.0.0-alpha.11",
+        "thirdweb": "^5.90.0"
     }
 }

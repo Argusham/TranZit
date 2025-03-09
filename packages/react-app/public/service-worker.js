@@ -63,7 +63,7 @@
 // });
 
 // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
-const CACHE = "taxify-offline-cache";
+const CACHE = "Tranzit-offline-cache";
 
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js");
 
