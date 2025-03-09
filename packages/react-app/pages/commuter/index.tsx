@@ -1,112 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
-// import { useEffect, useState } from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-// import { useQuery } from "@apollo/client";
-// import { ProcessPayment } from "@/components/ProcessPayment";
-// import { usePayments } from "@/hooks/usePayment";
-// import { useContractData } from "@/hooks/useContractData";
-// import WalletInfo from "@/components/WalletInfo";
-// import { GET_PAYMENT_SENT } from "@/graphql/queries/getPaymentData";
-// import TransactionItem from "@/components/TransactionItem";
-// import IncentiveHistory from "@/components/IncentiveHistory";
-// import { useWallets } from "@privy-io/react-auth"; // ✅ Fetch wallet from Privy
-// import FonbnkWidget from "@/components/FonbnkWidget";
-// import { Address, isAddress } from "viem"; // ✅ Import Address type and validation
-
-// export default function CommuterPage() {
-//   const { wallets } = useWallets();
-//   const activeWallet = wallets.length > 0 ? wallets[0] : null; // ✅ Use first available wallet
-//   const walletAddress = activeWallet?.address as Address | null;
-
-//   const { payUser, loading } = usePayments(); // ✅ Uses updated hook
-//   const { getUserBalances } = useContractData();
-
-//   const [recipient, setRecipient] = useState<Address | "">(""); // ✅ Ensure recipient is a valid Address
-//   const [amount, setAmount] = useState<string>("");
-//   const [showZar, setShowZar] = useState(false);
-//   const [conversionRate, setConversionRate] = useState<number | null>(null);
-//   const [isProcessingComplete, setIsProcessingComplete] = useState(false);
-//   const [isProcessing, setIsProcessing] = useState(false);
-//   const [activeTab, setActiveTab] = useState("wallet"); // Toggle state for the tabs
-
-//   useEffect(() => {
-//     if (walletAddress) {
-//       getUserBalances(walletAddress);
-//       fetchConversionRate();
-//     }
-//   }, [walletAddress]);
-
-//   const fetchConversionRate = async () => {
-//     try {
-//       const response = await fetch("https://open.er-api.com/v6/latest/USD");
-//       const data = await response.json();
-//       setConversionRate(data.rates.ZAR);
-//     } catch (error) {
-//       console.error("Error fetching conversion rate:", error);
-//     }
-//   };
-
-//   const handleScanSuccess = (scannedData: string) => {
-//     try {
-//       const parsedData = JSON.parse(scannedData);
-//       if (parsedData.recipient && isAddress(parsedData.recipient)) {
-//         setRecipient(parsedData.recipient as Address);
-//         setAmount(parsedData.amount);
-//         setIsProcessingComplete(false);
-//       } else {
-//         console.warn("Invalid QR code format.");
-//       }
-//     } catch (error) {
-//       console.error("Error parsing scanned data:", error);
-//     }
-//   };
-
-//   const handlePay = async () => {
-//     if (!isAddress(recipient)) {
-//       console.error("❌ Invalid recipient address.");
-//       return;
-//     }
-
-//     setIsProcessing(true);
-//     try {
-//       await payUser(recipient, amount);
-//       setIsProcessingComplete(true);
-//     } catch (error) {
-//       console.error("Payment failed:", error);
-//     } finally {
-//       setIsProcessing(false);
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center text-gray-800 min-h-screen px-6 py-8 bg-gray-100">
-//       {/* ✅ Only show wallet when connected */}
-//       {walletAddress ? (
-//         <>
-//           <WalletInfo showZar={showZar} zarBalance={null} setShowZar={function (value: boolean): void {
-//             throw new Error("Function not implemented.");
-//           } } />
-//           <ProcessPayment onScanSuccess={handleScanSuccess} />
-//           <button onClick={handlePay} disabled={loading}>
-//             {loading ? "Processing..." : `Pay ${amount} cUSD`}
-//           </button>
-//         </>
-//       ) : (
-//         <p>❌ Please connect your wallet.</p>
-//       )}
-//     </div>
-//   );
-// }
-
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@apollo/client";
 import { ProcessPayment } from "@/components/ProcessPayment";
-import { usePayments } from "@/hooks/usePayment";
-import { useContractData } from "@/hooks/useContractData";
+import { useTaxiPaymentcUSD } from "@/hooks/useTaxiPaymentcUSD";
 import WalletInfo from "@/components/WalletInfo";
 import { GET_PAYMENT_SENT } from "@/graphql/queries/getPaymentData";
 import TransactionItem from "@/components/TransactionItem";
@@ -116,12 +13,10 @@ import FonbnkWidget from "@/components/FonbnkWidget";
 import { Address, isAddress } from "viem";
 
 export default function CommuterPage() {
-  // const walletAddress = activeWallet?.address as Address | null;
-  const { walletAddress, walletBalance, fetchWalletBalance } =
-    useWalletsContext();
 
-  const { payUser, loading } = usePayments();
-  const { getUserBalances } = useContractData();
+  const { walletAddress, walletBalance, fetchWalletBalance } = useWalletsContext();
+
+  const { payUser, loading } = useTaxiPaymentcUSD();
 
   const [recipient, setRecipient] = useState<Address | "">("");
   const [amount, setAmount] = useState<string>("");
