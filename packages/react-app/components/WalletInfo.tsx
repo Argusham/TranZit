@@ -11,9 +11,9 @@ interface WalletInfoProps {
 
 const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
   const { role } = useUserRole();
-  const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
-  const blockieDataUrl = walletAddress
-    ? blockies.create({ seed: walletAddress }).toDataURL()
+  const { address, balance } = useWallets();
+  const blockieDataUrl = address
+    ? blockies.create({ seed: address }).toDataURL()
     : "";
 
   return (
@@ -33,11 +33,11 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
                 {role === "commuter" ? "Passenger" : "Driver"}
               </p>
               <p className="text-xs text-gray-500">
-                {walletAddress
-                  ? `${walletAddress.substring(
+                {address
+                  ? `${address.substring(
                       0,
                       6
-                    )}...${walletAddress.substring(walletAddress.length - 4)}`
+                    )}...${address.substring(address.length - 4)}`
                   : "Not Connected"}
               </p>
             </div>
@@ -48,7 +48,7 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
         <div className="mt-4">
           <p className="text-s font-medium text-gray-600">Balance:</p>
           <h3 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            {showZar ? `R ${zarBalance}` : `$ ${walletBalance || "0.00"}`}
+            {showZar ? `R ${zarBalance}` : `$ ${balance || "0.00"}`}
           </h3>
         </div>
 

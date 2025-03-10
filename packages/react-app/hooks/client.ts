@@ -1,29 +1,5 @@
-// // thirdwebClient.ts
-// import {
-//     createThirdwebClient,
-//     getContract,
-//   } from "thirdweb";
-//   import { defineChain } from "thirdweb/chains";
-  
-//   require("dotenv").config();
-
-//   const apikey = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID as string;
-//   // 1. Create the client with your clientId,
-//   // or a secretKey if in a server environment
-//   export const thirdwebClient = createThirdwebClient({
-//     clientId: apikey, 
-//     // or secretKey: "YOUR_SECRET_KEY" (server only)
-//   });
-  
-//   // 2. Connect to a specific contract on Celo (42220)
-//   export const thirdwebContract = getContract({
-//     client: thirdwebClient,
-//     chain: defineChain(42220),
-//     address: "0xf86AE66b74CB1F06eDeF18bCDc38469B6A064df8",
-//   });
-  
-
-import { createThirdwebClient } from "thirdweb";
+import { createThirdwebClient, getContract } from "thirdweb";
+import { defineChain } from "thirdweb/chains";
 
 require("dotenv").config();
 
@@ -37,4 +13,10 @@ if (!clientId) {
 
 export const client = createThirdwebClient({
   clientId: clientId,
+});
+
+const contract = getContract({
+  client,
+  chain: defineChain(42220),
+  address: "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96",
 });

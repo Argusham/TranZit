@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { ReceivePayment } from "@/components/ReceivePayment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { useContractData } from "@/hooks/useContractData";
 import WalletInfo from "@/components/WalletInfo";
 import { GET_PAYMENTS_RECEIVED } from "@/graphql/queries/getPaymentData";
 import { useQuery } from "@apollo/client";
@@ -17,9 +16,7 @@ export default function DriverUIPage() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const predefinedAmounts = [0.5, 1, 2];
-
-  const { walletAddress, walletBalance, fetchWalletBalance } = useWallets();
-  // const { getUserBalances } = useContractData();
+  const { address, balance } = useWallets();
   const [showZar, setShowZar] = useState(false);
   const [conversionRate, setConversionRate] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("wallet"); // Toggle state for the tabs
@@ -29,16 +26,17 @@ export default function DriverUIPage() {
   };
 
   const { data, loading: transactionsLoading, error, refetch } = useQuery(GET_PAYMENTS_RECEIVED, {
-    variables: { address: walletAddress },
+    variables: { address: address },
     // skip: !walletAddress,
     fetchPolicy: "network-only",
     notifyOnNetworkStatusChange: true,
   });
 
   useEffect(() => {
-    fetchWalletBalance();
-    fetchConversionRate();
-  }, [fetchWalletBalance]);
+    if (address) {
+      fetchConversionRate();
+    }
+  }, [address]);
 
   const fetchConversionRate = async () => {
     try {
@@ -51,11 +49,10 @@ export default function DriverUIPage() {
   };
 
   const zarBalance = conversionRate
-    ? (Number(walletBalance) * conversionRate).toFixed(2)
+    ? (Number(balance) * conversionRate).toFixed(2)
     : "Loading...";
 
     const handleRefresh = async () => {
-      await fetchWalletBalance();
       await refetch();
     };
 
@@ -108,7 +105,7 @@ export default function DriverUIPage() {
             amount={amount}
             setAmount={setAmount}
             predefinedAmounts={predefinedAmounts}
-            address={walletAddress || ""}
+            address={address || ""}
             conversionRate={conversionRate || 1}
             showZar={showZar}
           />
@@ -119,8 +116,8 @@ export default function DriverUIPage() {
     {activeTab === "activity" && (
       <div className="w-full max-w-md bg-white p-4 rounded-lg mt-4">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h3>
-        {walletAddress && (
-          <IncentiveHistory address={walletAddress} showZar={showZar} conversionRate={conversionRate} />
+        {address && (
+          <IncentiveHistory address={address} showZar={showZar} conversionRate={conversionRate} />
         )}
         {transactionsLoading ? (
           <p className="text-center text-gray-500">Loading transactions...</p>

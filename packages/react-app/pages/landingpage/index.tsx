@@ -66,7 +66,7 @@ export default function LandingPage() {
       <InfoHub />
 
       {/* Account Info */}
-      <Account client={client} />
+      {/* <Account client={client} /> */}
     </div>
   );
 }
