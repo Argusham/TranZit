@@ -173,24 +173,33 @@
 
 
 
+
 // hooks/usePayments.ts
 import { useState } from "react";
 import { useSendTransaction } from "thirdweb/react";
-import { getContract, prepareContractCall } from "thirdweb";
+import {
+  getContract,
+  prepareContractCall,
+  prepareTransaction,
+} from "thirdweb";
 import { Chain, celo } from "thirdweb/chains";
 import { client } from "../hooks/client";
-import { parseUnits } from "viem";
+import { parseEther } from "viem";
 
+// Define the shape of a payment request for clarity and type safety
 interface PaymentRequest {
-  recipient: string;
-  amount: string; // Amount in cUSD
+  recipient: string; // Address to send funds to (could be a contract or wallet address)
+  amount: string; // Amount to send (in ether)
+  tokenAddress?: string; // ERC-20 token contract address if using a token; if omitted, native currency is assumed
 }
 
 export function usePayments(defaultChain: Chain = celo) {
+  // Local state
   const [isPreparing, setIsPreparing] = useState(false);
   const [prepareError, setPrepareError] =
     useState<Error | null>(null);
 
+  // Thirdweb hook for sending transactions
   const {
     mutateAsync: sendTransaction,
     isPending: isSending,
@@ -204,8 +213,11 @@ export function usePayments(defaultChain: Chain = celo) {
   const cusdTokenAddress =
     "0x765de816845861e75a25fca122bb6898b8b1282a";
 
-  // Approve cUSD spending for the taxi payment contract
-  const approveCUSDSpending = async (amount: string) => {
+  // Approve token spending
+  const approveCUSDSpending = async (
+    spender: string,
+    amount: string,
+  ) => {
     try {
       const tokenContract = getContract({
         address: cusdTokenAddress,
@@ -213,13 +225,12 @@ export function usePayments(defaultChain: Chain = celo) {
         client: client,
       });
 
-      // Convert amount to wei (6 decimals for cUSD)
-      const amountInWei = parseUnits(amount, 6);
+      const amountInWei = parseEther(amount);
 
       const approveTx = prepareContractCall({
         contract: tokenContract,
-        method: "function cUSDToken() view returns (address)",
-        params: [taxiPaymentContractAddress, amountInWei],
+        method: "function approve(address spender, uint256 amount)",
+        params: [spender, amountInWei],
       });
 
       // Execute approval transaction
@@ -231,39 +242,56 @@ export function usePayments(defaultChain: Chain = celo) {
     }
   };
 
-  // Function to send payment using payUser method
+  // Function to initiate a payment
   const sendPayment = async ({
     recipient,
     amount,
+    tokenAddress,
   }: PaymentRequest) => {
     try {
       setPrepareError(null);
       setIsPreparing(true);
 
-      // Convert amount to wei (6 decimals for cUSD)
-      const amountInWei = parseUnits(amount, 6);
+      const amountInWei = parseEther(amount);
 
-      // First, approve spending
-      const approved = await approveCUSDSpending(amount);
-      if (!approved) {
-        throw new Error("Token approval failed");
+      if (tokenAddress) {
+        // Token payment with approval
+        // First, approve spending
+        const approved = await approveCUSDSpending(
+          taxiPaymentContractAddress,
+          amount,
+        );
+        if (!approved) {
+          throw new Error("Token approval failed");
+        }
+
+        // Prepare payment contract call
+        const taxiContract = getContract({
+          address: taxiPaymentContractAddress,
+          chain: defaultChain,
+          client: client,
+        });
+
+        const paymentTx = prepareContractCall({
+          contract: taxiContract,
+          method:  "function payUser(address recipient, uint256 amount)",
+          params: [recipient, amountInWei],
+        });
+
+        // Execute payment transaction
+        await sendTransaction(paymentTx);
+      } else {
+        // Native currency payment
+        const preparedTx = prepareTransaction({
+          to: recipient,
+          value: amountInWei,
+          chain: defaultChain,
+          client: client,
+        });
+
+        // Execute native token transaction
+        await sendTransaction(preparedTx);
       }
-
-      // Prepare taxi payment contract call
-      const taxiContract = getContract({
-        address: taxiPaymentContractAddress,
-        chain: defaultChain,
-        client: client,
-      });
-
-      const paymentTx = prepareContractCall({
-        contract: taxiContract,
-        method:   "function payUser(address recipient, uint256 amount)",
-        params: [recipient, amountInWei],
-      });
-
-      // Execute payment transaction
-      await sendTransaction(paymentTx);
     } catch (err) {
       console.error("Payment failed:", err);
       setPrepareError(err as Error);

@@ -327,7 +327,7 @@ export default function CommuterPage() {
       await sendPayment({
         recipient,
         amount,
-        tokenAddress: "0x765de816845861e75A25fCA122bb6898B8B1282a", // ✅ cUSD contract address on Celo
+        // tokenAddress: "0x765de816845861e75A25fCA122bb6898B8B1282a", // ✅ cUSD contract address on Celo
       });
 
       setIsProcessingComplete(true);
