@@ -97,64 +97,173 @@
 // };
 
 
-// usePayments.ts
-import { useState } from 'react';
-import { useSendTransaction } from 'thirdweb/react';
-import { getContract, prepareContractCall, prepareTransaction } from 'thirdweb';
-import { Chain, celo } from 'thirdweb/chains';   // import the chain you're using (e.g. mainnet, polygon, sepolia, etc.)
-import { client } from "../hooks/client";            // import your configured Thirdweb client instance
+// // usePayments.ts
+// import { useState } from 'react';
+// import { useSendTransaction } from 'thirdweb/react';
+// import { getContract, prepareContractCall, prepareTransaction } from 'thirdweb';
+// import { Chain, celo } from 'thirdweb/chains';   // import the chain you're using (e.g. mainnet, polygon, sepolia, etc.)
+// import { client } from "../hooks/client";      
+// import { parseEther } from "viem";
 
-// Define the shape of a payment request for clarity and type safety
+// // Define the shape of a payment request for clarity and type safety
+// interface PaymentRequest {
+//   recipient: string;        // address to send funds to (could be a contract or wallet address)
+//   amount: string;  // amount to send (in wei or the smallest token unit)
+//   tokenAddress?: string;    // ERC-20 token contract address if using a token; if omitted, native currency is assumed
+// }
+
+// export function usePayments(defaultChain: Chain = celo) {
+//   // Local state
+//   const [isPreparing, setIsPreparing] = useState(false);
+//   const [prepareError, setPrepareError] = useState<Error | null>(null);
+
+//   // Thirdweb hook for sending transactions
+//   const { mutateAsync: sendTransaction, isPending: isSending, error: sendError, data: txResult } = useSendTransaction();
+
+//   // Function to initiate a payment
+//   const sendPayment = async ({ recipient, amount, tokenAddress }: PaymentRequest) => {
+//     try {
+//       setPrepareError(null);
+//       setIsPreparing(true);
+
+//       let preparedTx;
+//       const amountInWei = parseEther(amount); // ✅ Ensure amount is in `bigint` format
+
+//       if (tokenAddress) {
+//         // **Token payment (cUSD or other ERC-20)**
+//         const tokenContract = getContract({
+//           address: "0x765de816845861e75a25fca122bb6898b8b1282a",
+//           chain: defaultChain,
+//           client: client,
+//         });
+
+//         preparedTx = await prepareContractCall({
+//           contract: tokenContract,
+//           method: "function transfer(address to, uint256 amount)",
+//           params: [recipient, amountInWei],
+//         });
+//       } else {
+//         // **Native currency payment (e.g., CELO)**
+//         preparedTx = await prepareTransaction({
+//           to: recipient,
+//           value: amountInWei,
+//           chain: defaultChain,
+//           client: client,
+//         });
+//       }
+
+//       // Execute transaction using Thirdweb's mutation hook
+//       await sendTransaction(preparedTx);
+
+//     } catch (err) {
+//       console.error("Payment failed:", err);
+//       setPrepareError(err as Error);
+//     } finally {
+//       setIsPreparing(false);
+//     }
+//   };
+
+//   return {
+//     sendPayment,
+//     isLoading: isPreparing || isSending, // ✅ Uses `isPending` instead of `isLoading`
+//     error: prepareError || sendError || null,
+//     transactionResult: txResult, // ✅ Transaction result (e.g., hash)
+//   };
+// }
+
+
+
+// hooks/usePayments.ts
+import { useState } from "react";
+import { useSendTransaction } from "thirdweb/react";
+import { getContract, prepareContractCall } from "thirdweb";
+import { Chain, celo } from "thirdweb/chains";
+import { client } from "../hooks/client";
+import { parseUnits } from "viem";
+
 interface PaymentRequest {
-  recipient: string;        // address to send funds to (could be a contract or wallet address)
-  amount: string | bigint;  // amount to send (in wei or the smallest token unit)
-  tokenAddress?: string;    // ERC-20 token contract address if using a token; if omitted, native currency is assumed
-  // You can add other fields like invoiceId or payment reference if needed
+  recipient: string;
+  amount: string; // Amount in cUSD
 }
 
 export function usePayments(defaultChain: Chain = celo) {
-  // Local state
   const [isPreparing, setIsPreparing] = useState(false);
-  const [prepareError, setPrepareError] = useState<Error | null>(null);
+  const [prepareError, setPrepareError] =
+    useState<Error | null>(null);
 
-  // Thirdweb hook for sending transactions
-  const { mutateAsync: sendTransaction, isPending: isSending, error: sendError, data: txResult } = useSendTransaction();
+  const {
+    mutateAsync: sendTransaction,
+    isPending: isSending,
+    error: sendError,
+    data: txResult,
+  } = useSendTransaction();
 
-  // Function to initiate a payment
-  const sendPayment = async ({ recipient, amount, tokenAddress }: PaymentRequest) => {
+  // Predefined contract addresses
+  const taxiPaymentContractAddress =
+    "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96";
+  const cusdTokenAddress =
+    "0x765de816845861e75a25fca122bb6898b8b1282a";
+
+  // Approve cUSD spending for the taxi payment contract
+  const approveCUSDSpending = async (amount: string) => {
+    try {
+      const tokenContract = getContract({
+        address: cusdTokenAddress,
+        chain: defaultChain,
+        client: client,
+      });
+
+      // Convert amount to wei (6 decimals for cUSD)
+      const amountInWei = parseUnits(amount, 6);
+
+      const approveTx = prepareContractCall({
+        contract: tokenContract,
+        method: "function cUSDToken() view returns (address)",
+        params: [taxiPaymentContractAddress, amountInWei],
+      });
+
+      // Execute approval transaction
+      await sendTransaction(approveTx);
+      return true;
+    } catch (error) {
+      console.error("Approval failed:", error);
+      return false;
+    }
+  };
+
+  // Function to send payment using payUser method
+  const sendPayment = async ({
+    recipient,
+    amount,
+  }: PaymentRequest) => {
     try {
       setPrepareError(null);
       setIsPreparing(true);
 
-      let preparedTx;
-      const amountInWei = BigInt(amount); // ✅ Ensure amount is in `bigint` format
+      // Convert amount to wei (6 decimals for cUSD)
+      const amountInWei = parseUnits(amount, 6);
 
-      if (tokenAddress) {
-        // **Token payment (cUSD or other ERC-20)**
-        const tokenContract = getContract({
-          address: tokenAddress,
-          chain: defaultChain,
-          client: client,
-        });
-
-        preparedTx = await prepareContractCall({
-          contract: tokenContract,
-          method: "function transfer(address to, uint256 amount)",
-          params: [recipient, amountInWei],
-        });
-      } else {
-        // **Native currency payment (e.g., CELO)**
-        preparedTx = await prepareTransaction({
-          to: recipient,
-          value: amountInWei,
-          chain: defaultChain,
-          client: client,
-        });
+      // First, approve spending
+      const approved = await approveCUSDSpending(amount);
+      if (!approved) {
+        throw new Error("Token approval failed");
       }
 
-      // Execute transaction using Thirdweb's mutation hook
-      await sendTransaction(preparedTx);
+      // Prepare taxi payment contract call
+      const taxiContract = getContract({
+        address: taxiPaymentContractAddress,
+        chain: defaultChain,
+        client: client,
+      });
 
+      const paymentTx = prepareContractCall({
+        contract: taxiContract,
+        method:   "function payUser(address recipient, uint256 amount)",
+        params: [recipient, amountInWei],
+      });
+
+      // Execute payment transaction
+      await sendTransaction(paymentTx);
     } catch (err) {
       console.error("Payment failed:", err);
       setPrepareError(err as Error);
@@ -165,8 +274,8 @@ export function usePayments(defaultChain: Chain = celo) {
 
   return {
     sendPayment,
-    isLoading: isPreparing || isSending, // ✅ Uses `isPending` instead of `isLoading`
+    isLoading: isPreparing || isSending,
     error: prepareError || sendError || null,
-    transactionResult: txResult, // ✅ Transaction result (e.g., hash)
+    transactionResult: txResult,
   };
 }

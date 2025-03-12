@@ -252,18 +252,18 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@apollo/client";
-import { ProcessPayment } from "@/components/ProcessPayment";
+import { ProcessPayment } from "@/components/ui/ProcessPayment";
 import { usePayments } from "@/hooks/usePayment";
-import WalletInfo from "@/components/WalletInfo";
+import WalletInfo from "@/components/ui/WalletInfo";
 import { GET_PAYMENT_SENT } from "@/graphql/queries/getPaymentData";
-import TransactionItem from "@/components/TransactionItem";
-import IncentiveHistory from "@/components/IncentiveHistory";
+import TransactionItem from "@/components/ui/TransactionItem";
+import IncentiveHistory from "@/components/ui/IncentiveHistory";
 import { useWallets } from "@/context/WalletProvider"; // ✅ Updated import
 import FonbnkWidget from "@/components/FonbnkWidget";
 
 export default function CommuterPage() {
   // ✅ Updated: Using the new WalletProvider values
-  const { address, balance, connectWallet, isConnected } = useWallets();
+  const { address, balance, } = useWallets();
   const { sendPayment, isLoading } = usePayments();
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");

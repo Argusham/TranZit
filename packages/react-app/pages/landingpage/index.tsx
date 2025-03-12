@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useUserRole } from "@/context/UserRoleContext";
 import InfoHub from "@/components/InfoHub";
 import Connect from "@/components/ConnectButton";
-import Account from "@/components/AccountProvider";
+import Account from "@/components/ui/AccountProvider";
  import { client } from "hooks/client"
 
 export default function LandingPage() {

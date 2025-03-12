@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ReceivePayment } from "@/components/ReceivePayment";
+import { ReceivePayment } from "@/components/ui/ReceivePayment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import WalletInfo from "@/components/WalletInfo";
+import WalletInfo from "@/components/ui/WalletInfo";
 import { GET_PAYMENTS_RECEIVED } from "@/graphql/queries/getPaymentData";
 import { useQuery } from "@apollo/client";
 import { useWallets } from "@/context/WalletProvider";
-import IncentiveHistory from "@/components/IncentiveHistory";
-import TransactionItem from "@/components/TransactionItem";
+import IncentiveHistory from "@/components/ui/IncentiveHistory";
+import TransactionItem from "@/components/ui/TransactionItem";
 import FonbnkWidget from "@/components/FonbnkWidget";
 
 export default function DriverUIPage() {

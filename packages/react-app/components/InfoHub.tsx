@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, Send, X, Info } from "lucide-react";
+import { MessageCircle, Send, X, Info , RefreshCcw} from "lucide-react";
 import { useWallets } from "../context/WalletProvider";
 
 export default function InfoHub() {
@@ -14,6 +14,7 @@ export default function InfoHub() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const userId = address || "guest"; 
 
   // Toggle Chat Visibility
   const toggleChatbot = () => setIsOpen((prev) => !prev);
@@ -34,15 +35,11 @@ export default function InfoHub() {
     setIsLoading(true);
 
     try {
-      // Identify if it's a Web3-related query (transaction or wallet keywords)
-      const isWeb3Query = input.toLowerCase().includes("transaction") || input.toLowerCase().includes("wallet");
-     
-
       // Use the Nebula API route (which is now configured for Celo Mainnet) for Web3 queries
       const response = await fetch("/api/nebula", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input, walletAddress: address || null }),
+        body: JSON.stringify({ message: input, walletAddress: address || userId  }),
       });
 
       const data = await response.json();
@@ -61,8 +58,17 @@ export default function InfoHub() {
     }
   };
 
+  // const handleResetSession = async () => {
+  //   setMessages([{ id: "1", role: "assistant", content: "Session reset. How can I assist with Tranzit?" }]);
+  //   await fetch("/api/nebula", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resetSession: true, userId }) });
+  // };
+
+
   return (
     <div style={{ position: "relative", zIndex: 50 }}>
+       {/* <button onClick={handleResetSession} className="fixed bottom-20 right-6 p-2 bg-gray-200 rounded-full">
+        <RefreshCcw className="w-5 h-5 text-gray-600" />
+      </button> */}
       {/* Chat Button */}
       <button
         onClick={toggleChatbot}

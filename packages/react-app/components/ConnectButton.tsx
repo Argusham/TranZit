@@ -29,7 +29,7 @@ export default function Connect() {
           showThirdwebBranding: false,
         }}
         accountAbstraction={{
-          chain: celo, // replace with the chain you want
+          chain: celo,
           sponsorGas: true,
         }}
       />

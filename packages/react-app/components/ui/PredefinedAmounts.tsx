@@ -39,7 +39,7 @@ export const PredefinedAmounts = ({
       Number.parseFloat((amount * conversionRate).toFixed(2))
     );
     setUpdatedPredefinedAmounts(transformedAmounts);
-    console.log(predefinedAmounts);
+    // console.log(predefinedAmounts);
   }, [showZar]);
 
   return (
