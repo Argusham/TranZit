@@ -264,7 +264,7 @@ import FonbnkWidget from "@/components/FonbnkWidget";
 export default function CommuterPage() {
   // ✅ Updated: Using the new WalletProvider values
   const { address, balance, } = useWallets();
-  const { sendPayment, isLoading } = usePayments();
+  const { payUser, isLoading } = usePayments();
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [showZar, setShowZar] = useState(false);
@@ -324,10 +324,10 @@ export default function CommuterPage() {
 
     setIsProcessing(true);
     try {
-      await sendPayment({
+      await payUser({
         recipient,
         amount,
-        // tokenAddress: "0x765de816845861e75A25fCA122bb6898B8B1282a", // ✅ cUSD contract address on Celo
+        tokenAddress: "0x765de816845861e75A25fCA122bb6898B8B1282a", // ✅ cUSD contract address on Celo
       });
 
       setIsProcessingComplete(true);
