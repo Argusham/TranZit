@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { WalletProvider } from "@/context/WalletProvider";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
@@ -8,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "../utils/apolloClient";
 import { ThirdwebProvider } from "thirdweb/react";
+import Head from "next/head";
 
 
 
@@ -19,6 +19,20 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       {/* ✅ PWA Metadata */}
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <link rel="apple-touch-icon" href="/ios-192.png" />
+      </Head>
      
       <ThirdwebProvider>
         <WalletProvider>
