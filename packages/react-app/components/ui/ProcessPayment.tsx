@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import PrimaryButton from '@/components/Button';
+import PrimaryButton from '@/components/ui/Button';
 import { Button, Stack } from '@mui/material';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 

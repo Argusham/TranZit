@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { PredefinedAmounts } from "@/components/PredefinedAmounts";
-import { QRCodeDisplay } from "@/components/QRCodeDisplay";
+import { PredefinedAmounts } from "@/components/ui/PredefinedAmounts";
+import { QRCodeDisplay } from "@/components/ui/QRCodeDisplay";
 
 interface DriverUIProps {
   address: string;
