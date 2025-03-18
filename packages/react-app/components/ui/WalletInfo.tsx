@@ -12,9 +12,10 @@ interface WalletInfoProps {
 const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
   const { role } = useUserRole();
   const { address, balance } = useWallets();
-  const blockieDataUrl = address
-    ? blockies.create({ seed: address }).toDataURL()
-    : "";
+  const blockieDataUrl = address ? blockies.create({ seed: address }).toDataURL() : "";
+
+    // Format balance values to three decimal places
+    const formattedBalance = Number(balance || 0).toFixed(3);
 
   return (
     <div className="w-full max-w-md mx-auto p-1 rounded-3xl bg-gradient-to-br from-blue-200 to-blue-500">
@@ -34,10 +35,9 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
               </p>
               <p className="text-xs text-gray-500">
                 {address
-                  ? `${address.substring(
-                      0,
-                      6
-                    )}...${address.substring(address.length - 4)}`
+                  ? `${address.substring(0, 4)}...${address.substring(
+                      address.length - 4
+                    )}`
                   : "Not Connected"}
               </p>
             </div>
@@ -48,15 +48,14 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
         <div className="mt-4">
           <p className="text-s font-medium text-gray-600">Balance:</p>
           <h3 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            {showZar ? `R ${zarBalance}` : `$ ${balance || "0.00"}`}
+            {showZar ? `R ${zarBalance}` : `$ ${formattedBalance || "0.00"}`}
           </h3>
         </div>
 
         {/* Currency Toggle */}
         <div className="flex items-center justify-center space-x-2">
           <span
-            className={`text-sm font-medium ${
-              !showZar ? "text-gray-900" : "text-gray-400"
+            className={`text-sm font-medium ${ !showZar ? "text-gray-900" : "text-gray-400"
             }`}
           >
             cU$D

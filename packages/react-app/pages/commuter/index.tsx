@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@apollo/client";
@@ -10,9 +11,11 @@ import TransactionItem from "@/components/ui/TransactionItem";
 import IncentiveHistory from "@/components/ui/IncentiveHistory";
 import { useWallets } from "@/context/WalletProvider"; // ✅ Updated import
 import FonbnkWidget from "@/components/FonbnkWidget";
+import { cUSDContract } from "@/hooks/client";
 
 export default function CommuterPage() {
-  // ✅ Updated: Using the new WalletProvider values
+
+  const router = useRouter();
   const { address, balance, } = useWallets();
   const { payUser, isLoading } = usePayments();
   const [recipient, setRecipient] = useState("");
@@ -25,12 +28,7 @@ export default function CommuterPage() {
   // Toggle state to switch between Wallet, Rewards, and Activity views
   const [activeTab, setActiveTab] = useState("wallet");
 
-  const {
-    data,
-    loading: transactionsLoading,
-    error,
-    refetch,
-  } = useQuery(GET_PAYMENT_SENT, {
+  const {data,loading: transactionsLoading, error, refetch} = useQuery(GET_PAYMENT_SENT, {
     fetchPolicy: "network-only",
     notifyOnNetworkStatusChange: true,
   });
@@ -77,7 +75,7 @@ export default function CommuterPage() {
       await payUser({
         recipient,
         amount,
-        tokenAddress: "0x765de816845861e75A25fCA122bb6898B8B1282a", // ✅ cUSD contract address on Celo
+        tokenAddress: cUSDContract.address, // ✅ cUSD contract address on Celo
       });
 
       setIsProcessingComplete(true);
@@ -95,9 +93,7 @@ export default function CommuterPage() {
     setIsProcessing(false);
   };
 
-  const zarBalance = conversionRate
-    ? (Number(balance) * conversionRate).toFixed(2)
-    : "Loading...";
+  const zarBalance = conversionRate ? (Number(balance) * conversionRate).toFixed(2) : "Loading...";
 
   const userTransactions = data?.paymentMades
     ?.filter(
@@ -115,7 +111,7 @@ export default function CommuterPage() {
       {/* Back Button */}
       <div className="w-full flex items-center mb-8">
         <button
-          onClick={() => history.back()}
+          onClick={() => router.back()}
           className="flex items-center text-gray-500 hover:text-gray-700 transition duration-200"
         >
           <FontAwesomeIcon icon={faArrowLeft} className="w-5 h-5 mr-2" />

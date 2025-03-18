@@ -11,14 +11,8 @@ interface DriverUIProps {
   showZar: boolean;
 }
 
-export const ReceivePayment = ({
-  address,
-  amount,
-  setAmount,
-  predefinedAmounts,
-  conversionRate,
-  showZar,
-}: DriverUIProps) => {
+export const ReceivePayment = ({address, amount, setAmount, predefinedAmounts, conversionRate, showZar, }: DriverUIProps) => {
+  
   const [isSettingAmount, setIsSettingAmount] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
 
@@ -74,9 +68,9 @@ export const ReceivePayment = ({
       {amount && !isSettingAmount && (
         <div className="mt-6">
           <QRCodeDisplay recipient={address} amount={qrAmount} />
-          <p className="text-center text-gray-500 text-sm mt-2">
+          {/* <p className="text-center text-gray-500 text-sm mt-2">
             {showZar ? `Converted to ${qrAmount} cUSD` : "Processing in cUSD"}
-          </p>
+          </p> */}
         </div>
       )}
     </div>

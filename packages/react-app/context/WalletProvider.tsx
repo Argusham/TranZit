@@ -2,10 +2,7 @@
 
 // WalletProvider.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  useActiveAccount, 
-  useActiveWallet, 
-  useActiveWalletConnectionStatus, 
+import { useActiveAccount, useActiveWallet, useActiveWalletConnectionStatus, 
   useActiveWalletChain, 
   useWalletBalance, 
   useConnect, 
