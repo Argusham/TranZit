@@ -3,24 +3,24 @@
   "short_name": "Tranzit",
   "start_url": "/?source=pwa",
   "display": "standalone",
-  "display_override": ["fullscreen", "window-controls-overlay"],
-  "description": " Web3-powered ride-sharing PWA.",
+  "display_override": ["window-controls-overlay"],
+  "description": "Web3-powered ride-sharing PWA.",
   "lang": "en",
   "dir": "auto",
   "theme_color": "#000000",
   "background_color": "#000000",
   "orientation": "portrait",
   "icons": [
-   {
-			"src": "/blobby-192.png",
-			"type": "image/png",
-			"sizes": "192x192"
-		},
-		{
-			"src": "/blobby-512.png",
-			"type": "image/png",
-			"sizes": "512x512"
-		}
+    {
+      "src": "/ios-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/android-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
   ],
   "screenshots": [
     {

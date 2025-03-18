@@ -11,23 +11,16 @@ interface PredefinedAmountsProps {
   showZar: boolean;
 }
 
-export const PredefinedAmounts = ({
-  predefinedAmounts,
-  handleAmountClick,
-  conversionRate,
-  showZar,
-}: PredefinedAmountsProps) => {
+export const PredefinedAmounts = ({predefinedAmounts, handleAmountClick, conversionRate, showZar,}: PredefinedAmountsProps) => {
+
   const [activeAmount, setActiveAmount] = useState<number | null>(null);
   const [flyAmount, setFlyAmount] = useState<number | null>(null);
-  const [updatedPredefinedAmounts, setUpdatedPredefinedAmounts] =
-    useState<number[]>(predefinedAmounts);
+  const [updatedPredefinedAmounts, setUpdatedPredefinedAmounts] = useState<number[]>(predefinedAmounts);
 
   const handleClick = (amount: number) => {
     setActiveAmount(amount);
     setFlyAmount(amount); // Trigger the flying text animation
     handleAmountClick(amount);
-
-    // After the animation completes, reset the flyAmount
     setTimeout(() => setFlyAmount(null), 1000);
   };
 
@@ -39,7 +32,7 @@ export const PredefinedAmounts = ({
       Number.parseFloat((amount * conversionRate).toFixed(2))
     );
     setUpdatedPredefinedAmounts(transformedAmounts);
-    console.log(predefinedAmounts);
+    // console.log(predefinedAmounts);
   }, [showZar]);
 
   return (

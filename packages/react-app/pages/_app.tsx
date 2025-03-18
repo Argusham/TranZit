@@ -1,36 +1,20 @@
-import { useEffect } from "react";
-import dynamic from "next/dynamic"; // ✅ Import `dynamic()`
+import { WalletProvider } from "@/context/WalletProvider";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
 import { UserRoleProvider } from "@/context/UserRoleContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloProvider } from "@apollo/client";
-import client from "../utils/apolloClient";
+import apolloClient from "../utils/apolloClient";
+import { ThirdwebProvider } from "thirdweb/react";
 import Head from "next/head";
-import { PrivyProviderWrapper } from "@/context/PrivyProviderWrapper";
 
-const WalletProvider = dynamic(() => import("@/context/WalletProvider"), {
-  ssr: false, // ✅ Disable SSR for WalletProvider
-});
+
 
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      if (process.env.NODE_ENV === "production") {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .then(() => console.log("✅ Service Worker Registered"))
-          .catch((err) =>
-            console.error("❌ Service Worker Registration Failed", err)
-          );
-      } else {
-        console.log("🛑 Service Worker is disabled in development mode");
-      }
-    }
-  }, []);
+
 
   return (
     <>
@@ -47,12 +31,12 @@ function App({ Component, pageProps }: AppProps) {
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-        <link rel="apple-touch-icon" href="/blobby-192.png" />
+        <link rel="apple-touch-icon" href="/ios-192.png" />
       </Head>
-
-      <PrivyProviderWrapper>
+     
+      <ThirdwebProvider>
         <WalletProvider>
-          <ApolloProvider client={client}>
+          <ApolloProvider client={apolloClient}>
             <QueryClientProvider client={queryClient}>
               <UserRoleProvider>
                 <Layout>
@@ -62,7 +46,7 @@ function App({ Component, pageProps }: AppProps) {
             </QueryClientProvider>
           </ApolloProvider>
         </WalletProvider>
-      </PrivyProviderWrapper>
+      </ThirdwebProvider>
     </>
   );
 }

@@ -7,14 +7,8 @@ interface PaymentFormProps {
     loading: boolean;
   }
   
-  const PaymentForm = ({
-    recipient,
-    setRecipient,
-    amount,
-    setAmount,
-    handlePayment,
-    loading,
-  }: PaymentFormProps) => {
+  const PaymentForm = ({recipient, setRecipient, amount, setAmount, handlePayment, loading,}: PaymentFormProps) => {
+    
     return (
       <div className="mb-6">
         <h2 className="text-xl font-semibold">Send Payment</h2>

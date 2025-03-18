@@ -1,63 +1,106 @@
-// nebula.ts
+import { NextApiRequest, NextApiResponse } from "next";
+import { OpenAI } from "openai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// Nebula API Config
 const API_BASE_URL = "https://nebula-api.thirdweb.com";
+const SECRET_KEY = process.env.THIRDWEB_SECRET_KEY;
+if (!SECRET_KEY) {
+  console.error("❌ Missing Thirdweb Secret Key!");
+  throw new Error("THIRDWEB_SECRET_KEY is not defined in the environment.");
+}
 
-// Retrieve the Nebula API key from environment variables.
-// Ensure your env file defines NEBULA_API_KEY
-const SECRET_KEY = process.env.NEBULA_API_KEY as string;
- 
+// OpenAI API Config
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-// if (!SECRET_KEY) {
-//   throw new Error("No Nebula API Key provided");
-// }
+// In-memory session store
+const userSessions: Record<string, { openaiHistory: any[]; nebulaSession: string | null }> = {};
 
-// We'll store the session ID in module scope for reuse.
-let sessionId: string | null = null;
+// System prompt to strictly enforce Tranzit-related conversations
+const SYSTEM_PROMPT = {
+  role: "system",
+  content: `
+  You are Kuhle, an AI assistant for TranZit, a Web3 application for decentralized contactless payments.
+  - You **only** answer questions related to TranZit or blockchain/Web3.
+  - If a user asks about other topics, politely refuse and say you can only help with TranZit-related queries.
+  - Keep responses **short, clear, and beginner-friendly**.
+  - If asked, **explain TranZit simply**: "TranZit is a decentralized app (dApp) that enables fast and secure payments between commuters and drivers using the Celo blockchain."
+  - If asked about "transactions", "wallets", or "smart contracts", forward the question to Nebula for on-chain insights.
+  `,
+};
 
-async function apiRequest(
-  endpoint: string,
-  method: string,
-  body: Record<string, any> = {}
-): Promise<any> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      // SECRET_KEY is guaranteed to be a string now.
-      "x-secret-key": SECRET_KEY
-    },
-    body: Object.keys(body).length ? JSON.stringify(body) : undefined,
+function isWeb3Query(message: string): boolean {
+  const web3Keywords = ["wallet", "blockchain", "crypto", "token", "transaction"];
+  return web3Keywords.some((keyword) => message.toLowerCase().includes(keyword));
+}
+
+async function callNebulaAPI(userId: string, message: string, walletAddress?: string) {
+  // If session doesn't exist, create one
+  if (!userSessions[userId].nebulaSession) {
+    const sessionResponse = await fetch(`${API_BASE_URL}/session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Secret-Key": SECRET_KEY! },
+      body: JSON.stringify({ title: `Chat for ${userId}` }),
+    });
+    const sessionData = await sessionResponse.json();
+    userSessions[userId].nebulaSession = sessionData.result.id;
+  }
+
+  // Send the message to Nebula
+  const response = await fetch(`${API_BASE_URL}/chat/completions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Secret-Key": SECRET_KEY! },
+    body: JSON.stringify({
+      model: "t0",
+      messages: [{ role: "user", content: message }],
+      session_id: userSessions[userId].nebulaSession,
+      context: {
+        wallet_address: walletAddress || null,
+        chain_ids: ["42220"],
+        contract_addresses: ["0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96"],
+      },
+      stream: false,
+    }),
   });
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("API Response Error:", errorText);
-    throw new Error(`API Error: ${response.statusText} - ${errorText}`);
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || "No response from Nebula.";
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+
+  const { message, walletAddress, userId, resetSession } = req.body;
+  if (!message || message.trim().length === 0) return res.status(400).json({ error: "Message is required" });
+
+  if (!userSessions[userId] || resetSession) {
+    userSessions[userId] = { openaiHistory: [SYSTEM_PROMPT], nebulaSession: null };
+    return res.status(200).json({ response: "Your session has been reset. How can I assist with Tranzit?" });
   }
-  return response.json();
-}
 
-export async function createSession(title = "Chat Session"): Promise<string> {
-  const response = await apiRequest("/session", "POST", { title });
-  sessionId = response.result.id;
-  console.log(`Session created: ${sessionId}`);
-  return sessionId as string;
-}
+  try {
+    let responseText = "";
 
-export async function sendNebulaMessage(message: string, walletAddress?: string ): Promise<string> {
-  if (!sessionId) {
-    await createSession();
+    if (isWeb3Query(message)) {
+      responseText = await callNebulaAPI(userId, message, walletAddress);
+    } else {
+      userSessions[userId].openaiHistory.push({ role: "user", content: message });
+      const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: userSessions[userId].openaiHistory,
+      });
+
+      responseText = response.choices[0]?.message?.content || "I don't understand that.";
+      userSessions[userId].openaiHistory.push({ role: "assistant", content: responseText });
+    }
+
+    res.status(200).json({ response: responseText });
+  } catch (error) {
+    console.error("🔥 AI Error:", error);
+    res.status(500).json({ error: "Something went wrong. Please try again later." });
   }
-  const requestBody = {
-    message,
-    session_id: sessionId,
-    walletAddress,
-    // Context filter: Celo Mainnet (chain id "42220")
-    context_filter: { chain_ids: ["42220"],
-      contractAdress: ["0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96"]
-     },
-  };
-  console.log("Sending message with request body:", requestBody);
-  const response = await apiRequest("/chat", "POST", requestBody);
-  console.log("Response", requestBody);
-  return response.message;
 }
-
