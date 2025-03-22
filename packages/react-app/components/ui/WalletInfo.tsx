@@ -50,7 +50,7 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
             {address && (
               <button
                 onClick={handleDisconnect}
-                className="text-sm font-medium text-red-500 hover:underline pl-32"
+                className="text-sm font-medium text-red-500 hover:underline pl-16"
               >
                   Disconnect
               </button>
