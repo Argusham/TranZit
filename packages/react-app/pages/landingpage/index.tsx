@@ -2,9 +2,9 @@
 // src/components/LandingPage.tsx
 import { useRouter } from "next/router";
 import { useUserRole } from "@/context/UserRoleContext";
-import InfoHub from "@/components/InfoHub";
+import InfoHub from "@/components/KuhleAi";
 import Connect from "@/components/ConnectButton";
- import { client } from "hooks/client"
+
 
 export default function LandingPage() {
   const router = useRouter();

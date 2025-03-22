@@ -2,6 +2,7 @@
 import blockies from "ethereum-blockies";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useWallets } from "@/context/WalletProvider";
+import { useRouter } from "next/router";
 
 interface WalletInfoProps {
   showZar: boolean;
@@ -11,11 +12,15 @@ interface WalletInfoProps {
 
 const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
   const { role } = useUserRole();
-  const { address, balance } = useWallets();
-  const blockieDataUrl = address ? blockies.create({ seed: address }).toDataURL() : "";
+  const { address, balance, disconnectWallet } = useWallets();
+  const blockieDataUrl = address ? blockies.create({ seed: address }).toDataURL(): "";
+  const router = useRouter();
+  const formattedBalance = Number(balance || 0).toFixed(2);
 
-    // Format balance values to three decimal places
-    const formattedBalance = Number(balance || 0).toFixed(3);
+  const handleDisconnect = () => {
+    disconnectWallet();
+    router.push("/");
+  };
 
   return (
     <div className="w-full max-w-md mx-auto p-1 rounded-3xl bg-gradient-to-br from-blue-200 to-blue-500">
@@ -23,7 +28,7 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
       <div className="bg-white rounded-3xl p-4">
         {/* Card Info Section */}
         <div className="bg-gray-100 rounded-3xl p-3 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <img
               src={blockieDataUrl}
               alt="User Avatar"
@@ -35,12 +40,21 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
               </p>
               <p className="text-xs text-gray-500">
                 {address
-                  ? `${address.substring(0, 4)}...${address.substring(
+                  ? `${address.substring(0, 6)}...${address.substring(
                       address.length - 4
                     )}`
                   : "Not Connected"}
               </p>
             </div>
+
+            {address && (
+              <button
+                onClick={handleDisconnect}
+                className="text-sm font-medium text-red-500 hover:underline pl-32"
+              >
+                  Disconnect
+              </button>
+            )}
           </div>
         </div>
 
@@ -55,7 +69,8 @@ const WalletInfo = ({ showZar, zarBalance, setShowZar }: WalletInfoProps) => {
         {/* Currency Toggle */}
         <div className="flex items-center justify-center space-x-2">
           <span
-            className={`text-sm font-medium ${ !showZar ? "text-gray-900" : "text-gray-400"
+            className={`text-sm font-medium ${
+              !showZar ? "text-gray-900" : "text-gray-400"
             }`}
           >
             cU$D

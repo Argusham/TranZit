@@ -9,13 +9,9 @@ import apolloClient from "../utils/apolloClient";
 import { ThirdwebProvider } from "thirdweb/react";
 import Head from "next/head";
 
-
-
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-
-
   return (
     <>
       {/* ✅ PWA Metadata */}
@@ -33,7 +29,7 @@ function App({ Component, pageProps }: AppProps) {
         />
         <link rel="apple-touch-icon" href="/ios-192.png" />
       </Head>
-     
+
       <ThirdwebProvider>
         <WalletProvider>
           <ApolloProvider client={apolloClient}>
