@@ -23,6 +23,18 @@ Welcome to **Tranzit**, a decentralized application that revolutionises contactl
 
 ## 📈 **Business Model Overview**
 ![Business Model](images/BusinnessModel.png)
+```mermaid
+flowchart LR
+    A[Celo Blockchain] --> B[Tranzit DApp Thirdweb]
+    B -->|Provides social login & <br/> embedded wallets| C[Commuters & Drivers]
+    B -->|Handles gas via relayer| A
+    A -->|Used for cUSD| D[Smart Contract]
+    D -->|Tracks<br/> unique interactions| E[User Data]
+    D -->|Transfers 1% fee| F[Incentive Pool]
+    D -->|Awards| G[0.2 cUSD Incentive]
+    H[Owner/Operator] -->|Manages config| D
+
+```
 
 Tranzit facilitates contactless payments while incentivizing user interactions within the ecosystem.
 
@@ -38,6 +50,23 @@ Tranzit facilitates contactless payments while incentivizing user interactions w
 
 ## 🔄 **Process Flow**
 ![Process Flow](images/Processflow.png)
+```mermaid
+flowchart TB
+    A((Start)) --> B{Social Login}
+    B -->|User logs in| C[Generate/Access Embedded Wallet]
+    C --> D[Driver sets price and generates QR code]
+    D --> E[Commuter scans QR code]
+    E --> F[Payment initiated through<br/>Thirdweb Relayer]
+    F --> G[Smart Contract processes payment]
+    G -->|Transfer cUSD minus tax| H[Driver's Wallet]
+    G -->|Transfer 1% tax| I[Contract Balance/Incentive Pool]
+    G --> J[Update unique user interactions]
+    J --> K[Check for incentive eligibility]
+    K -->|If eligible| L[Award 0.2 cUSD incentive]
+    K -->|If not eligible| M((End))
+    L --> M((End))
+
+```
 
 Understanding the step-by-step process from initiating a payment to receiving incentives.
 
@@ -55,7 +84,19 @@ Understanding the step-by-step process from initiating a payment to receiving in
 ---
 
 ## 📊 **Data Flow**
-![Process Flow](images/Dataflow.png)
+![Data Flow](images/Dataflow.png)
+```mermaid
+flowchart LR
+    A([Social Login<br/>Provider]) -->|Authenticates user| B([Thirdweb/Embedded Wallet])
+    B -->|Scans QR wallet ID + amount| C([Commuter UI])
+    C -->|Initiates payment request| D([Relayer<br/>via Thirdweb])
+    D -->|Submits transaction| E([Smart Contract])
+    E -->|Verifies cUSD balance<br/> & processes tax| F([Driver's Wallet])
+    E -->|Transfers tax<br/> to Incentive Pool| G([Incentive Pool])
+    E -->|Updates user data| H([User Data<br/>Balances & Interactions])
+    E -->|Checks eligibility| I([Incentive Eligibility])
+    I -->|If eligible, awards incentives| B
+```
 
 A detailed look at how data moves through the system during a transaction.
 
@@ -100,8 +141,8 @@ A detailed look at how data moves through the system during a transaction.
 
 ## **Pitch Deck & Demo Videos**
 
-- [Pitch Deck](https://docs.google.com/presentation/d/1Rjn4HUlv2up2dEMyi_RhBr-4FaJ1QxutRoUr3W_yifw/edit?usp=sharing) 📊
-- [Demo Video](https://docs.google.com/presentation/d/1Rjn4HUlv2up2dEMyi_RhBr-4FaJ1QxutRoUr3W_yifw/edit?usp=sharing) 🎥
+- [New Pitch Deck](https://docs.google.com/presentation/d/1n6DtycvlVZmMjKasG2TDMJJAXryVE9MURMjI075zZbU/edit?usp=sharing) 📊
+- [Demo Video](https://drive.google.com/file/d/1sUSVjUryNuVvwjmNhnyJK0ThjuIWZ1Id/view?usp=sharing) 🎥
 
 ---
 
