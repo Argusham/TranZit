@@ -22,7 +22,6 @@ Welcome to **Tranzit**, a decentralized application that revolutionises contactl
 ---
 
 ## 📈 **Business Model Overview**
-![Business Model](images/BusinnessModel.png)
 ```mermaid
 flowchart LR
     A[Celo Blockchain] --> B[Tranzit DApp Thirdweb]
@@ -49,7 +48,6 @@ Tranzit facilitates contactless payments while incentivizing user interactions w
 ---
 
 ## 🔄 **Process Flow**
-![Process Flow](images/Processflow.png)
 ```mermaid
 flowchart TB
     A((Start)) --> B{Social Login}
@@ -84,7 +82,6 @@ Understanding the step-by-step process from initiating a payment to receiving in
 ---
 
 ## 📊 **Data Flow**
-![Data Flow](images/Dataflow.png)
 ```mermaid
 flowchart LR
     A([Social Login<br/>Provider]) -->|Authenticates user| B([Thirdweb/Embedded Wallet])
