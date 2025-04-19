@@ -21,7 +21,7 @@ Welcome to **Tranzit**, a decentralized application that revolutionises contactl
 
 ---
 
-## 📈 **Business Model Overview**
+## 📈 **Project Architecture**
 ```mermaid
 flowchart LR
     A[Celo Blockchain] --> B[Tranzit DApp Thirdweb]

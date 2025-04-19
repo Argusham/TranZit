@@ -8,6 +8,8 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "../utils/apolloClient";
 import { ThirdwebProvider } from "thirdweb/react";
 import Head from "next/head";
+import "../utils/i18n"
+import { appWithTranslation } from 'next-i18next';
 
 const queryClient = new QueryClient();
 
@@ -47,4 +49,4 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default App;
+export default appWithTranslation(App);
