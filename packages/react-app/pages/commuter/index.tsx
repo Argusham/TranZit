@@ -76,7 +76,6 @@
 //       setIsProcessing(false);
 //     }
 //   };
-
 //   const handleCancelTransaction = () => {
 //     setRecipient("");
 //     setAmount("");
@@ -246,7 +245,6 @@
 //     </div>
 //   );
 // }
-
 
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -433,60 +431,79 @@ export default function CommuterPage() {
 
       {/* Activity Section */}
       {activeTab === "activity" && (
-        <div className="w-full max-w-md mx-auto mt-6">
+        <div className="w-full max-w-md mx-auto mt-6 space-y-6">
+          {/* Incentive History */}
           {address && (
-            <IncentiveHistory
-              address={address}
-              showZar={showZar}
-              conversionRate={conversionRate}
-            />
+            <div className="bg-white border border-[#E5E5EA] rounded-3xl p-4">
+              <p className="text-xs font-medium text-[#8E8E93] uppercase tracking-wide mb-1">
+                Incentives
+              </p>
+              <IncentiveHistory
+                address={address}
+                showZar={showZar}
+                conversionRate={conversionRate}
+              />
+            </div>
           )}
 
-          <div className="bg-white p-4 rounded-2xl shadow-sm mt-6">
+          {/* Wallet Activity */}
+          <div className="bg-white border border-[#E5E5EA] rounded-3xl p-5">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Transactions
+              <h3 className="text-xl font-bold text-[#1C1C1E]">
+                Wallet Activity
               </h3>
             </div>
 
             {transactionsLoading ? (
-              <p className="text-center text-gray-500 py-4">
+              <p className="text-center text-sm text-[#8E8E93] py-4">
                 Loading transactions...
               </p>
             ) : error ? (
-              <p className="text-center text-red-500 py-4">
+              <p className="text-center text-sm text-red-500 py-4">
                 Error loading transactions: {error.message}
               </p>
-            ) : (
-              <div>
-                {userTransactions.length > 0 ? (
-                  userTransactions
-                    .slice(0, 5)
-                    .map((transaction: any) => (
-                      <TransactionItem
-                        key={transaction.id}
-                        payee={transaction.payee}
-                        amount={transaction.amount}
-                        blockTimestamp={transaction.blockTimestamp}
-                        showZar={showZar}
-                        conversionRate={conversionRate}
-                      />
-                    ))
-                ) : (
-                  <p className="text-center text-gray-500 py-4">
-                    No recent transactions found.
-                  </p>
-                )}
+            ) : userTransactions.length > 0 ? (
+              <div className="space-y-4">
+                {userTransactions.slice(0, 5).map((transaction: any) => (
+                  <TransactionItem
+                    key={transaction.id}
+                    payee={transaction.payee}
+                    amount={transaction.amount}
+                    blockTimestamp={transaction.blockTimestamp}
+                    showZar={showZar}
+                    conversionRate={conversionRate}
+                  />
+                ))}
               </div>
+            ) : (
+              <p className="text-center text-sm text-[#8E8E93] py-4">
+                No recent transactions found.
+              </p>
             )}
 
-            <button
-              onClick={handleRefresh}
-              className="w-full flex items-center justify-center text-gray-600 text-sm mt-4"
-            >
-              <FontAwesomeIcon icon={faSyncAlt} className="w-4 h-4 mr-2" />
-              Refresh Transactions
-            </button>
+            {/* Refresh CTA */}
+            <div className="pt-4 mt-4 border-t border-[#E5E5EA]">
+              <button
+                onClick={handleRefresh}
+                className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-[#007AFF] border border-[#007AFF] rounded-xl hover:bg-[#F2F2F7] transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="#007AFF"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 4v6h6M20 20v-6h-6M4 20l16-16"
+                  />
+                </svg>
+                Refresh Transactions
+              </button>
+            </div>
           </div>
         </div>
       )}
