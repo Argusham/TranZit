@@ -139,6 +139,7 @@ A detailed look at how data moves through the system during a transaction.
 
 - [New Pitch Deck](https://docs.google.com/presentation/d/1n6DtycvlVZmMjKasG2TDMJJAXryVE9MURMjI075zZbU/edit?usp=sharing) 📊
 - [Demo Video](https://drive.google.com/file/d/1sUSVjUryNuVvwjmNhnyJK0ThjuIWZ1Id/view?usp=sharing) 🎥
+- [Loom video run through] (https://www.loom.com/share/ac41f7d9480c4c608ce250afa4270be2?sid=e9f77ec6-ce55-4b60-9ef5-d3f649e09c06)
 
 ---
 
