@@ -1,57 +1,55 @@
 {
-    "name": "MiniTest",
-    "version": "1.0.0",
-    "description": "Custom Celo Composer project.",
-    "private": true,
-    "author": "Celo",
-    "license": "MIT",
-    "scripts": {
-        "dev": "yarn workspace @MiniTest/react-app dev",
-        "build": "yarn workspace @MiniTest/react-app build",
-        "react-app:start": "yarn workspace @MiniTest/react-app start",
-        "react-app:lint": "yarn workspace @MiniTest/react-app lint",
-        "hardhat:compile": "yarn workspace @MiniTest/hardhat compile",
-        "subgraphs:test": "yarn workspace @MiniTest/subgraphs test",
-        "subgraphs:get-abi": "yarn workspace @MiniTest/subgraphs get-abi"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/celo-org/celo-composer.git"
-    },
-    "bugs": {
-        "url": "https://github.com/celo-org/celo-composer/issues"
-    },
-    "homepage": "https://github.com/celo-org/celo-composer/blob/main/README.md",
-    "workspaces": [
-        "packages/*"
-    ],
-    "keywords": [
-        "celo-composer",
-        "celo"
-    ],
-    "dependencies": {
-        "@celo/abis": "^11.0.0",
-        "@celo/identity": "^5.1.2",
-        "@emotion/react": "^11.11.4",
-        "@emotion/styled": "^11.11.5",
-        "@heroicons/react": "^2.2.0",
-        "@mui/material": "^5.15.20",
-        "@thirdweb-dev/react": "^4.9.4",
-        "@thirdweb-dev/sdk": "^4.0.99",
-        "@thirdweb-dev/wallets": "^2.5.39",
-        "@wagmi/core": "^2.17.0",
-        "caniuse-lite": "^1.0.30001690",
-        "dotenv": "^16.4.7",
-        "ethereum-blockies": "^0.1.1",
-        "ethers": "^6.13.5",
-        "html5-qrcode": "^2.3.8",
-        "lucide-react": "^0.477.0",
-        "openai": "^4.86.1",
-        "qrcode.react": "^4.0.1",
-        "react-qr-code": "^2.0.15",
-        "react-qr-reader": "^3.0.0-beta-1",
-        "react-qr-scanner": "^1.0.0-alpha.11",
-        "thirdweb": "^5.90.2",
-        "workbox-precaching": "^7.3.0"
-    }
+  "name": "MiniTest",
+  "version": "1.0.0",
+  "description": "Custom Celo Composer project.",
+  "private": true,
+  "author": "Celo",
+  "license": "MIT",
+  "scripts": {
+    "dev": "yarn workspace @MiniTest/react-app dev",
+    "build": "yarn workspace @MiniTest/react-app build",
+    "react-app:start": "yarn workspace @MiniTest/react-app start",
+    "react-app:lint": "yarn workspace @MiniTest/react-app lint",
+    "hardhat:compile": "yarn workspace @MiniTest/hardhat compile",
+    "subgraphs:test": "yarn workspace @MiniTest/subgraphs test",
+    "subgraphs:get-abi": "yarn workspace @MiniTest/subgraphs get-abi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/celo-org/celo-composer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/celo-org/celo-composer/issues"
+  },
+  "homepage": "https://github.com/celo-org/celo-composer/blob/main/README.md",
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [
+    "celo-composer",
+    "celo"
+  ],
+  "dependencies": {
+    "@celo/abis": "^11.0.0",
+    "@celo/identity": "^5.1.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
+    "@walletconnect/modal": "^2.7.0",
+    "caniuse-lite": "^1.0.30001690",
+    "ethereum-blockies": "^0.1.1",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^0.477.0",
+    "openai": "^4.86.1",
+    "qrcode.react": "^4.0.1",
+    "react-qr-code": "^2.0.15",
+    "react-qr-reader": "^3.0.0-beta-1",
+    "react-qr-scanner": "^1.0.0-alpha.11",
+    "thirdweb": "^5.90.2",
+    "@thirdweb-dev/react": "^4.9.4",
+    "@thirdweb-dev/sdk": "^4.0.99",
+    "@thirdweb-dev/wallets": "^2.5.39",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.5"
+  }
 }

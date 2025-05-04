@@ -13,7 +13,7 @@ Welcome to **Tranzit**, a decentralized application that revolutionises contactl
 - **Incentives**: Users are rewarded with **0.2 cUSD** after interacting with 2 unique users.
 - **QR Code Payments**: Fast and convenient transactions using QR code technology.
 - **Fonbnk API Integration**: Enables cUsd-to-Airtime conversion for seamless fund access.
-- **Wallet Compatibility**: Supports **MetaMask, Valora, MiniPay, and Trust Wallet** for easy user onboarding.
+- **Wallet Compatibility**: Now supports embeded wallets from privy and third web for easy user onboarding.
 - **Progressive Web App (PWA)**: Works seamlessly across web and mobile, even offline (Full offline mode still in the works).
 - **The Graph**: Fetch and display transaction and incentive data efficiently.
 
@@ -121,7 +121,7 @@ A detailed look at how data moves through the system during a transaction.
 - **Incentive System**: Users receive incentives after multiple interactions.
 - **GraphQL Integration**: Retrieve and display payment and incentive data.
 - **Fonbnk Integration**: Converts airtime to cUSD for easier onboarding.
-- **Multi-Wallet Support**: Works with MetaMask, Valora, MiniPay, and Trust Wallet.
+- **Embeded Wallet Support**: Works with Privy and thirdweb embeded wallets.
 - **Progressive Web App**: Ensures UI accessibility even when offline.
 
 ---
@@ -129,9 +129,8 @@ A detailed look at how data moves through the system during a transaction.
 ## **What’s Next?**
 
 - **Gasless Transactions**: Enabling meta-transactions for frictionless payments.
-- **Privy Authentication: Enables social login with phone numbers and emails.**
-- **Multilingual Support**: Expanding accessibility to different language speakers.
-- **Khule (Super AI to help users learn / onboard and resolve any issues users might encounter while paying)**
+- **Privy Authentication: Enables social login with emails.**
+- **Khule (AI to help users learn / onboard and resolve any issues users might encounter while paying)**
 - **Better progress reporting on transaction loading time.
 
 ---
