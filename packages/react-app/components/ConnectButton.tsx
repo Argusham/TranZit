@@ -28,8 +28,6 @@ export default function Connect() {
         <div className="flex justify-center">
           <ConnectButton
             onConnect={(wallet) => {
-              console.log("connected to", wallet);
-              close();
             }}
             client={client}
             wallets={wallets}
