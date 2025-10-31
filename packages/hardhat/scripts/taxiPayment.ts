@@ -5,7 +5,7 @@ async function main() {
   // Get the contract factory for the TaxiPaymentcUSD contract
   const TaxiPaymentcUSD = await ethers.getContractFactory("TaxiPaymentcUSD");
 
-  // Specify the cUSD token address for the Celo Alfajores mainnet
+  // Specify the cUSD token address for the Celo mainnet
   const cUSDTokenAddress = "0x765DE816845861e75A25fCA122bb6898B8B1282a"; // Celo  cUSD token address
 
   console.log("Deploying the TaxiPaymentcUSD contract...");

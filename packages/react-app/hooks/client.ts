@@ -18,7 +18,8 @@ export const client = createThirdwebClient({
 export const taxiContract  = getContract({
   client,
   chain: defineChain(42220),
-  address: "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96",
+  // address: "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96",
+    address: "0xEE8Ad478A25FC60766B9a0595A75504c64F4a946",
 });
 
 export const cUSDContract = getContract({
