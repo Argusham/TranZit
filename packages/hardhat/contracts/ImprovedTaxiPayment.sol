@@ -8,7 +8,7 @@ interface IERC20 {
     function balanceOf(address account) external view returns (uint256);
 }
 
-contract TaxiPaymentcUSD {
+contract ImporvedTaxiPaymentcUSD {
     address public owner;
     IERC20 public cUSDToken; // Reference to the cUSD token
 

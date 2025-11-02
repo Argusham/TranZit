@@ -17,9 +17,9 @@ import { createIncentiveAwardedEvent } from "./taxi-paymentc-usd-utils"
 
 describe("Describe entity assertions", () => {
   beforeAll(() => {
-    let user = Address.fromString("0x0000000000000000000000000000000000000001")
+    let payer = Address.fromString("0x0000000000000000000000000000000000000001")
     let amount = BigInt.fromI32(234)
-    let newIncentiveAwardedEvent = createIncentiveAwardedEvent(user, amount)
+    let newIncentiveAwardedEvent = createIncentiveAwardedEvent(payer, amount)
     handleIncentiveAwarded(newIncentiveAwardedEvent)
   })
 
@@ -37,7 +37,7 @@ describe("Describe entity assertions", () => {
     assert.fieldEquals(
       "IncentiveAwarded",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "user",
+      "payer",
       "0x0000000000000000000000000000000000000001"
     )
     assert.fieldEquals(

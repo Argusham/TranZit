@@ -126,7 +126,7 @@ async function callNebulaAPI(userId: string, message: string, walletAddress?: st
       context: {
         wallet_address: walletAddress || null,
         chain_ids: ["42220"],
-        contract_addresses: ["0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96"],
+        contract_addresses: ["0xEE8Ad478A25FC60766B9a0595A75504c64F4a946"],
       },
       stream: false,
     }),

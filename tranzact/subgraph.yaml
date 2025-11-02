@@ -8,9 +8,9 @@ dataSources:
     name: TaxiPaymentcUSD
     network: celo
     source:
-      address: "0x7f8EFB57b228798d2d3ec3339cD0a155EB3B0f96"
+      address: "0xEE8Ad478A25FC60766B9a0595A75504c64F4a946"
       abi: TaxiPaymentcUSD
-      startBlock: 28730416
+      startBlock: 49999353
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

@@ -8,7 +8,7 @@ export function handleIncentiveAwarded(event: IncentiveAwardedEvent): void {
   let entity = new IncentiveAwarded(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.user = event.params.user
+  entity.payer = event.params.payer
   entity.amount = event.params.amount
 
   entity.blockNumber = event.block.number
@@ -23,7 +23,7 @@ export function handlePaymentMade(event: PaymentMadeEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.payer = event.params.payer
-  entity.payee = event.params.payee
+  entity.driver = event.params.driver
   entity.amount = event.params.amount
 
   entity.blockNumber = event.block.number

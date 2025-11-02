@@ -16,7 +16,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "payer",
         "type": "address"
       },
       {
@@ -41,7 +41,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "payee",
+        "name": "driver",
         "type": "address"
       },
       {
@@ -95,7 +95,7 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
+      { "internalType": "address", "name": "userAddr", "type": "address" }
     ],
     "name": "getUserBalances",
     "outputs": [
@@ -118,7 +118,7 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "address", "name": "driver", "type": "address" },
       { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "payUser",
@@ -139,6 +139,11 @@
       {
         "internalType": "uint256",
         "name": "uniqueUserCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "incentivesAwarded",
         "type": "uint256"
       }
     ],

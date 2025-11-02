@@ -1,6 +1,6 @@
 type IncentiveAwarded @entity(immutable: true) {
   id: Bytes!
-  user: Bytes! # address
+  payer: Bytes! # address
   amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -10,7 +10,7 @@ type IncentiveAwarded @entity(immutable: true) {
 type PaymentMade @entity(immutable: true) {
   id: Bytes!
   payer: Bytes! # address
-  payee: Bytes! # address
+  driver: Bytes! # address
   amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!

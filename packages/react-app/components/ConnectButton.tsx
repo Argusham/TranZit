@@ -13,6 +13,7 @@ const wallets = [
       defaultSmsCountryCode: "ZA",
     },
     hidePrivateKeyExport: true,
+    
   }),
 ];
 

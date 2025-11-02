@@ -15,20 +15,20 @@ import { ThirdwebProvider } from "thirdweb/react";
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      if (process.env.NODE_ENV === "production") {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .then(() => console.log("✅ Service Worker Registered"))
-          .catch((err) =>
-            console.error("❌ Service Worker Registration Failed", err)
-          );
-      } else {
-        console.log("🛑 Service Worker is disabled in development mode");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ("serviceWorker" in navigator) {
+  //     if (process.env.NODE_ENV === "production") {
+  //       navigator.serviceWorker
+  //         .register("/service-worker.js")
+  //         .then(() => console.log("✅ Service Worker Registered"))
+  //         .catch((err) =>
+  //           console.error("❌ Service Worker Registration Failed", err)
+  //         );
+  //     } else {
+  //       console.log("🛑 Service Worker is disabled in development mode");
+  //     }
+  //   }
+  // }, []);
 
   return (
     <>

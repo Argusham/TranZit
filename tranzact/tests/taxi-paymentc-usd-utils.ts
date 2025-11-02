@@ -6,7 +6,7 @@ import {
 } from "../generated/TaxiPaymentcUSD/TaxiPaymentcUSD"
 
 export function createIncentiveAwardedEvent(
-  user: Address,
+  payer: Address,
   amount: BigInt
 ): IncentiveAwarded {
   let incentiveAwardedEvent = changetype<IncentiveAwarded>(newMockEvent())
@@ -14,7 +14,7 @@ export function createIncentiveAwardedEvent(
   incentiveAwardedEvent.parameters = new Array()
 
   incentiveAwardedEvent.parameters.push(
-    new ethereum.EventParam("user", ethereum.Value.fromAddress(user))
+    new ethereum.EventParam("payer", ethereum.Value.fromAddress(payer))
   )
   incentiveAwardedEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
@@ -25,7 +25,7 @@ export function createIncentiveAwardedEvent(
 
 export function createPaymentMadeEvent(
   payer: Address,
-  payee: Address,
+  driver: Address,
   amount: BigInt
 ): PaymentMade {
   let paymentMadeEvent = changetype<PaymentMade>(newMockEvent())
@@ -36,7 +36,7 @@ export function createPaymentMadeEvent(
     new ethereum.EventParam("payer", ethereum.Value.fromAddress(payer))
   )
   paymentMadeEvent.parameters.push(
-    new ethereum.EventParam("payee", ethereum.Value.fromAddress(payee))
+    new ethereum.EventParam("driver", ethereum.Value.fromAddress(driver))
   )
   paymentMadeEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
