@@ -9,6 +9,8 @@ import IncentiveHistory from "@/components/ui/IncentiveHistory";
 import { useWallets } from "@/context/WalletProvider"; // ✅ Updated import
 import FonbnkWidget from "@/components/FonbnkWidget";
 import TabNavigation from "@/components/ui/TabNavigation";
+import AIPage from "@/components/AIPage";
+import { Sparkles } from "lucide-react";
 
 export default function CommuterPage() {
   // ✅ Updated: Using the new WalletProvider values
@@ -115,10 +117,11 @@ export default function CommuterPage() {
     { id: "wallet", label: "Wallet" },
     { id: "activity", label: "Activity" },
     { id: "TopUp", label: "Top Up" },
+    { id: "ai", label: "AI", icon: <Sparkles className="w-5 h-5" /> },
   ];
 
   return (
-    <div className="flex flex-col items-center text-gray-800 min-h-screen px-6 py-8 pb-28 bg-gray-100 relative">
+    <div className="flex flex-col items-center text-gray-800 min-h-screen px-6 py-8 pb-32 bg-gray-100 relative">
       {/* Content Area */}
 
       {/* Wallet Section */}
@@ -249,12 +252,20 @@ export default function CommuterPage() {
         </div>
       )}
 
-      {/* Fixed Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-6 py-4">
-        <div className="max-w-md mx-auto flex items-center gap-4">
+      {/* AI Section */}
+      {activeTab === "ai" && (
+        <div className="w-full max-w-md h-[calc(100vh-200px)]">
+          <AIPage />
+        </div>
+      )}
+
+      {/* Fixed Bottom Navigation - Floating */}
+      <div className="fixed bottom-6 left-0 right-0 px-4 sm:px-6 z-50">
+        <div className="max-w-md mx-auto bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 border border-gray-100">
           <button
+            type="button"
             onClick={() => history.back()}
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gradient-to-r from-gray-100 to-gray-200 rounded-full shadow-inner hover:shadow-md transition-all duration-300 hover:scale-105"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -275,7 +286,7 @@ export default function CommuterPage() {
             tabs={commuterTabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
-            className=""
+            className="flex-1"
           />
         </div>
       </div>

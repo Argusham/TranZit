@@ -2,10 +2,8 @@
 // src/components/LandingPage.tsx
 import { useRouter } from "next/router";
 import { useUserRole } from "@/context/UserRoleContext";
-import InfoHub from "@/components/InfoHub";
 import Connect from "@/components/ConnectButton";
-import Account from "@/components/ui/AccountProvider";
- import { client } from "hooks/client"
+
 
 export default function LandingPage() {
   const router = useRouter();
@@ -64,7 +62,7 @@ export default function LandingPage() {
       <div className="m-6 text-gray-500 text-sm">
         <Connect />
       </div>
-      <InfoHub />
+
     </div>
     
   );
