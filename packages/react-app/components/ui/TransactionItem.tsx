@@ -3,18 +3,18 @@ import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { useUserRole } from '@/context/UserRoleContext';
 
 interface TransactionItemProps {
-  payee: string;
+  driver: string;
   amount: string;
   blockTimestamp: string;
   showZar: boolean;
   conversionRate: number | null;
 }
 
-const TransactionItem = ({ payee, amount, blockTimestamp, showZar, conversionRate }: TransactionItemProps) => {
+const TransactionItem = ({ driver, amount, blockTimestamp, showZar, conversionRate }: TransactionItemProps) => {
   const { role } = useUserRole();
 
-  // Shorten the payee address for display
-  const formattedAddress = `${payee.substring(0, 4)}...${payee.substring(payee.length - 4)}`;
+  // Shorten the driver address for display
+  const formattedAddress = `${driver.substring(0, 4)}...${driver.substring(driver.length - 4)}`;
   const formattedAmount = (Number(amount) / 1e18).toFixed(2);
   const amountZar = conversionRate ? (Number(formattedAmount) * conversionRate).toFixed(2) : "Loading...";
 

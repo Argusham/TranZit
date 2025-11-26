@@ -167,7 +167,7 @@ export default function DriverUIPage() {
                   {data.paymentMades.map((transaction: any) => (
                     <TransactionItem
                       key={transaction?.id}
-                      payee={transaction?.payee}
+                      driver={transaction?.driver}
                       amount={transaction?.amount}
                       blockTimestamp={transaction?.blockTimestamp}
                       showZar={showZar}

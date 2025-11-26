@@ -1,37 +1,36 @@
 import { gql } from "@apollo/client";
 
-export const GET_PAYMENT_SENT = gql`
-  query {
-      incentiveAwardeds(where: { user: $userAddress }) {
-      amount
-    }
-    paymentMades(orderBy: blockTimestamp, orderDirection: desc) {
+export const GET_PAYMENT_MADE = gql`
+  query GetPaymentMade($address: Bytes!) {
+    paymentMades(where: { payer: $address }, orderBy: blockTimestamp, orderDirection: desc) {
+      id
       payer
-      payee
+      driver
       amount
       blockTimestamp
-    }
-  }
-`;
-
-export const GET_USER_INCENTIVES = gql`
-  query GetUserIncentives($userAddress: Bytes!) {
-    incentiveAwardeds(where: { user: $userAddress }) {
-      id
-      user
-      amount
     }
   }
 `;
 
 export const GET_PAYMENTS_RECEIVED = gql`
-  query GetPaymentData($address: String!) {
-    paymentMades(where: { payer: $address }, orderBy: blockTimestamp, orderDirection: desc) {
+  query GetPaymentData($address: Bytes!) {
+    paymentMades(where: { driver: $address }, orderBy: blockTimestamp, orderDirection: desc) {
       id
       payer
-      payee
+      driver
       amount
       blockTimestamp
     }
   }
 `
+
+export const GET_USER_INCENTIVES = gql`
+  query GetUserIncentives($userAddress: Bytes!) {
+    incentiveAwardeds(where: { payer: $userAddress }) {
+      id
+      payer
+      amount
+      blockTimestamp
+    }
+  }
+`;

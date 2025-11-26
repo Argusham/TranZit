@@ -5,7 +5,7 @@ import {
   clearStore,
   beforeAll,
   afterAll
-} from "matchstick-as/assembly/index"
+} from "matchstick-as"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { IncentiveAwarded } from "../generated/schema"
 import { IncentiveAwarded as IncentiveAwardedEvent } from "../generated/TaxiPaymentcUSD/TaxiPaymentcUSD"

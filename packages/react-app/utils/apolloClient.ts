@@ -1,7 +1,9 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 const apolloClient = new ApolloClient({
-    uri: 'https://api.studio.thegraph.com/query/89300/taxipaymentmainnet/version/latest',
+       link: new HttpLink({
+    uri: 'https://api.studio.thegraph.com/query/89300/tranzact/version/latest'
+   }),
     cache: new InMemoryCache(),
   });
   
