@@ -15,17 +15,3 @@ const Layout: FC<Props> = ({ children }) => {
 };
 
 export default Layout;
-
-// import { ThirdwebProvider } from "thirdweb/react";
-
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <ThirdwebProvider>{children}</ThirdwebProvider>
-//     </html>
-//   );
-// }
